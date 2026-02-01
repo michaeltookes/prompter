@@ -21,6 +21,17 @@ struct OverlayFooterView: View {
                         label: "Protected",
                         color: Theme.accent
                     )
+                } else {
+                    // Warning when Protected Mode is off
+                    HStack(spacing: 4) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.yellow)
+                        Text("Visible to capture")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(.yellow)
+                    }
+                    .help("Protected Mode is off. Enable it before sharing your screen.")
                 }
 
                 if appState.isClickThroughEnabled {

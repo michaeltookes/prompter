@@ -178,12 +178,15 @@ struct OverlayContentView: View {
                 )
 
             VStack(spacing: 0) {
+                // Drag handle at top
+                DragHandleView()
+
                 // Card content using layout-specific renderer
                 if let card = appState.currentCard {
                     ScrollView {
                         OverlayCardRenderer(card: card, fontScale: appState.overlayFontScale)
                             .padding(.horizontal, 20)
-                            .padding(.top, 16)
+                            .padding(.top, 8)
                     }
                 } else {
                     emptyState
@@ -191,7 +194,7 @@ struct OverlayContentView: View {
 
                 Spacer(minLength: 0)
 
-                // Footer
+                // Footer with resize hint
                 OverlayFooterView()
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
@@ -222,5 +225,27 @@ struct OverlayContentView: View {
                 .foregroundColor(Theme.textSecondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+// MARK: - Drag Handle View
+
+/// A visual drag handle at the top of the overlay for moving the window.
+struct DragHandleView: View {
+    var body: some View {
+        VStack(spacing: 4) {
+            // Drag indicator pill
+            RoundedRectangle(cornerRadius: 2)
+                .fill(Theme.textSecondary.opacity(0.5))
+                .frame(width: 40, height: 4)
+                .padding(.top, 8)
+
+            Text("Drag to move • Edges to resize")
+                .font(.system(size: 10))
+                .foregroundColor(Theme.textSecondary.opacity(0.6))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.bottom, 4)
+        .contentShape(Rectangle())
     }
 }
