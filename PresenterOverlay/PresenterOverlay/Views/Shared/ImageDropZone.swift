@@ -18,9 +18,6 @@ struct ImageDropZone: View {
     /// Whether the zone is currently being hovered over
     @State private var isTargeted = false
 
-    /// Environment access to asset manager
-    @EnvironmentObject var appState: AppState
-
     var body: some View {
         ZStack {
             // Background
@@ -116,6 +113,7 @@ struct AssetImageView: View {
     let assetRef: AssetRef
 
     @State private var image: NSImage?
+    @State private var loadFailed = false
 
     var body: some View {
         Group {
@@ -123,6 +121,22 @@ struct AssetImageView: View {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+            } else if loadFailed {
+                // Show error state with retry option
+                VStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.system(size: 24))
+                        .foregroundColor(Theme.textSecondary)
+                    Text("Failed to load")
+                        .font(.system(size: Theme.captionFontSize))
+                        .foregroundColor(Theme.textSecondary)
+                    Button("Retry") {
+                        loadFailed = false
+                        loadImage()
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundColor(Theme.accent)
+                }
             } else {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -132,19 +146,31 @@ struct AssetImageView: View {
             loadImage()
         }
         .onChange(of: assetRef.id) { _, _ in
+            loadFailed = false
             loadImage()
         }
     }
 
     private func loadImage() {
-        if let nsImage = AssetManager.shared.loadImage(for: assetRef) {
-            self.image = nsImage
+        Task {
+            if let nsImage = await AssetManager.shared.loadImageAsync(for: assetRef) {
+                self.image = nsImage
+                self.loadFailed = false
+            } else {
+                self.loadFailed = true
+            }
         }
     }
 }
 
-#Preview {
+#Preview("Empty State") {
     ImageDropZone(assetRef: .constant(nil))
+        .frame(width: 200, height: 150)
+        .padding()
+}
+
+#Preview("With Placeholder") {
+    ImageDropZone(assetRef: .constant(nil), placeholder: "Drop logo here")
         .frame(width: 200, height: 150)
         .padding()
 }

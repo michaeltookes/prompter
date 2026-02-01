@@ -240,7 +240,9 @@ struct DeckSettingsSheet: View {
     private func saveDeckSettings() {
         if var deck = appState.currentDeck {
             deck.title = deckTitle
-            appState.loadDeck(deck)
+            deck.updatedAt = Date()
+            appState.currentDeck = deck
+            appState.saveDeck()
         }
     }
 }

@@ -10,7 +10,7 @@ struct TwoImagesNotesRenderer: View {
             // Two images side by side
             HStack(spacing: 12) {
                 // Image 1
-                if card.images.count > 0, let assetRef = card.images[0] {
+                if !card.images.isEmpty, let assetRef = card.images[0] {
                     OverlayImageView(assetRef: assetRef)
                         .frame(maxHeight: 150)
                         .clipShape(RoundedRectangle(cornerRadius: Theme.imageCornerRadius))

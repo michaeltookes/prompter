@@ -77,7 +77,7 @@ struct CardListSidebar: View {
     private var sidebarHeader: some View {
         HStack {
             Text("Cards")
-                .font(.headline)
+                .font(.system(size: Theme.captionFontSize, weight: .semibold))
                 .foregroundColor(Theme.textPrimary)
 
             Spacer()
@@ -91,7 +91,8 @@ struct CardListSidebar: View {
                 }
             } label: {
                 Image(systemName: "plus")
-                    .font(.system(size: 14, weight: .medium))
+                    .font(.system(size: Theme.footerFontSize, weight: .medium))
+                    .foregroundColor(Theme.accent)
             }
             .menuStyle(.borderlessButton)
             .frame(width: 24, height: 24)
@@ -109,11 +110,11 @@ struct CardListSidebar: View {
                 .foregroundColor(Theme.textSecondary)
 
             Text("No Cards")
-                .font(.headline)
+                .font(.system(size: Theme.captionFontSize, weight: .semibold))
                 .foregroundColor(Theme.textSecondary)
 
             Text("Click + to add a card")
-                .font(.caption)
+                .font(.system(size: Theme.footerFontSize, weight: .regular))
                 .foregroundColor(Theme.textSecondary.opacity(0.7))
 
             Spacer()
@@ -134,13 +135,16 @@ struct CardListSidebar: View {
     }
 
     private func deleteCard(at index: Int) {
-        guard let deck = appState.currentDeck, deck.cards.count > 0 else { return }
+        guard let deck = appState.currentDeck, !deck.cards.isEmpty else { return }
 
         appState.deleteCard(at: index)
 
-        // Adjust selection
-        if selectedIndex >= deck.cards.count - 1 {
-            selectedIndex = max(0, deck.cards.count - 2)
+        // Re-fetch deck to get updated count after deletion
+        guard let updatedDeck = appState.currentDeck else { return }
+
+        // Adjust selection if it's now out of bounds
+        if selectedIndex >= updatedDeck.cards.count {
+            selectedIndex = max(0, updatedDeck.cards.count - 1)
         }
     }
 

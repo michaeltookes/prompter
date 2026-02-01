@@ -48,7 +48,7 @@ final class AssetManager {
 
     // MARK: - Import
 
-    /// Imports an image from a file URL
+    /// Imports an image from a file URL (synchronous - for compatibility)
     /// - Parameter url: The source file URL
     /// - Returns: An AssetRef if successful, nil otherwise
     func importImage(from url: URL) -> AssetRef? {
@@ -65,7 +65,28 @@ final class AssetManager {
         return importImage(data: imageData, extension: fileExtension)
     }
 
-    /// Imports an image from raw data
+    /// Imports an image from a file URL asynchronously
+    /// - Parameter url: The source file URL
+    /// - Returns: An AssetRef if successful, nil otherwise
+    func importImageAsync(from url: URL) async -> AssetRef? {
+        let ext = url.pathExtension.lowercased()
+        let validExtensions = ["png", "jpg", "jpeg", "heic", "gif", "webp", "tiff"]
+        let fileExtension = validExtensions.contains(ext) ? ext : "png"
+
+        // Read file data on background thread
+        let imageData: Data? = await Task.detached(priority: .userInitiated) {
+            try? Data(contentsOf: url)
+        }.value
+
+        guard let data = imageData else {
+            print("AssetManager: Failed to read image data from \(url)")
+            return nil
+        }
+
+        return await importImageAsync(data: data, extension: fileExtension)
+    }
+
+    /// Imports an image from raw data (synchronous - for compatibility)
     /// - Parameters:
     ///   - data: The image data
     ///   - extension: The file extension (defaults to png)
@@ -86,9 +107,37 @@ final class AssetManager {
         }
     }
 
+    /// Imports an image from raw data asynchronously
+    /// - Parameters:
+    ///   - data: The image data
+    ///   - extension: The file extension (defaults to png)
+    /// - Returns: An AssetRef if successful, nil otherwise
+    func importImageAsync(data: Data, extension ext: String = "png") async -> AssetRef? {
+        let id = UUID()
+        let filename = "\(id.uuidString).\(ext)"
+        let destinationURL = assetsURL.appendingPathComponent(filename)
+
+        // Write file on background thread
+        let success = await Task.detached(priority: .userInitiated) {
+            do {
+                try data.write(to: destinationURL)
+                return true
+            } catch {
+                print("AssetManager: Failed to write image: \(error)")
+                return false
+            }
+        }.value
+
+        if success {
+            print("AssetManager: Imported image as \(filename)")
+            return AssetRef(id: id, filename: filename)
+        }
+        return nil
+    }
+
     // MARK: - Load
 
-    /// Loads an image for the given asset reference
+    /// Loads an image for the given asset reference (synchronous - for compatibility)
     /// - Parameter assetRef: The asset reference
     /// - Returns: The loaded NSImage, or nil if not found
     func loadImage(for assetRef: AssetRef) -> NSImage? {
@@ -109,6 +158,33 @@ final class AssetManager {
         addToCache(id: assetRef.id, image: image)
 
         return image
+    }
+
+    /// Loads an image for the given asset reference asynchronously
+    /// - Parameter assetRef: The asset reference
+    /// - Returns: The loaded NSImage, or nil if not found
+    func loadImageAsync(for assetRef: AssetRef) async -> NSImage? {
+        // Check cache first (on main actor)
+        if let cached = imageCache[assetRef.id] {
+            return cached
+        }
+
+        let fileURL = assetsURL.appendingPathComponent(assetRef.filename)
+
+        // Load and decode image on background thread
+        let image: NSImage? = await Task.detached(priority: .userInitiated) {
+            NSImage(contentsOf: fileURL)
+        }.value
+
+        guard let loadedImage = image else {
+            print("AssetManager: Failed to load image from \(fileURL)")
+            return nil
+        }
+
+        // Add to cache (on main actor)
+        addToCache(id: assetRef.id, image: loadedImage)
+
+        return loadedImage
     }
 
     /// Returns the file URL for an asset (useful for direct file access)

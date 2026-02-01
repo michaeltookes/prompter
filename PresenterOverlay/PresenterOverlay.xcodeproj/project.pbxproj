@@ -39,7 +39,23 @@
 		A1000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift */; };
 		A1000001BBBBBBBB00000116 /* OverlayCardRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000116 /* OverlayCardRenderer.swift */; };
 		A1000001BBBBBBBB00000117 /* OverlayFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000117 /* OverlayFooterView.swift */; };
+		B1000001CCCCCCCC00000001 /* CardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000001 /* CardTests.swift */; };
+		B1000001CCCCCCCC00000002 /* DeckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000002 /* DeckTests.swift */; };
+		B1000001CCCCCCCC00000003 /* LayoutTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000003 /* LayoutTypeTests.swift */; };
+		B1000001CCCCCCCC00000004 /* AssetRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000004 /* AssetRefTests.swift */; };
+		B1000001CCCCCCCC00000005 /* OverlayFrameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */; };
+		B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000006 /* AppStateTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B4000001CCCCCCCC00000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9000001BBBBBBBB00000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A6000001BBBBBBBB00000001;
+			remoteInfo = PresenterOverlay;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A2000001BBBBBBBB00000001 /* PresenterOverlayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterOverlayApp.swift; sourceTree = "<group>"; };
@@ -77,10 +93,24 @@
 		A2000001BBBBBBBB00000116 /* OverlayCardRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayCardRenderer.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000117 /* OverlayFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayFooterView.swift; sourceTree = "<group>"; };
 		A3000001BBBBBBBB00000001 /* PresenterOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PresenterOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2000001CCCCCCCC00000001 /* CardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000002 /* DeckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000003 /* LayoutTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutTypeTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000004 /* AssetRefTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRefTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayFrameTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000006 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
+		B3000001CCCCCCCC00000001 /* PresenterOverlayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PresenterOverlayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A4000001BBBBBBBB00000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B4000001CCCCCCCC00000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -94,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				A5000001BBBBBBBB00000002 /* PresenterOverlay */,
+				B5000001CCCCCCCC00000001 /* PresenterOverlayTests */,
 				A5000001BBBBBBBB00000003 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -118,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				A3000001BBBBBBBB00000001 /* PresenterOverlay.app */,
+				B3000001CCCCCCCC00000001 /* PresenterOverlayTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -259,6 +291,19 @@
 			path = LayoutRenderers;
 			sourceTree = "<group>";
 		};
+		B5000001CCCCCCCC00000001 /* PresenterOverlayTests */ = {
+			isa = PBXGroup;
+			children = (
+				B2000001CCCCCCCC00000001 /* CardTests.swift */,
+				B2000001CCCCCCCC00000002 /* DeckTests.swift */,
+				B2000001CCCCCCCC00000003 /* LayoutTypeTests.swift */,
+				B2000001CCCCCCCC00000004 /* AssetRefTests.swift */,
+				B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */,
+				B2000001CCCCCCCC00000006 /* AppStateTests.swift */,
+			);
+			path = PresenterOverlayTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -279,6 +324,24 @@
 			productReference = A3000001BBBBBBBB00000001 /* PresenterOverlay.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B6000001CCCCCCCC00000001 /* PresenterOverlayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B8000001CCCCCCCC00000001 /* Build configuration list for PBXNativeTarget "PresenterOverlayTests" */;
+			buildPhases = (
+				B7000001CCCCCCCC00000001 /* Sources */,
+				B4000001CCCCCCCC00000002 /* Frameworks */,
+				B7000001CCCCCCCC00000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B4000001CCCCCCCC00000003 /* PBXTargetDependency */,
+			);
+			name = PresenterOverlayTests;
+			productName = PresenterOverlayTests;
+			productReference = B3000001CCCCCCCC00000001 /* PresenterOverlayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -291,6 +354,10 @@
 				TargetAttributes = {
 					A6000001BBBBBBBB00000001 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					B6000001CCCCCCCC00000001 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = A6000001BBBBBBBB00000001;
 					};
 				};
 			};
@@ -308,6 +375,7 @@
 			projectRoot = "";
 			targets = (
 				A6000001BBBBBBBB00000001 /* PresenterOverlay */,
+				B6000001CCCCCCCC00000001 /* PresenterOverlayTests */,
 			);
 		};
 /* End PBXProject section */
@@ -318,6 +386,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1000001BBBBBBBB00000020 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7000001CCCCCCCC00000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,7 +437,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B7000001CCCCCCCC00000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1000001CCCCCCCC00000001 /* CardTests.swift in Sources */,
+				B1000001CCCCCCCC00000002 /* DeckTests.swift in Sources */,
+				B1000001CCCCCCCC00000003 /* LayoutTypeTests.swift in Sources */,
+				B1000001CCCCCCCC00000004 /* AssetRefTests.swift in Sources */,
+				B1000001CCCCCCCC00000005 /* OverlayFrameTests.swift in Sources */,
+				B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B4000001CCCCCCCC00000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A6000001BBBBBBBB00000001 /* PresenterOverlay */;
+			targetProxy = B4000001CCCCCCCC00000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		AA000001BBBBBBBB00000001 /* Debug */ = {
@@ -539,6 +635,42 @@
 			};
 			name = Release;
 		};
+		BA000001CCCCCCCC00000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PresenterOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PresenterOverlay";
+			};
+			name = Debug;
+		};
+		BA000001CCCCCCCC00000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PresenterOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PresenterOverlay";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -556,6 +688,15 @@
 			buildConfigurations = (
 				AA000001BBBBBBBB00000001 /* Debug */,
 				AA000001BBBBBBBB00000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B8000001CCCCCCCC00000001 /* Build configuration list for PBXNativeTarget "PresenterOverlayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA000001CCCCCCCC00000001 /* Debug */,
+				BA000001CCCCCCCC00000002 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

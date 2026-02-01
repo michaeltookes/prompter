@@ -260,11 +260,23 @@ final class AppState: ObservableObject {
     func moveCard(from sourceIndex: Int, to destinationIndex: Int) {
         guard var deck = currentDeck,
               sourceIndex >= 0 && sourceIndex < deck.cards.count,
-              destinationIndex >= 0 && destinationIndex < deck.cards.count else { return }
+              destinationIndex >= 0 && destinationIndex <= deck.cards.count else { return }
 
         var cards = deck.cards
         let card = cards.remove(at: sourceIndex)
-        cards.insert(card, at: destinationIndex)
+
+        // Adjust destination after removal to account for index shift
+        let adjustedDestination: Int
+        if destinationIndex > sourceIndex {
+            adjustedDestination = destinationIndex - 1
+        } else {
+            adjustedDestination = destinationIndex
+        }
+
+        // Clamp to valid range (0...cards.count allows appending)
+        let finalDestination = max(0, min(adjustedDestination, cards.count))
+        cards.insert(card, at: finalDestination)
+
         deck.cards = cards
         currentDeck = deck
         saveDeck()
