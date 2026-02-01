@@ -61,6 +61,12 @@ final class AppState: ObservableObject {
     /// Cancellables for Combine subscriptions
     private var cancellables = Set<AnyCancellable>()
 
+    /// Debouncer for auto-saving deck changes
+    private let deckDebouncer = Debouncer(delay: 1.0)
+
+    /// Debouncer for auto-saving settings changes
+    private let settingsDebouncer = Debouncer(delay: 0.5)
+
     // MARK: - Computed Properties
 
     /// The currently displayed card, if any
@@ -91,18 +97,53 @@ final class AppState: ObservableObject {
     // MARK: - Initialization
 
     init() {
+        loadSettings()
         setupAutoSave()
+    }
+
+    /// Loads settings from persistence
+    private func loadSettings() {
+        let settings = PersistenceService.shared.loadSettings()
+        overlayOpacity = settings.overlayOpacity
+        overlayFontScale = settings.overlayFontScale
+        overlayFrame = settings.overlayFrame
+        isClickThroughEnabled = settings.clickThroughEnabled
+        isProtectedModeEnabled = settings.protectedModeEnabled
     }
 
     // MARK: - Deck Operations
 
-    /// Loads the last opened deck and settings from disk
+    /// Loads the last opened deck from disk
     func loadLastOpenedDeck() {
-        // TODO: Implement with PersistenceService in Phase 3
-        // For now, create a default deck if none exists
-        if currentDeck == nil {
-            currentDeck = Deck.createDefault()
+        let settings = PersistenceService.shared.loadSettings()
+
+        // Try to load the last opened deck
+        if let lastDeckId = settings.lastOpenedDeckId,
+           let deck = PersistenceService.shared.loadDeck(id: lastDeckId) {
+            currentDeck = deck
+            currentCardIndex = 0
+            selectedCardId = deck.cards.first?.id
+            print("AppState: Loaded last opened deck '\(deck.title)'")
+            return
         }
+
+        // Try to load any existing deck
+        let allDecks = PersistenceService.shared.loadAllDecks()
+        if let firstDeck = allDecks.first {
+            currentDeck = firstDeck
+            currentCardIndex = 0
+            selectedCardId = firstDeck.cards.first?.id
+            print("AppState: Loaded existing deck '\(firstDeck.title)'")
+            return
+        }
+
+        // Create a default deck if none exists
+        let defaultDeck = Deck.createDefault()
+        currentDeck = defaultDeck
+        currentCardIndex = 0
+        selectedCardId = defaultDeck.cards.first?.id
+        PersistenceService.shared.saveDeck(defaultDeck)
+        print("AppState: Created default deck")
     }
 
     /// Creates a new empty deck
@@ -338,21 +379,84 @@ final class AppState: ObservableObject {
 
     // MARK: - Persistence
 
-    /// Sets up auto-save on deck changes
+    /// Sets up auto-save on settings changes
     private func setupAutoSave() {
-        // TODO: Implement debounced auto-save in Phase 3
-        // For now, saving is triggered explicitly
+        // Auto-save settings when overlay properties change
+        $overlayOpacity
+            .dropFirst()
+            .sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+
+        $overlayFontScale
+            .dropFirst()
+            .sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+
+        $overlayFrame
+            .dropFirst()
+            .sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+
+        $isClickThroughEnabled
+            .dropFirst()
+            .sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+
+        $isProtectedModeEnabled
+            .dropFirst()
+            .sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+
+        // Auto-save when current deck changes
+        $currentDeck
+            .dropFirst()
+            .sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
     }
 
-    /// Saves the current deck to disk
+    /// Saves the current deck to disk (debounced)
     func saveDeck() {
-        // TODO: Implement with PersistenceService in Phase 3
-        print("Deck saved (placeholder)")
+        guard let deck = currentDeck else { return }
+
+        deckDebouncer.debounce { [weak self] in
+            guard self != nil else { return }
+            PersistenceService.shared.saveDeck(deck)
+        }
     }
 
-    /// Saves settings to disk
+    /// Saves the current deck immediately (for app termination)
+    func saveDeckSync() {
+        guard let deck = currentDeck else { return }
+        deckDebouncer.cancel()
+        PersistenceService.shared.saveDeckSync(deck)
+    }
+
+    /// Saves settings to disk (debounced)
     func saveSettings() {
-        // TODO: Implement with PersistenceService in Phase 3
-        print("Settings saved (placeholder)")
+        let settings = buildSettings()
+
+        settingsDebouncer.debounce { [weak self] in
+            guard self != nil else { return }
+            PersistenceService.shared.saveSettings(settings)
+        }
+    }
+
+    /// Saves settings immediately (for app termination)
+    func saveSettingsSync() {
+        let settings = buildSettings()
+        settingsDebouncer.cancel()
+        PersistenceService.shared.saveSettingsSync(settings)
+    }
+
+    /// Builds a Settings object from current state
+    private func buildSettings() -> Settings {
+        Settings(
+            overlayOpacity: overlayOpacity,
+            overlayFontScale: overlayFontScale,
+            overlayFrame: overlayFrame,
+            clickThroughEnabled: isClickThroughEnabled,
+            protectedModeEnabled: isProtectedModeEnabled,
+            lastOpenedDeckId: currentDeck?.id
+        )
     }
 }
