@@ -62,7 +62,7 @@ By the end of Phase 1, we should have:
 *This section is updated as we build.*
 
 ### Entry 1: Documentation Setup
-**Date**: [Current]
+**Date**: January 2026
 
 Created the docs/ folder structure with:
 - Overview documentation (what, who, features)
@@ -74,13 +74,98 @@ Created the docs/ folder structure with:
 
 ---
 
-*More entries will be added as we progress through Phase 1.*
+### Entry 2: Xcode Project Setup
+**Date**: January 2026
+
+Created the PresenterOverlay Xcode project with:
+- Folder structure matching our architecture plan
+- Info.plist with LSUIElement=YES (menu bar only app)
+- macOS 14.0 deployment target
+- Entitlements file (sandbox disabled for hotkey access)
+- Assets.xcassets with placeholder AppIcon and AccentColor
+
+**Key decision - LSUIElement**: Setting this to YES makes the app invisible in the Dock. It only appears in the menu bar. This keeps it unobtrusive during demos.
+
+---
+
+### Entry 3: Data Models
+**Date**: January 2026
+
+Implemented all core data models:
+- **LayoutType**: Enum with 5 layout types, includes helper properties for image slots, bullet counts, etc.
+- **AssetRef**: Simple struct for image references with UUID-based filenames
+- **Card**: Core presenter note with layout-specific optional fields
+- **Deck**: Collection of cards with navigation state
+- **Settings**: User preferences including overlay frame
+
+**Design choice - Optional fields in Card**: Each layout type uses different fields (title, notes, bullets, caption). We made them all optional rather than creating separate types per layout. This keeps the model simple while being flexible.
+
+---
+
+### Entry 4: AppState and Core App Structure
+**Date**: January 2026
+
+Built the central nervous system:
+- **AppState**: ObservableObject with all app state, published properties for reactivity
+- **AppDelegate**: Sets up menu bar, overlay, and hotkeys on launch
+- **PresenterOverlayApp**: SwiftUI app entry point with NSApplicationDelegateAdaptor
+
+**Why centralized state?**: All views observe AppState. When you press a hotkey to advance cards, AppState updates, and the overlay redraws automatically. No manual refresh calls needed.
+
+---
+
+### Entry 5: Menu Bar Controller
+**Date**: January 2026
+
+Implemented MenuBarController with:
+- NSStatusItem for the menu bar icon
+- Dropdown menu with all options
+- Placeholder views for editor and test capture windows
+
+**Design note**: The menu rebuilds each time it's shown to reflect current state (overlay visibility, mode toggles). Simple and reliable.
+
+---
+
+### Entry 6: Overlay Window System
+**Date**: January 2026
+
+Created the core overlay:
+- **OverlayWindow**: Custom NSWindow with special properties
+  - Borderless and transparent
+  - Floating level (above all windows)
+  - canJoinAllSpaces + fullScreenAuxiliary
+  - sharingType=.none for capture protection
+  - ignoresMouseEvents for click-through
+- **OverlayWindowController**: Manages lifecycle with Combine bindings
+- **OverlayContentView**: SwiftUI placeholder with frosted glass styling
+
+**The capture protection approach**: We set `sharingType = .none` which requests the window be excluded from screen capture. This is "best effort" - it works for most cases but isn't guaranteed.
+
+---
+
+### Entry 7: Global Hotkeys
+**Date**: January 2026
+
+Implemented HotkeyManager using Carbon Event Manager:
+- Registers 9 global hotkeys (Cmd+Shift+...)
+- Works even when other apps are focused
+- Callbacks bound to AppState methods
+
+**Why Carbon?**: Despite being deprecated, it's still the standard for global hotkeys. Many popular apps (Alfred, Rectangle) use it. There's no modern replacement.
+
+---
 
 ## Challenges Encountered
 
-*This section documents problems we ran into and how we solved them.*
+### Challenge 1: Xcode Project File Complexity
+The .pbxproj file format is complex. We manually created a minimal version that Xcode can open and enhance.
 
-(No challenges logged yet - Phase 1 in progress)
+**Solution**: Start with minimal configuration, let Xcode add files as we build.
+
+### Challenge 2: Type Resolution During Development
+While creating files, the IDE shows errors because dependent types don't exist yet.
+
+**Solution**: Create files in dependency order (models first, then services, then views). Errors resolve once all files exist.
 
 ## Verification Checklist
 
