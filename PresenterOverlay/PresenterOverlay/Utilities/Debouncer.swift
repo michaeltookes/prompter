@@ -31,6 +31,9 @@ final class Debouncer {
     /// The current pending action (kept separately for flush)
     private var pendingAction: (() -> Void)?
 
+    /// Monotonic token to invalidate stale work items
+    private var generation: UInt64 = 0
+
     /// Lock for thread safety
     private let lock = NSLock()
 
@@ -57,16 +60,24 @@ final class Debouncer {
         lock.lock()
         defer { lock.unlock() }
 
+        generation &+= 1
+
         // Cancel any pending work
         workItem?.cancel()
 
         // Store the action for potential flush
         pendingAction = action
 
+        let token = generation
+
         // Create new work item
         let item = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
             self.lock.lock()
+            guard token == self.generation else {
+                self.lock.unlock()
+                return
+            }
             self.pendingAction = nil
             self.workItem = nil
             self.lock.unlock()
@@ -83,6 +94,7 @@ final class Debouncer {
         lock.lock()
         defer { lock.unlock() }
 
+        generation &+= 1
         workItem?.cancel()
         workItem = nil
         pendingAction = nil
@@ -91,6 +103,7 @@ final class Debouncer {
     /// Executes the pending action immediately if one exists
     func flush() {
         lock.lock()
+        generation &+= 1
         let action = pendingAction
         pendingAction = nil
         workItem?.cancel()
