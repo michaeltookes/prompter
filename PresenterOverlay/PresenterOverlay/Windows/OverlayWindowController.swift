@@ -170,11 +170,11 @@ struct OverlayContentView: View {
     var body: some View {
         ZStack {
             // Frosted glass background
-            RoundedRectangle(cornerRadius: 18)
+            RoundedRectangle(cornerRadius: Theme.overlayCornerRadius)
                 .fill(.ultraThinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 18)
-                        .fill(Color(red: 25/255, green: 27/255, blue: 32/255).opacity(0.75))
+                    RoundedRectangle(cornerRadius: Theme.overlayCornerRadius)
+                        .fill(Theme.surfaceBackground.opacity(0.75))
                 )
 
             VStack(spacing: 0) {
@@ -195,12 +195,12 @@ struct OverlayContentView: View {
                     .padding(.bottom, 12)
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .clipShape(RoundedRectangle(cornerRadius: Theme.overlayCornerRadius))
         .overlay(
-            RoundedRectangle(cornerRadius: 18)
-                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+            RoundedRectangle(cornerRadius: Theme.overlayCornerRadius)
+                .stroke(Theme.divider, lineWidth: 1)
         )
-        .shadow(color: Color(red: 93/255, green: 169/255, blue: 255/255).opacity(0.35), radius: 30, x: 0, y: 10)
+        .shadow(color: Theme.accentGlow, radius: Theme.overlayShadowRadius, x: 0, y: 10)
     }
 
     /// Renders card content based on layout
@@ -210,26 +210,26 @@ struct OverlayContentView: View {
         VStack(alignment: .leading, spacing: 12) {
             if let title = card.title {
                 Text(title)
-                    .font(.system(size: 28 * appState.overlayFontScale, weight: .semibold))
-                    .foregroundColor(Color(hex: "F5F7FA"))
+                    .font(.system(size: Theme.titleFontSize * appState.overlayFontScale, weight: .semibold))
+                    .foregroundColor(Theme.textPrimary)
             }
 
             if let bullets = card.bullets {
                 ForEach(bullets, id: \.self) { bullet in
                     HStack(alignment: .top, spacing: 8) {
                         Text("•")
-                            .foregroundColor(Color(hex: "5DA9FF"))
+                            .foregroundColor(Theme.accent)
                         Text(bullet)
-                            .foregroundColor(Color(hex: "F5F7FA"))
+                            .foregroundColor(Theme.textPrimary)
                     }
-                    .font(.system(size: 20 * appState.overlayFontScale))
+                    .font(.system(size: Theme.notesFontSize * appState.overlayFontScale))
                 }
             }
 
             if let notes = card.notes {
                 Text(notes)
-                    .font(.system(size: 18 * appState.overlayFontScale))
-                    .foregroundColor(Color(hex: "B8C1CC"))
+                    .font(.system(size: Theme.notesFontSize * appState.overlayFontScale))
+                    .foregroundColor(Theme.textSecondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -240,15 +240,15 @@ struct OverlayContentView: View {
         VStack(spacing: 12) {
             Image(systemName: "square.stack.3d.up")
                 .font(.system(size: 48))
-                .foregroundColor(Color(hex: "5DA9FF"))
+                .foregroundColor(Theme.accent)
 
             Text("No Cards")
                 .font(.title2)
-                .foregroundColor(Color(hex: "F5F7FA"))
+                .foregroundColor(Theme.textPrimary)
 
             Text("Open the Deck Editor to create cards")
                 .font(.subheadline)
-                .foregroundColor(Color(hex: "B8C1CC"))
+                .foregroundColor(Theme.textSecondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -257,42 +257,25 @@ struct OverlayContentView: View {
     private var footer: some View {
         HStack {
             Text("Card \(appState.currentCardIndex + 1) / \(appState.totalCards)")
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(Color(hex: "B8C1CC"))
+                .font(.system(size: Theme.footerFontSize, weight: .medium))
+                .foregroundColor(Theme.textSecondary)
 
             Spacer()
 
             HStack(spacing: 8) {
                 if appState.isProtectedModeEnabled {
                     Image(systemName: "shield.fill")
-                        .foregroundColor(Color(hex: "5DA9FF"))
+                        .foregroundColor(Theme.accent)
                         .font(.system(size: 12))
                 }
                 if appState.isClickThroughEnabled {
                     Image(systemName: "cursorarrow.click.badge.clock")
-                        .foregroundColor(Color(hex: "5DA9FF"))
+                        .foregroundColor(Theme.accent)
                         .font(.system(size: 12))
                 }
             }
         }
         .padding(.vertical, 8)
         .opacity(0.8)
-    }
-}
-
-// MARK: - Color Extension
-
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let r, g, b: UInt64
-        (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        self.init(
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue: Double(b) / 255
-        )
     }
 }
