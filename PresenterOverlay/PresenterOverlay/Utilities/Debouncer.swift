@@ -28,6 +28,9 @@ final class Debouncer {
     /// The current pending work item
     private var workItem: DispatchWorkItem?
 
+    /// The current pending action (kept separately for flush)
+    private var pendingAction: (() -> Void)?
+
     /// Lock for thread safety
     private let lock = NSLock()
 
@@ -57,9 +60,16 @@ final class Debouncer {
         // Cancel any pending work
         workItem?.cancel()
 
+        // Store the action for potential flush
+        pendingAction = action
+
         // Create new work item
         let item = DispatchWorkItem { [weak self] in
-            guard self != nil else { return }
+            guard let self = self else { return }
+            self.lock.lock()
+            self.pendingAction = nil
+            self.workItem = nil
+            self.lock.unlock()
             action()
         }
         workItem = item
@@ -75,16 +85,19 @@ final class Debouncer {
 
         workItem?.cancel()
         workItem = nil
+        pendingAction = nil
     }
 
     /// Executes the pending action immediately if one exists
     func flush() {
         lock.lock()
-        let item = workItem
+        let action = pendingAction
+        pendingAction = nil
+        workItem?.cancel()
         workItem = nil
         lock.unlock()
 
-        item?.cancel()
-        item?.perform()
+        // Execute the action directly
+        action?()
     }
 }

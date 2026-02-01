@@ -49,6 +49,8 @@
 		B1000001CCCCCCCC00000004 /* AssetRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000004 /* AssetRefTests.swift */; };
 		B1000001CCCCCCCC00000005 /* OverlayFrameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */; };
 		B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000006 /* AppStateTests.swift */; };
+		B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000007 /* DebouncerTests.swift */; };
+		B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +109,8 @@
 		B2000001CCCCCCCC00000004 /* AssetRefTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRefTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayFrameTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000006 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000007 /* DebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncerTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceServiceTests.swift; sourceTree = "<group>"; };
 		B3000001CCCCCCCC00000001 /* PresenterOverlayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PresenterOverlayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -320,6 +324,8 @@
 				B2000001CCCCCCCC00000004 /* AssetRefTests.swift */,
 				B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */,
 				B2000001CCCCCCCC00000006 /* AppStateTests.swift */,
+				B2000001CCCCCCCC00000007 /* DebouncerTests.swift */,
+				B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */,
 			);
 			path = PresenterOverlayTests;
 			sourceTree = "<group>";
@@ -471,6 +477,8 @@
 				B1000001CCCCCCCC00000004 /* AssetRefTests.swift in Sources */,
 				B1000001CCCCCCCC00000005 /* OverlayFrameTests.swift in Sources */,
 				B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */,
+				B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */,
+				B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
