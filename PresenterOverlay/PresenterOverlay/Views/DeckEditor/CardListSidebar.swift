@@ -16,8 +16,19 @@ struct CardListSidebar: View {
     /// Card being dragged for reordering
     @State private var draggedCard: Card?
 
+    /// Whether to show the new deck dialog
+    @State private var showNewDeckDialog = false
+
+    /// New deck title input
+    @State private var newDeckTitle = ""
+
     var body: some View {
         VStack(spacing: 0) {
+            // Deck picker section
+            deckPickerSection
+
+            Divider()
+
             // Header
             sidebarHeader
 
@@ -73,6 +84,91 @@ struct CardListSidebar: View {
     }
 
     // MARK: - Subviews
+
+    private var deckPickerSection: some View {
+        VStack(spacing: 8) {
+            HStack {
+                Text("Deck")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(Theme.textSecondary)
+
+                Spacer()
+
+                Text("\(appState.decks.count)/\(AppState.maxDecks)")
+                    .font(.system(size: 10))
+                    .foregroundColor(Theme.textSecondary.opacity(0.7))
+            }
+
+            // Deck picker dropdown
+            Menu {
+                ForEach(appState.decks) { deck in
+                    Button(action: { switchToDeck(deck) }) {
+                        HStack {
+                            Text(deck.title)
+                            if deck.id == appState.currentDeck?.id {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+
+                Divider()
+
+                Button(action: { showNewDeckDialog = true }) {
+                    Label("New Deck", systemImage: "plus")
+                }
+                .disabled(!appState.canCreateNewDeck)
+
+            } label: {
+                HStack {
+                    Image(systemName: "square.stack.3d.up")
+                        .font(.system(size: 12))
+                        .foregroundColor(Theme.accent)
+
+                    Text(appState.currentDeck?.title ?? "Select Deck")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(Theme.textPrimary)
+                        .lineLimit(1)
+
+                    Spacer()
+
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 10))
+                        .foregroundColor(Theme.textSecondary)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Theme.cardBackground)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Theme.divider, lineWidth: 1)
+                )
+            }
+            .menuStyle(.borderlessButton)
+
+            // Delete deck button (only if more than one deck)
+            if appState.decks.count > 1 {
+                Button(action: deleteCurrentDeck) {
+                    HStack {
+                        Image(systemName: "trash")
+                            .font(.system(size: 11))
+                        Text("Delete Deck")
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.red.opacity(0.8))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .sheet(isPresented: $showNewDeckDialog) {
+            NewDeckSheet(isPresented: $showNewDeckDialog)
+        }
+    }
 
     private var sidebarHeader: some View {
         HStack {
@@ -177,6 +273,17 @@ struct CardListSidebar: View {
         } else {
             selectedIndex = destinationIndex
         }
+    }
+
+    private func switchToDeck(_ deck: Deck) {
+        appState.switchToDeck(deck)
+        selectedIndex = 0
+    }
+
+    private func deleteCurrentDeck() {
+        guard let deck = appState.currentDeck else { return }
+        appState.deleteDeck(deck)
+        selectedIndex = 0
     }
 }
 
@@ -288,5 +395,51 @@ struct CardDropDelegate: DropDelegate {
 
     func dropUpdated(info: DropInfo) -> DropProposal? {
         return DropProposal(operation: .move)
+    }
+}
+
+// MARK: - New Deck Sheet
+
+struct NewDeckSheet: View {
+    @EnvironmentObject var appState: AppState
+    @Binding var isPresented: Bool
+
+    @State private var deckTitle: String = ""
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("New Deck")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(Theme.textPrimary)
+
+            TextField("Deck Title", text: $deckTitle)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 250)
+
+            HStack(spacing: 16) {
+                Button("Cancel") {
+                    isPresented = false
+                }
+                .keyboardShortcut(.cancelAction)
+
+                Button("Create") {
+                    createDeck()
+                }
+                .keyboardShortcut(.defaultAction)
+                .disabled(deckTitle.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+        }
+        .padding(24)
+        .onAppear {
+            deckTitle = "Deck \(appState.decks.count + 1)"
+        }
+    }
+
+    private func createDeck() {
+        let title = deckTitle.trimmingCharacters(in: .whitespaces)
+        guard !title.isEmpty else { return }
+
+        appState.createNewDeck(title: title)
+        isPresented = false
     }
 }

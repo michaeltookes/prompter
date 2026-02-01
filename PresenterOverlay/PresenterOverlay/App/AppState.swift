@@ -14,6 +14,11 @@ import Combine
 @MainActor
 final class AppState: ObservableObject {
 
+    // MARK: - Constants
+
+    /// Maximum number of decks allowed
+    static let maxDecks = 5
+
     // MARK: - Deck State
 
     /// The currently open deck
@@ -22,8 +27,13 @@ final class AppState: ObservableObject {
     /// Index of the currently displayed card in the overlay
     @Published var currentCardIndex: Int = 0
 
-    /// All available decks (for future deck switching)
+    /// All available decks
     @Published var decks: [Deck] = []
+
+    /// Whether the maximum deck limit has been reached
+    var canCreateNewDeck: Bool {
+        decks.count < Self.maxDecks
+    }
 
     // MARK: - Overlay State
 
@@ -113,13 +123,17 @@ final class AppState: ObservableObject {
 
     // MARK: - Deck Operations
 
-    /// Loads the last opened deck from disk
+    /// Loads all decks and the last opened deck from disk
     func loadLastOpenedDeck() {
+        // Load all decks
+        decks = PersistenceService.shared.loadAllDecks()
+            .sorted { $0.updatedAt > $1.updatedAt }
+
         let settings = PersistenceService.shared.loadSettings()
 
         // Try to load the last opened deck
         if let lastDeckId = settings.lastOpenedDeckId,
-           let deck = PersistenceService.shared.loadDeck(id: lastDeckId) {
+           let deck = decks.first(where: { $0.id == lastDeckId }) {
             currentDeck = deck
             currentCardIndex = 0
             selectedCardId = deck.cards.first?.id
@@ -127,9 +141,8 @@ final class AppState: ObservableObject {
             return
         }
 
-        // Try to load any existing deck
-        let allDecks = PersistenceService.shared.loadAllDecks()
-        if let firstDeck = allDecks.first {
+        // Try to use the first existing deck
+        if let firstDeck = decks.first {
             currentDeck = firstDeck
             currentCardIndex = 0
             selectedCardId = firstDeck.cards.first?.id
@@ -140,20 +153,66 @@ final class AppState: ObservableObject {
         // Create a default deck if none exists
         let defaultDeck = Deck.createDefault()
         currentDeck = defaultDeck
+        decks = [defaultDeck]
         currentCardIndex = 0
         selectedCardId = defaultDeck.cards.first?.id
         PersistenceService.shared.saveDeck(defaultDeck)
         print("AppState: Created default deck")
     }
 
+    /// Reloads the deck list from persistence
+    func reloadDecks() {
+        decks = PersistenceService.shared.loadAllDecks()
+            .sorted { $0.updatedAt > $1.updatedAt }
+    }
+
     /// Creates a new empty deck
     /// - Parameter title: Title for the new deck
-    func createNewDeck(title: String = "Untitled Deck") {
-        let deck = Deck(title: title)
+    /// - Returns: True if deck was created, false if limit reached
+    @discardableResult
+    func createNewDeck(title: String = "Untitled Deck") -> Bool {
+        guard canCreateNewDeck else {
+            print("AppState: Cannot create deck - limit of \(Self.maxDecks) reached")
+            return false
+        }
+
+        let deck = Deck(title: title, cards: [
+            Card(layout: .titleBullets, title: "New Card", bullets: ["Your first bullet point"])
+        ])
         currentDeck = deck
+        decks.insert(deck, at: 0)
         currentCardIndex = 0
         selectedCardId = deck.cards.first?.id
         saveDeck()
+        return true
+    }
+
+    /// Switches to a different deck
+    func switchToDeck(_ deck: Deck) {
+        currentDeck = deck
+        currentCardIndex = 0
+        selectedCardId = deck.cards.first?.id
+        overlayScrollOffset = 0
+        saveSettings()
+    }
+
+    /// Deletes a deck
+    func deleteDeck(_ deck: Deck) {
+        // Remove from list
+        decks.removeAll { $0.id == deck.id }
+
+        // Delete from persistence
+        PersistenceService.shared.deleteDeck(id: deck.id)
+
+        // If we deleted the current deck, switch to another
+        if currentDeck?.id == deck.id {
+            if let firstDeck = decks.first {
+                switchToDeck(firstDeck)
+            } else {
+                // Create a new default deck if none left
+                createNewDeck(title: "My Deck")
+            }
+        }
     }
 
     /// Opens a deck for editing and presenting
@@ -417,6 +476,11 @@ final class AppState: ObservableObject {
     /// Saves the current deck to disk (debounced)
     func saveDeck() {
         guard let deck = currentDeck else { return }
+
+        // Update the deck in the decks array
+        if let index = decks.firstIndex(where: { $0.id == deck.id }) {
+            decks[index] = deck
+        }
 
         deckDebouncer.debounce { [weak self] in
             guard self != nil else { return }
