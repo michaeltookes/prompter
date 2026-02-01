@@ -11,8 +11,13 @@ struct PresenterOverlayApp: App {
     var body: some Scene {
         // Menu bar apps don't need a main window scene
         // All UI is managed through the AppDelegate
-        Settings {
+        // Using an empty WindowGroup that we never show
+        WindowGroup {
             EmptyView()
+                .frame(width: 0, height: 0)
         }
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
+        .windowStyle(.hiddenTitleBar)
     }
 }
