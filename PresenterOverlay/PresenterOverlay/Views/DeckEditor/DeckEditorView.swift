@@ -127,7 +127,7 @@ struct CardCanvasView: View {
             // Card position indicator
             if let deck = appState.currentDeck {
                 Text("Card \(selectedIndex + 1) of \(deck.cards.count)")
-                    .font(.subheadline)
+                    .font(.system(size: Theme.footerFontSize, weight: .medium))
                     .foregroundColor(Theme.textSecondary)
             }
         }
@@ -159,11 +159,11 @@ struct CardCanvasView: View {
                 .foregroundColor(Theme.textSecondary)
 
             Text("No Card Selected")
-                .font(.title2)
+                .font(.system(size: Theme.titleFontSize, weight: .semibold))
                 .foregroundColor(Theme.textSecondary)
 
             Text("Select a card from the sidebar or create a new one")
-                .font(.subheadline)
+                .font(.system(size: Theme.notesFontSize, weight: .regular))
                 .foregroundColor(Theme.textSecondary.opacity(0.7))
         }
     }
@@ -208,11 +208,12 @@ struct DeckSettingsSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             Text("Deck Settings")
-                .font(.title2)
-                .fontWeight(.semibold)
+                .font(.system(size: Theme.titleFontSize, weight: .semibold))
+                .foregroundColor(Theme.textPrimary)
 
             Form {
                 TextField("Deck Title", text: $deckTitle)
+                    .font(.system(size: Theme.notesFontSize, weight: .regular))
                     .textFieldStyle(.roundedBorder)
             }
             .formStyle(.grouped)

@@ -1,5 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
+import ImageIO
 
 /// A drop zone that accepts image files via drag-and-drop.
 ///
@@ -76,14 +77,17 @@ struct ImageDropZone: View {
                 guard let data = item as? Data,
                       let url = URL(dataRepresentation: data, relativeTo: nil) else { return }
 
-                // Verify it's an image
+                // Verify it's an image (on background thread)
                 guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
                       CGImageSourceGetCount(imageSource) > 0 else { return }
 
-                DispatchQueue.main.async {
-                    // Import the image using AssetManager
-                    if let ref = AssetManager.shared.importImage(from: url) {
-                        self.assetRef = ref
+                // Import image on background thread to avoid blocking UI
+                Task.detached(priority: .userInitiated) {
+                    let ref = await AssetManager.shared.importImageAsync(from: url)
+                    await MainActor.run {
+                        if let ref = ref {
+                            self.assetRef = ref
+                        }
                     }
                 }
             }
@@ -95,9 +99,13 @@ struct ImageDropZone: View {
             provider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { data, error in
                 guard let data = data else { return }
 
-                DispatchQueue.main.async {
-                    if let ref = AssetManager.shared.importImage(data: data) {
-                        self.assetRef = ref
+                // Import image on background thread to avoid blocking UI
+                Task.detached(priority: .userInitiated) {
+                    let ref = await AssetManager.shared.importImageAsync(data: data)
+                    await MainActor.run {
+                        if let ref = ref {
+                            self.assetRef = ref
+                        }
                     }
                 }
             }

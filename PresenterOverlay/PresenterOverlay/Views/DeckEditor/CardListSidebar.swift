@@ -171,7 +171,12 @@ struct CardListSidebar: View {
         appState.moveCard(from: sourceIndex, to: destinationIndex)
 
         // Update selection to follow the moved card
-        selectedIndex = destinationIndex
+        // Account for index shift when moving forward (destination adjusts after removal)
+        if sourceIndex < destinationIndex {
+            selectedIndex = destinationIndex - 1
+        } else {
+            selectedIndex = destinationIndex
+        }
     }
 }
 

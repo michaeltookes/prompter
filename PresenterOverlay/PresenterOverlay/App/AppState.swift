@@ -189,9 +189,12 @@ final class AppState: ObservableObject {
     /// Inserts a card at a specific index
     func insertCard(_ card: Card, at index: Int) {
         guard var deck = currentDeck else { return }
-        var cards = deck.cards
-        cards.insert(card, at: min(index, cards.count))
-        deck.cards = cards
+
+        // Clamp index to valid range
+        let safeIndex = max(0, min(index, deck.cards.count))
+        deck.insertCard(card, at: safeIndex)
+        deck.updatedAt = Date()
+
         currentDeck = deck
         selectedCardId = card.id
         saveDeck()
@@ -209,9 +212,13 @@ final class AppState: ObservableObject {
     func updateCard(_ card: Card, at index: Int) {
         guard var deck = currentDeck,
               index >= 0 && index < deck.cards.count else { return }
-        var cards = deck.cards
-        cards[index] = card
-        deck.cards = cards
+
+        // Update the card with proper timestamp via Deck's API
+        var updatedCard = card
+        updatedCard.updatedAt = Date()
+        deck.cards[index] = updatedCard
+        deck.updatedAt = Date()
+
         currentDeck = deck
         saveDeck()
     }
