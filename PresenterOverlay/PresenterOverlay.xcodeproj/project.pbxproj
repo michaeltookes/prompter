@@ -21,6 +21,24 @@
 		A1000001BBBBBBBB00000012 /* OverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000012 /* OverlayWindowController.swift */; };
 		A1000001BBBBBBBB00000013 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000013 /* Theme.swift */; };
 		A1000001BBBBBBBB00000020 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000020 /* Assets.xcassets */; };
+		A1000001BBBBBBBB00000100 /* ImageDropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000100 /* ImageDropZone.swift */; };
+		A1000001BBBBBBBB00000101 /* FrostedPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000101 /* FrostedPanelView.swift */; };
+		A1000001BBBBBBBB00000102 /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000102 /* IconButton.swift */; };
+		A1000001BBBBBBBB00000103 /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000103 /* AssetManager.swift */; };
+		A1000001BBBBBBBB00000104 /* CardListSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000104 /* CardListSidebar.swift */; };
+		A1000001BBBBBBBB00000105 /* DeckEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000105 /* DeckEditorView.swift */; };
+		A1000001BBBBBBBB00000106 /* TitleBulletsEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000106 /* TitleBulletsEditorView.swift */; };
+		A1000001BBBBBBBB00000107 /* ImageTopNotesEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000107 /* ImageTopNotesEditorView.swift */; };
+		A1000001BBBBBBBB00000108 /* TwoImagesNotesEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000108 /* TwoImagesNotesEditorView.swift */; };
+		A1000001BBBBBBBB00000109 /* Grid2x2CaptionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000109 /* Grid2x2CaptionEditorView.swift */; };
+		A1000001BBBBBBBB00000110 /* FullBleedBulletsEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000110 /* FullBleedBulletsEditorView.swift */; };
+		A1000001BBBBBBBB00000111 /* TitleBulletsRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000111 /* TitleBulletsRenderer.swift */; };
+		A1000001BBBBBBBB00000112 /* ImageTopNotesRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000112 /* ImageTopNotesRenderer.swift */; };
+		A1000001BBBBBBBB00000113 /* TwoImagesNotesRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000113 /* TwoImagesNotesRenderer.swift */; };
+		A1000001BBBBBBBB00000114 /* Grid2x2CaptionRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000114 /* Grid2x2CaptionRenderer.swift */; };
+		A1000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift */; };
+		A1000001BBBBBBBB00000116 /* OverlayCardRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000116 /* OverlayCardRenderer.swift */; };
+		A1000001BBBBBBBB00000117 /* OverlayFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000117 /* OverlayFooterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +58,24 @@
 		A2000001BBBBBBBB00000020 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000021 /* PresenterOverlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PresenterOverlay.entitlements; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000022 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000100 /* ImageDropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropZone.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000101 /* FrostedPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrostedPanelView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000102 /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000103 /* AssetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000104 /* CardListSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListSidebar.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000105 /* DeckEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckEditorView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000106 /* TitleBulletsEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBulletsEditorView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000107 /* ImageTopNotesEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTopNotesEditorView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000108 /* TwoImagesNotesEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoImagesNotesEditorView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000109 /* Grid2x2CaptionEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid2x2CaptionEditorView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000110 /* FullBleedBulletsEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBleedBulletsEditorView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000111 /* TitleBulletsRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBulletsRenderer.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000112 /* ImageTopNotesRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTopNotesRenderer.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000113 /* TwoImagesNotesRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoImagesNotesRenderer.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000114 /* Grid2x2CaptionRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid2x2CaptionRenderer.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBleedBulletsRenderer.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000116 /* OverlayCardRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayCardRenderer.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000117 /* OverlayFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayFooterView.swift; sourceTree = "<group>"; };
 		A3000001BBBBBBBB00000001 /* PresenterOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PresenterOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -109,6 +145,9 @@
 		A5000001BBBBBBBB00000006 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A5000001BBBBBBBB00000020 /* Shared */,
+				A5000001BBBBBBBB00000021 /* DeckEditor */,
+				A5000001BBBBBBBB00000023 /* Overlay */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -129,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000001BBBBBBBB00000010 /* HotkeyManager.swift */,
+				A2000001BBBBBBBB00000103 /* AssetManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -163,6 +203,60 @@
 				A2000001BBBBBBBB00000022 /* Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		A5000001BBBBBBBB00000020 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001BBBBBBBB00000100 /* ImageDropZone.swift */,
+				A2000001BBBBBBBB00000101 /* FrostedPanelView.swift */,
+				A2000001BBBBBBBB00000102 /* IconButton.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		A5000001BBBBBBBB00000021 /* DeckEditor */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001BBBBBBBB00000104 /* CardListSidebar.swift */,
+				A2000001BBBBBBBB00000105 /* DeckEditorView.swift */,
+				A5000001BBBBBBBB00000022 /* LayoutEditors */,
+			);
+			path = DeckEditor;
+			sourceTree = "<group>";
+		};
+		A5000001BBBBBBBB00000022 /* LayoutEditors */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001BBBBBBBB00000106 /* TitleBulletsEditorView.swift */,
+				A2000001BBBBBBBB00000107 /* ImageTopNotesEditorView.swift */,
+				A2000001BBBBBBBB00000108 /* TwoImagesNotesEditorView.swift */,
+				A2000001BBBBBBBB00000109 /* Grid2x2CaptionEditorView.swift */,
+				A2000001BBBBBBBB00000110 /* FullBleedBulletsEditorView.swift */,
+			);
+			path = LayoutEditors;
+			sourceTree = "<group>";
+		};
+		A5000001BBBBBBBB00000023 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001BBBBBBBB00000116 /* OverlayCardRenderer.swift */,
+				A2000001BBBBBBBB00000117 /* OverlayFooterView.swift */,
+				A5000001BBBBBBBB00000024 /* LayoutRenderers */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+		A5000001BBBBBBBB00000024 /* LayoutRenderers */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001BBBBBBBB00000111 /* TitleBulletsRenderer.swift */,
+				A2000001BBBBBBBB00000112 /* ImageTopNotesRenderer.swift */,
+				A2000001BBBBBBBB00000113 /* TwoImagesNotesRenderer.swift */,
+				A2000001BBBBBBBB00000114 /* Grid2x2CaptionRenderer.swift */,
+				A2000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift */,
+			);
+			path = LayoutRenderers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,6 +341,24 @@
 				A1000001BBBBBBBB00000011 /* OverlayWindow.swift in Sources */,
 				A1000001BBBBBBBB00000012 /* OverlayWindowController.swift in Sources */,
 				A1000001BBBBBBBB00000013 /* Theme.swift in Sources */,
+				A1000001BBBBBBBB00000100 /* ImageDropZone.swift in Sources */,
+				A1000001BBBBBBBB00000101 /* FrostedPanelView.swift in Sources */,
+				A1000001BBBBBBBB00000102 /* IconButton.swift in Sources */,
+				A1000001BBBBBBBB00000103 /* AssetManager.swift in Sources */,
+				A1000001BBBBBBBB00000104 /* CardListSidebar.swift in Sources */,
+				A1000001BBBBBBBB00000105 /* DeckEditorView.swift in Sources */,
+				A1000001BBBBBBBB00000106 /* TitleBulletsEditorView.swift in Sources */,
+				A1000001BBBBBBBB00000107 /* ImageTopNotesEditorView.swift in Sources */,
+				A1000001BBBBBBBB00000108 /* TwoImagesNotesEditorView.swift in Sources */,
+				A1000001BBBBBBBB00000109 /* Grid2x2CaptionEditorView.swift in Sources */,
+				A1000001BBBBBBBB00000110 /* FullBleedBulletsEditorView.swift in Sources */,
+				A1000001BBBBBBBB00000111 /* TitleBulletsRenderer.swift in Sources */,
+				A1000001BBBBBBBB00000112 /* ImageTopNotesRenderer.swift in Sources */,
+				A1000001BBBBBBBB00000113 /* TwoImagesNotesRenderer.swift in Sources */,
+				A1000001BBBBBBBB00000114 /* Grid2x2CaptionRenderer.swift in Sources */,
+				A1000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift in Sources */,
+				A1000001BBBBBBBB00000116 /* OverlayCardRenderer.swift in Sources */,
+				A1000001BBBBBBBB00000117 /* OverlayFooterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

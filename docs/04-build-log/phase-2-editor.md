@@ -1,7 +1,7 @@
 # Phase 2: Deck Editor & Layouts
 
-**Status**: Not Started
-**Depends on**: Phase 1 completion
+**Status**: Complete
+**Completed**: January 2026
 
 ## What We're Building
 
@@ -75,9 +75,94 @@ Each layout needs a display version for the overlay:
 
 ## Build Log
 
-*This section will be updated as we build Phase 2.*
+### Entry 1: Shared Components
+**Date**: January 2026
 
-(Phase 2 not yet started)
+Created the reusable UI components for Phase 2:
+- **ImageDropZone.swift**: Drag-and-drop handler for image files. Supports common formats (PNG, JPEG, HEIC). Shows visual feedback during drag hover.
+- **FrostedPanelView.swift**: Reusable frosted glass panel with customizable corner radius and opacity.
+- **IconButton.swift**: Standardized icon button with hover/press states and animations.
+
+---
+
+### Entry 2: Asset Management
+**Date**: January 2026
+
+Implemented the AssetManager service for image storage:
+- Stores images in `~/Library/Application Support/PresenterOverlay/Assets/`
+- Uses UUID-based filenames for uniqueness
+- Includes in-memory LRU cache (50 images max)
+- Provides import from file URL or raw data
+- Cleanup method for removing unused assets
+
+---
+
+### Entry 3: Deck Editor View
+**Date**: January 2026
+
+Built the main deck editor UI:
+- **DeckEditorView**: HSplitView with sidebar and canvas
+- **CardListSidebar**: Card list with layout icons, context menus for duplicate/delete, drag-to-reorder support
+- **CardCanvasView**: Layout picker and dynamic layout editor switching
+
+Key features:
+- Add cards with layout selection menu
+- Delete/duplicate via context menu
+- Layout type picker in header
+- Automatic scroll to selected card
+
+---
+
+### Entry 4: Layout Editors (5 Views)
+**Date**: January 2026
+
+Created editing interfaces for all 5 layouts:
+1. **TitleBulletsEditorView**: Title field + dynamic bullet list (add/remove)
+2. **ImageTopNotesEditorView**: Single image drop zone + text editor
+3. **TwoImagesNotesEditorView**: Side-by-side image zones + notes
+4. **Grid2x2CaptionEditorView**: 2x2 grid of drop zones + caption
+5. **FullBleedBulletsEditorView**: Hero image + exactly 3 numbered bullets
+
+Each editor uses bindings to update the Card model in real-time.
+
+---
+
+### Entry 5: Layout Renderers (5 Views)
+**Date**: January 2026
+
+Created overlay renderers for all 5 layouts:
+1. **TitleBulletsRenderer**: Title + bullet list with accent dots
+2. **ImageTopNotesRenderer**: Image display + notes text
+3. **TwoImagesNotesRenderer**: Side-by-side images + notes
+4. **Grid2x2CaptionRenderer**: 2x2 image grid + centered caption
+5. **FullBleedBulletsRenderer**: Large hero image + numbered bullets
+
+Each renderer respects the fontScale setting for accessibility.
+
+---
+
+### Entry 6: Overlay Integration
+**Date**: January 2026
+
+Updated the overlay window to use the new renderers:
+- **OverlayCardRenderer**: Switches to correct renderer based on card layout
+- **OverlayFooterView**: Extracted footer with card counter and status icons
+- Added transition animations between cards
+
+Card model extended with `images` computed property (alias for `imageSlots`) for cleaner code.
+
+---
+
+### Entry 7: AppState Extensions
+**Date**: January 2026
+
+Added methods to AppState for editor operations:
+- `loadDeck(_:)` - Load a deck
+- `navigateToCard(_:)` - Navigate to card by index
+- `addCard(_:)` - Add existing Card object
+- `insertCard(_:at:)` - Insert at specific position
+- `updateCard(_:at:)` - Update card at index
+- `moveCard(from:to:)` - Reorder with Int parameters
 
 ## Design Decisions
 

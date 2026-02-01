@@ -36,6 +36,14 @@ struct Card: Identifiable, Codable, Equatable {
     /// When this card was last modified
     var updatedAt: Date
 
+    // MARK: - Computed Properties
+
+    /// Alias for imageSlots for convenience
+    var images: [AssetRef?] {
+        get { imageSlots }
+        set { imageSlots = newValue }
+    }
+
     // MARK: - Initialization
 
     /// Creates a new card with the specified layout
