@@ -13,15 +13,22 @@ struct OverlayFooterView: View {
 
             Spacer()
 
-            // Opacity indicator
-            HStack(spacing: 4) {
+            // Opacity slider
+            HStack(spacing: 6) {
                 Image(systemName: "circle.lefthalf.filled")
                     .font(.system(size: 10))
+                    .foregroundColor(Theme.textSecondary.opacity(0.7))
+
+                Slider(value: $appState.overlayOpacity, in: 0.3...1.0, step: 0.05)
+                    .frame(width: 60)
+                    .controlSize(.mini)
+
                 Text("\(Int(appState.overlayOpacity * 100))%")
                     .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(Theme.textSecondary.opacity(0.7))
+                    .frame(width: 28, alignment: .trailing)
             }
-            .foregroundColor(Theme.textSecondary.opacity(0.7))
-            .help("Opacity: ⌘⇧[ to decrease, ⌘⇧] to increase")
+            .help("Adjust overlay transparency")
 
             Spacer()
 
