@@ -43,7 +43,7 @@ enum LayoutType: String, Codable, CaseIterable, Identifiable, Equatable {
         case .imageTopNotes:    return "Image + Notes"
         case .twoImagesNotes:   return "Two Images + Notes"
         case .grid2x2Caption:   return "2×2 Grid + Caption"
-        case .fullBleedBullets: return "Full Image + Bullets"
+        case .fullBleedBullets: return "Full Image + 3 Bullets"
         }
     }
 

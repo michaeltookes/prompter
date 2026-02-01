@@ -6,7 +6,7 @@ import SwiftUI
 /// The menu bar is the primary access point for the application.
 /// It provides quick access to all features without taking up dock space.
 @MainActor
-final class MenuBarController: NSObject {
+final class MenuBarController: NSObject, NSMenuDelegate {
 
     // MARK: - Properties
 
@@ -25,6 +25,9 @@ final class MenuBarController: NSObject {
     /// The test capture window (created lazily)
     private var testCaptureWindow: NSWindow?
 
+    /// Observer for editor window close
+    private var editorCloseObserver: NSObjectProtocol?
+
     // MARK: - Initialization
 
     init(appState: AppState, overlayController: OverlayWindowController) {
@@ -32,6 +35,12 @@ final class MenuBarController: NSObject {
         self.overlayController = overlayController
         super.init()
         setupStatusItem()
+    }
+
+    deinit {
+        if let observer = editorCloseObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 
     // MARK: - Setup
@@ -49,13 +58,25 @@ final class MenuBarController: NSObject {
             button.image?.isTemplate = true  // Adapts to light/dark menu bar
         }
 
-        // Build and attach the menu
-        statusItem.menu = buildMenu()
+        // Build and attach the menu with delegate for dynamic refresh
+        let menu = buildMenu()
+        menu.delegate = self
+        statusItem.menu = menu
     }
 
-    /// Builds the dropdown menu
-    private func buildMenu() -> NSMenu {
-        let menu = NSMenu()
+    // MARK: - NSMenuDelegate
+
+    /// Called when the menu is about to be displayed - refreshes menu state
+    func menuNeedsUpdate(_ menu: NSMenu) {
+        menu.removeAllItems()
+        for item in buildMenuItems() {
+            menu.addItem(item)
+        }
+    }
+
+    /// Builds the dropdown menu items
+    private func buildMenuItems() -> [NSMenuItem] {
+        var items: [NSMenuItem] = []
 
         // Show/Hide Overlay
         let overlayTitle = appState.isOverlayVisible ? "Hide Overlay" : "Show Overlay"
@@ -65,7 +86,7 @@ final class MenuBarController: NSObject {
             keyEquivalent: ""
         )
         overlayItem.target = self
-        menu.addItem(overlayItem)
+        items.append(overlayItem)
 
         // Open Deck Editor
         let editorItem = NSMenuItem(
@@ -74,9 +95,9 @@ final class MenuBarController: NSObject {
             keyEquivalent: ""
         )
         editorItem.target = self
-        menu.addItem(editorItem)
+        items.append(editorItem)
 
-        menu.addItem(NSMenuItem.separator())
+        items.append(NSMenuItem.separator())
 
         // Protected Mode toggle
         let protectedItem = NSMenuItem(
@@ -86,7 +107,7 @@ final class MenuBarController: NSObject {
         )
         protectedItem.target = self
         protectedItem.state = appState.isProtectedModeEnabled ? .on : .off
-        menu.addItem(protectedItem)
+        items.append(protectedItem)
 
         // Click-through toggle
         let clickThroughItem = NSMenuItem(
@@ -96,9 +117,9 @@ final class MenuBarController: NSObject {
         )
         clickThroughItem.target = self
         clickThroughItem.state = appState.isClickThroughEnabled ? .on : .off
-        menu.addItem(clickThroughItem)
+        items.append(clickThroughItem)
 
-        menu.addItem(NSMenuItem.separator())
+        items.append(NSMenuItem.separator())
 
         // Test Capture Setup
         let testItem = NSMenuItem(
@@ -107,9 +128,9 @@ final class MenuBarController: NSObject {
             keyEquivalent: ""
         )
         testItem.target = self
-        menu.addItem(testItem)
+        items.append(testItem)
 
-        menu.addItem(NSMenuItem.separator())
+        items.append(NSMenuItem.separator())
 
         // Quit
         let quitItem = NSMenuItem(
@@ -118,31 +139,32 @@ final class MenuBarController: NSObject {
             keyEquivalent: "q"
         )
         quitItem.target = self
-        menu.addItem(quitItem)
+        items.append(quitItem)
 
-        return menu
+        return items
     }
 
-    /// Refreshes the menu to reflect current state
-    private func refreshMenu() {
-        statusItem.menu = buildMenu()
+    /// Builds the dropdown menu
+    private func buildMenu() -> NSMenu {
+        let menu = NSMenu()
+        for item in buildMenuItems() {
+            menu.addItem(item)
+        }
+        return menu
     }
 
     // MARK: - Menu Actions
 
     @objc private func toggleOverlay() {
         appState.toggleOverlay()
-        refreshMenu()
     }
 
     @objc private func toggleProtectedMode() {
         appState.toggleProtectedMode()
-        refreshMenu()
     }
 
     @objc private func toggleClickThrough() {
         appState.toggleClickThrough()
-        refreshMenu()
     }
 
     @objc private func openDeckEditor() {
@@ -161,11 +183,30 @@ final class MenuBarController: NSObject {
             editorWindow?.contentView = NSHostingView(rootView: editorView)
             editorWindow?.center()
             editorWindow?.minSize = NSSize(width: 800, height: 500)
+
+            // Observe window close to update app state
+            editorCloseObserver = NotificationCenter.default.addObserver(
+                forName: NSWindow.willCloseNotification,
+                object: editorWindow,
+                queue: .main
+            ) { [weak self] _ in
+                self?.handleEditorWindowClose()
+            }
         }
 
         editorWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         appState.isEditorOpen = true
+    }
+
+    /// Handles editor window close - resets state and cleans up observer
+    private func handleEditorWindowClose() {
+        appState.isEditorOpen = false
+        editorWindow = nil
+        if let observer = editorCloseObserver {
+            NotificationCenter.default.removeObserver(observer)
+            editorCloseObserver = nil
+        }
     }
 
     @objc private func openTestCapture() {

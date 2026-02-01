@@ -215,7 +215,7 @@ struct OverlayContentView: View {
             }
 
             if let bullets = card.bullets {
-                ForEach(bullets, id: \.self) { bullet in
+                ForEach(Array(bullets.enumerated()), id: \.offset) { index, bullet in
                     HStack(alignment: .top, spacing: 8) {
                         Text("•")
                             .foregroundColor(Theme.accent)

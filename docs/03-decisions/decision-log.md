@@ -242,6 +242,42 @@ See: [Why 5 Layouts](why-5-layouts.md)
 
 ---
 
+### D009: Sandbox Disabled (Required for Global Hotkeys)
+
+**Decision**: Disable the macOS app sandbox
+
+**Date**: Phase 1 implementation
+
+**Context**: We need to register global hotkeys that work when other apps are focused.
+
+**Options Considered**:
+1. Disable sandbox entirely (our choice)
+2. Sandbox with Accessibility API
+3. Sandbox with user-granted permissions
+
+**Why This Choice**:
+- Carbon Event Manager (our hotkey solution) does not work inside a sandboxed app
+- Global hotkeys are a core feature - the app is nearly useless without them
+- Accessibility API requires explicit user permission AND still needs sandbox disabled for some hotkey scenarios
+- Many popular productivity apps (Alfred, Rectangle, Raycast) also run without sandbox for the same reason
+
+**Tradeoffs**:
+- Cannot distribute through Mac App Store (requires sandbox)
+- Reduced security isolation (app has more system access)
+- Must distribute directly or through third-party stores (Homebrew, SetApp, direct download)
+
+**Mac App Store Alternative**:
+If Mac App Store distribution becomes important, we would need to:
+1. Switch to CGEvent tap with user-granted Accessibility permission
+2. Accept that some hotkey combinations may not work reliably
+3. Add significant UI for permission management
+
+For a productivity tool aimed at technical users (sales engineers), direct distribution is acceptable.
+
+**File Reference**: `PresenterOverlay/Resources/PresenterOverlay.entitlements`
+
+---
+
 ## Future Decisions (Not Yet Made)
 
 The following decisions are documented for future phases:
