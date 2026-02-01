@@ -161,11 +161,15 @@ struct AssetImageView: View {
 
     private func loadImage() {
         Task {
-            if let nsImage = await AssetManager.shared.loadImageAsync(for: assetRef) {
-                self.image = nsImage
-                self.loadFailed = false
-            } else {
-                self.loadFailed = true
+            let nsImage = await AssetManager.shared.loadImageAsync(for: assetRef)
+            // Ensure @State updates happen on the main thread
+            await MainActor.run {
+                if let nsImage = nsImage {
+                    self.image = nsImage
+                    self.loadFailed = false
+                } else {
+                    self.loadFailed = true
+                }
             }
         }
     }
