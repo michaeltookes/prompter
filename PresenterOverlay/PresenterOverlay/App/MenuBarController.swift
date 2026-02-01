@@ -170,7 +170,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     @objc private func openDeckEditor() {
         if editorWindow == nil {
             // Create the editor window with SwiftUI content
-            let editorView = DeckEditorPlaceholderView()
+            let editorView = DeckEditorView()
                 .environmentObject(appState)
 
             editorWindow = NSWindow(

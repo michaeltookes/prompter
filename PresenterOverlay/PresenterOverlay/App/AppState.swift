@@ -123,6 +123,11 @@ final class AppState: ObservableObject {
         saveSettings()
     }
 
+    /// Loads a deck (alias for openDeck for compatibility)
+    func loadDeck(_ deck: Deck) {
+        openDeck(deck)
+    }
+
     // MARK: - Card Navigation
 
     /// Advances to the next card
@@ -152,6 +157,11 @@ final class AppState: ObservableObject {
         }
     }
 
+    /// Navigates to a specific card (alias for goToCard)
+    func navigateToCard(_ index: Int) {
+        goToCard(at: index)
+    }
+
     // MARK: - Card Editing
 
     /// Adds a new card to the current deck
@@ -166,10 +176,49 @@ final class AppState: ObservableObject {
         saveDeck()
     }
 
+    /// Adds an existing card to the current deck
+    func addCard(_ card: Card) {
+        guard var deck = currentDeck else { return }
+        deck.addCard(card)
+        currentDeck = deck
+        currentCardIndex = deck.cards.count - 1
+        selectedCardId = card.id
+        saveDeck()
+    }
+
+    /// Inserts a card at a specific index
+    func insertCard(_ card: Card, at index: Int) {
+        guard var deck = currentDeck else { return }
+
+        // Clamp index to valid range
+        let safeIndex = max(0, min(index, deck.cards.count))
+        deck.insertCard(card, at: safeIndex)
+        deck.updatedAt = Date()
+
+        currentDeck = deck
+        selectedCardId = card.id
+        saveDeck()
+    }
+
     /// Updates a card in the current deck
     func updateCard(_ card: Card) {
         guard var deck = currentDeck else { return }
         deck.updateCard(card)
+        currentDeck = deck
+        saveDeck()
+    }
+
+    /// Updates a card at a specific index
+    func updateCard(_ card: Card, at index: Int) {
+        guard var deck = currentDeck,
+              index >= 0 && index < deck.cards.count else { return }
+
+        // Update the card with proper timestamp via Deck's API
+        var updatedCard = card
+        updatedCard.updatedAt = Date()
+        deck.cards[index] = updatedCard
+        deck.updatedAt = Date()
+
         currentDeck = deck
         saveDeck()
     }
@@ -205,11 +254,37 @@ final class AppState: ObservableObject {
         }
     }
 
-    /// Moves a card from one position to another
+    /// Moves a card from one position to another (IndexSet version)
     func moveCard(from source: IndexSet, to destination: Int) {
         guard var deck = currentDeck,
               let sourceIndex = source.first else { return }
         deck.moveCard(from: sourceIndex, to: destination)
+        currentDeck = deck
+        saveDeck()
+    }
+
+    /// Moves a card from one index to another (Int version)
+    func moveCard(from sourceIndex: Int, to destinationIndex: Int) {
+        guard var deck = currentDeck,
+              sourceIndex >= 0 && sourceIndex < deck.cards.count,
+              destinationIndex >= 0 && destinationIndex <= deck.cards.count else { return }
+
+        var cards = deck.cards
+        let card = cards.remove(at: sourceIndex)
+
+        // Adjust destination after removal to account for index shift
+        let adjustedDestination: Int
+        if destinationIndex > sourceIndex {
+            adjustedDestination = destinationIndex - 1
+        } else {
+            adjustedDestination = destinationIndex
+        }
+
+        // Clamp to valid range (0...cards.count allows appending)
+        let finalDestination = max(0, min(adjustedDestination, cards.count))
+        cards.insert(card, at: finalDestination)
+
+        deck.cards = cards
         currentDeck = deck
         saveDeck()
     }

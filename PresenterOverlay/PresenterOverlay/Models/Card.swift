@@ -36,6 +36,17 @@ struct Card: Identifiable, Codable, Equatable {
     /// When this card was last modified
     var updatedAt: Date
 
+    // MARK: - Computed Properties
+
+    /// Alias for imageSlots for convenience
+    var images: [AssetRef?] {
+        get { imageSlots }
+        set {
+            imageSlots = newValue
+            updatedAt = Date()
+        }
+    }
+
     // MARK: - Initialization
 
     /// Creates a new card with the specified layout
@@ -123,9 +134,9 @@ struct Card: Identifiable, Codable, Equatable {
         let newSlotCount = newLayout.imageSlotCount
 
         // Create new slots array, preserving existing images where possible
-        var newSlots = Array<AssetRef?>(repeating: nil, count: newSlotCount)
-        for i in 0..<min(oldSlots.count, newSlotCount) {
-            newSlots[i] = oldSlots[i]
+        var newSlots = [AssetRef?](repeating: nil, count: newSlotCount)
+        for index in 0..<min(oldSlots.count, newSlotCount) {
+            newSlots[index] = oldSlots[index]
         }
 
         layout = newLayout

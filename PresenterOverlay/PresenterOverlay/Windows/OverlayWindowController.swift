@@ -163,7 +163,7 @@ final class OverlayWindowController: NSObject, ObservableObject {
 // MARK: - Overlay Content View
 
 /// Root SwiftUI view for the overlay window content.
-/// This is a placeholder that will be expanded in Phase 2.
+/// Renders the current card using layout-specific renderers.
 struct OverlayContentView: View {
     @EnvironmentObject var appState: AppState
 
@@ -178,11 +178,13 @@ struct OverlayContentView: View {
                 )
 
             VStack(spacing: 0) {
-                // Card content
+                // Card content using layout-specific renderer
                 if let card = appState.currentCard {
-                    cardContent(for: card)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
+                    ScrollView {
+                        OverlayCardRenderer(card: card, fontScale: appState.overlayFontScale)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 16)
+                    }
                 } else {
                     emptyState
                 }
@@ -190,7 +192,7 @@ struct OverlayContentView: View {
                 Spacer(minLength: 0)
 
                 // Footer
-                footer
+                OverlayFooterView()
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
             }
@@ -201,38 +203,7 @@ struct OverlayContentView: View {
                 .stroke(Theme.divider, lineWidth: 1)
         )
         .shadow(color: Theme.accentGlow, radius: Theme.overlayShadowRadius, x: 0, y: 10)
-    }
-
-    /// Renders card content based on layout
-    /// (Placeholder - will be expanded in Phase 2)
-    @ViewBuilder
-    private func cardContent(for card: Card) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            if let title = card.title {
-                Text(title)
-                    .font(.system(size: Theme.titleFontSize * appState.overlayFontScale, weight: .semibold))
-                    .foregroundColor(Theme.textPrimary)
-            }
-
-            if let bullets = card.bullets {
-                ForEach(Array(bullets.enumerated()), id: \.offset) { index, bullet in
-                    HStack(alignment: .top, spacing: 8) {
-                        Text("•")
-                            .foregroundColor(Theme.accent)
-                        Text(bullet)
-                            .foregroundColor(Theme.textPrimary)
-                    }
-                    .font(.system(size: Theme.notesFontSize * appState.overlayFontScale))
-                }
-            }
-
-            if let notes = card.notes {
-                Text(notes)
-                    .font(.system(size: Theme.notesFontSize * appState.overlayFontScale))
-                    .foregroundColor(Theme.textSecondary)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .animation(.easeInOut(duration: Theme.cardTransitionDuration), value: appState.currentCardIndex)
     }
 
     /// Empty state when no cards exist
@@ -251,31 +222,5 @@ struct OverlayContentView: View {
                 .foregroundColor(Theme.textSecondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-
-    /// Footer showing card count and status
-    private var footer: some View {
-        HStack {
-            Text("Card \(appState.currentCardIndex + 1) / \(appState.totalCards)")
-                .font(.system(size: Theme.footerFontSize, weight: .medium))
-                .foregroundColor(Theme.textSecondary)
-
-            Spacer()
-
-            HStack(spacing: 8) {
-                if appState.isProtectedModeEnabled {
-                    Image(systemName: "shield.fill")
-                        .foregroundColor(Theme.accent)
-                        .font(.system(size: 12))
-                }
-                if appState.isClickThroughEnabled {
-                    Image(systemName: "cursorarrow.click.badge.clock")
-                        .foregroundColor(Theme.accent)
-                        .font(.system(size: 12))
-                }
-            }
-        }
-        .padding(.vertical, 8)
-        .opacity(0.8)
     }
 }
