@@ -28,6 +28,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     /// Observer for editor window close
     private var editorCloseObserver: NSObjectProtocol?
 
+    /// Observer for test capture window close
+    private var testCaptureWindowObserver: NSObjectProtocol?
+
     // MARK: - Initialization
 
     init(appState: AppState, overlayController: OverlayWindowController) {
@@ -39,6 +42,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
     deinit {
         if let observer = editorCloseObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = testCaptureWindowObserver {
             NotificationCenter.default.removeObserver(observer)
         }
     }
@@ -121,9 +127,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         items.append(NSMenuItem.separator())
 
-        // Test Capture Setup
+        // Test Protected Mode
         let testItem = NSMenuItem(
-            title: "Test Capture Setup…",
+            title: "Test Protected Mode…",
             action: #selector(openTestCapture),
             keyEquivalent: ""
         )
@@ -212,17 +218,34 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     @objc private func openTestCapture() {
         if testCaptureWindow == nil {
             // Create the test capture window with SwiftUI content
-            let testView = TestCapturePlaceholderView()
+            let testView = TestCaptureView()
+                .environmentObject(appState)
 
             testCaptureWindow = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 500, height: 400),
+                contentRect: NSRect(x: 0, y: 0, width: 400, height: 500),
                 styleMask: [.titled, .closable],
                 backing: .buffered,
                 defer: false
             )
-            testCaptureWindow?.title = "Test Capture Setup"
+            testCaptureWindow?.title = "Test Protected Mode"
             testCaptureWindow?.contentView = NSHostingView(rootView: testView)
             testCaptureWindow?.center()
+            testCaptureWindow?.isReleasedWhenClosed = false
+
+            // Observe window close to clean up reference
+            testCaptureWindowObserver = NotificationCenter.default.addObserver(
+                forName: NSWindow.willCloseNotification,
+                object: testCaptureWindow,
+                queue: .main
+            ) { [weak self] notification in
+                Task { @MainActor in
+                    if let observer = self?.testCaptureWindowObserver {
+                        NotificationCenter.default.removeObserver(observer)
+                        self?.testCaptureWindowObserver = nil
+                    }
+                    self?.testCaptureWindow = nil
+                }
+            }
         }
 
         testCaptureWindow?.makeKeyAndOrderFront(nil)

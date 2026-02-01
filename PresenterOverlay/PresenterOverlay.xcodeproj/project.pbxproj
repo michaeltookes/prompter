@@ -39,12 +39,18 @@
 		A1000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift */; };
 		A1000001BBBBBBBB00000116 /* OverlayCardRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000116 /* OverlayCardRenderer.swift */; };
 		A1000001BBBBBBBB00000117 /* OverlayFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000117 /* OverlayFooterView.swift */; };
+		A1000001BBBBBBBB00000200 /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000200 /* Debouncer.swift */; };
+		A1000001BBBBBBBB00000201 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000201 /* PersistenceService.swift */; };
+		A1000001BBBBBBBB00000202 /* TestCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000202 /* TestCaptureView.swift */; };
+		A1000001BBBBBBBB00000203 /* TestCaptureWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000203 /* TestCaptureWindowController.swift */; };
 		B1000001CCCCCCCC00000001 /* CardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000001 /* CardTests.swift */; };
 		B1000001CCCCCCCC00000002 /* DeckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000002 /* DeckTests.swift */; };
 		B1000001CCCCCCCC00000003 /* LayoutTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000003 /* LayoutTypeTests.swift */; };
 		B1000001CCCCCCCC00000004 /* AssetRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000004 /* AssetRefTests.swift */; };
 		B1000001CCCCCCCC00000005 /* OverlayFrameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */; };
 		B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000006 /* AppStateTests.swift */; };
+		B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000007 /* DebouncerTests.swift */; };
+		B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +98,10 @@
 		A2000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBleedBulletsRenderer.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000116 /* OverlayCardRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayCardRenderer.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000117 /* OverlayFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayFooterView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000200 /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000201 /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000202 /* TestCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCaptureView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000203 /* TestCaptureWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCaptureWindowController.swift; sourceTree = "<group>"; };
 		A3000001BBBBBBBB00000001 /* PresenterOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PresenterOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2000001CCCCCCCC00000001 /* CardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000002 /* DeckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckTests.swift; sourceTree = "<group>"; };
@@ -99,6 +109,8 @@
 		B2000001CCCCCCCC00000004 /* AssetRefTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRefTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayFrameTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000006 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000007 /* DebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncerTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceServiceTests.swift; sourceTree = "<group>"; };
 		B3000001CCCCCCCC00000001 /* PresenterOverlayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PresenterOverlayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -170,6 +182,7 @@
 			children = (
 				A2000001BBBBBBBB00000011 /* OverlayWindow.swift */,
 				A2000001BBBBBBBB00000012 /* OverlayWindowController.swift */,
+				A2000001BBBBBBBB00000203 /* TestCaptureWindowController.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -180,6 +193,7 @@
 				A5000001BBBBBBBB00000020 /* Shared */,
 				A5000001BBBBBBBB00000021 /* DeckEditor */,
 				A5000001BBBBBBBB00000023 /* Overlay */,
+				A5000001BBBBBBBB00000025 /* TestCapture */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -201,6 +215,7 @@
 			children = (
 				A2000001BBBBBBBB00000010 /* HotkeyManager.swift */,
 				A2000001BBBBBBBB00000103 /* AssetManager.swift */,
+				A2000001BBBBBBBB00000201 /* PersistenceService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -223,6 +238,7 @@
 		A5000001BBBBBBBB00000011 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A2000001BBBBBBBB00000200 /* Debouncer.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -291,6 +307,14 @@
 			path = LayoutRenderers;
 			sourceTree = "<group>";
 		};
+		A5000001BBBBBBBB00000025 /* TestCapture */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001BBBBBBBB00000202 /* TestCaptureView.swift */,
+			);
+			path = TestCapture;
+			sourceTree = "<group>";
+		};
 		B5000001CCCCCCCC00000001 /* PresenterOverlayTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -300,6 +324,8 @@
 				B2000001CCCCCCCC00000004 /* AssetRefTests.swift */,
 				B2000001CCCCCCCC00000005 /* OverlayFrameTests.swift */,
 				B2000001CCCCCCCC00000006 /* AppStateTests.swift */,
+				B2000001CCCCCCCC00000007 /* DebouncerTests.swift */,
+				B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */,
 			);
 			path = PresenterOverlayTests;
 			sourceTree = "<group>";
@@ -434,6 +460,10 @@
 				A1000001BBBBBBBB00000115 /* FullBleedBulletsRenderer.swift in Sources */,
 				A1000001BBBBBBBB00000116 /* OverlayCardRenderer.swift in Sources */,
 				A1000001BBBBBBBB00000117 /* OverlayFooterView.swift in Sources */,
+				A1000001BBBBBBBB00000200 /* Debouncer.swift in Sources */,
+				A1000001BBBBBBBB00000201 /* PersistenceService.swift in Sources */,
+				A1000001BBBBBBBB00000202 /* TestCaptureView.swift in Sources */,
+				A1000001BBBBBBBB00000203 /* TestCaptureWindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +477,8 @@
 				B1000001CCCCCCCC00000004 /* AssetRefTests.swift in Sources */,
 				B1000001CCCCCCCC00000005 /* OverlayFrameTests.swift in Sources */,
 				B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */,
+				B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */,
+				B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,7 +635,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.9;
 			};
 			name = Debug;
 		};
@@ -631,7 +663,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.9;
 			};
 			name = Release;
 		};
@@ -648,7 +680,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.9;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PresenterOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PresenterOverlay";
 			};
 			name = Debug;
@@ -666,7 +698,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.9;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PresenterOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PresenterOverlay";
 			};
 			name = Release;

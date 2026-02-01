@@ -59,8 +59,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
-        // Save settings and current deck before quitting
-        appState.saveSettings()
+        // Save settings and current deck synchronously before quitting
+        appState.saveDeckSync()
+        appState.saveSettingsSync()
         hotkeyManager.unregisterAllHotkeys()
 
         print("Presenter Overlay terminating")

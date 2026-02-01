@@ -7,6 +7,8 @@ final class AppStateTests: XCTestCase {
     var appState: AppState!
 
     override func setUp() async throws {
+        // Reset settings to defaults before each test
+        PersistenceService.shared.saveSettingsSync(.default)
         appState = AppState()
     }
 
