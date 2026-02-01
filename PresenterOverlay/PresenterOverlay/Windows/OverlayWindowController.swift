@@ -169,14 +169,16 @@ struct OverlayContentView: View {
 
     var body: some View {
         ZStack {
-            // Frosted glass background
+            // Frosted glass background (opacity applied here only)
             RoundedRectangle(cornerRadius: Theme.overlayCornerRadius)
                 .fill(.ultraThinMaterial)
                 .overlay(
                     RoundedRectangle(cornerRadius: Theme.overlayCornerRadius)
                         .fill(Theme.surfaceBackground.opacity(0.75))
                 )
+                .opacity(appState.overlayOpacity)
 
+            // Content (always fully opaque)
             VStack(spacing: 0) {
                 // Drag handle at top
                 DragHandleView()
@@ -203,10 +205,11 @@ struct OverlayContentView: View {
         .clipShape(RoundedRectangle(cornerRadius: Theme.overlayCornerRadius))
         .overlay(
             RoundedRectangle(cornerRadius: Theme.overlayCornerRadius)
-                .stroke(Theme.divider, lineWidth: 1)
+                .stroke(Theme.divider.opacity(appState.overlayOpacity), lineWidth: 1)
         )
-        .shadow(color: Theme.accentGlow, radius: Theme.overlayShadowRadius, x: 0, y: 10)
+        .shadow(color: Theme.accentGlow.opacity(appState.overlayOpacity), radius: Theme.overlayShadowRadius, x: 0, y: 10)
         .animation(.easeInOut(duration: Theme.cardTransitionDuration), value: appState.currentCardIndex)
+        .animation(.easeInOut(duration: 0.15), value: appState.overlayOpacity)
     }
 
     /// Empty state when no cards exist

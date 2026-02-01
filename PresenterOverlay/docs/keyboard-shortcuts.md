@@ -23,6 +23,8 @@ All shortcuts work globally - even when Presenter Overlay is not the active appl
 |----------|--------|
 | `Cmd+Shift+=` | Increase font size |
 | `Cmd+Shift+-` | Decrease font size |
+| `Cmd+Shift+]` | Increase opacity (more solid) |
+| `Cmd+Shift+[` | Decrease opacity (more transparent) |
 
 ## Tips
 

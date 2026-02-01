@@ -420,6 +420,18 @@ final class AppState: ObservableObject {
         saveSettings()
     }
 
+    /// Increases overlay opacity (more opaque)
+    func increaseOpacity() {
+        overlayOpacity = min(1.0, overlayOpacity + 0.1)
+        saveSettings()
+    }
+
+    /// Decreases overlay opacity (more transparent)
+    func decreaseOpacity() {
+        overlayOpacity = max(0.3, overlayOpacity - 0.1)
+        saveSettings()
+    }
+
     /// Scrolls overlay content up
     func scrollUp() {
         overlayScrollOffset = max(0, overlayScrollOffset - 50)
