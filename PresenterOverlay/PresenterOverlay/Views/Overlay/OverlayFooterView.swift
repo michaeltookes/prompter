@@ -13,6 +13,25 @@ struct OverlayFooterView: View {
 
             Spacer()
 
+            // Opacity slider
+            HStack(spacing: 6) {
+                Image(systemName: "circle.lefthalf.filled")
+                    .font(.system(size: 10))
+                    .foregroundColor(Theme.textSecondary.opacity(0.7))
+
+                Slider(value: $appState.overlayOpacity, in: 0.3...1.0, step: 0.05)
+                    .frame(width: 60)
+                    .controlSize(.mini)
+
+                Text("\(Int(appState.overlayOpacity * 100))%")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(Theme.textSecondary.opacity(0.7))
+                    .frame(width: 28, alignment: .trailing)
+            }
+            .help("Adjust overlay transparency")
+
+            Spacer()
+
             // Status indicators
             HStack(spacing: 8) {
                 if appState.isProtectedModeEnabled {
@@ -21,6 +40,17 @@ struct OverlayFooterView: View {
                         label: "Protected",
                         color: Theme.accent
                     )
+                } else {
+                    // Warning when Protected Mode is off
+                    HStack(spacing: 4) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.yellow)
+                        Text("Visible to capture")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(.yellow)
+                    }
+                    .help("Protected Mode is off. Enable it before sharing your screen.")
                 }
 
                 if appState.isClickThroughEnabled {

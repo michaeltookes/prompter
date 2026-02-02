@@ -30,6 +30,8 @@ final class HotkeyManager: ObservableObject {
         case scrollDown          // Cmd+Shift+Down
         case toggleClickThrough  // Cmd+Shift+C
         case toggleProtectedMode // Cmd+Shift+P
+        case increaseOpacity     // Cmd+Shift+]
+        case decreaseOpacity     // Cmd+Shift+[
 
         /// The virtual key code for this action
         var keyCode: UInt32 {
@@ -43,6 +45,8 @@ final class HotkeyManager: ObservableObject {
             case .scrollDown:          return UInt32(kVK_DownArrow)
             case .toggleClickThrough:  return UInt32(kVK_ANSI_C)
             case .toggleProtectedMode: return UInt32(kVK_ANSI_P)
+            case .increaseOpacity:     return UInt32(kVK_ANSI_RightBracket)
+            case .decreaseOpacity:     return UInt32(kVK_ANSI_LeftBracket)
             }
         }
 
@@ -63,6 +67,8 @@ final class HotkeyManager: ObservableObject {
             case .scrollDown:          return "⌘⇧↓"
             case .toggleClickThrough:  return "⌘⇧C"
             case .toggleProtectedMode: return "⌘⇧P"
+            case .increaseOpacity:     return "⌘⇧]"
+            case .decreaseOpacity:     return "⌘⇧["
             }
         }
     }
@@ -232,6 +238,18 @@ final class HotkeyManager: ObservableObject {
         setCallback(for: .toggleProtectedMode) { [weak appState] in
             Task { @MainActor in
                 appState?.toggleProtectedMode()
+            }
+        }
+
+        setCallback(for: .increaseOpacity) { [weak appState] in
+            Task { @MainActor in
+                appState?.increaseOpacity()
+            }
+        }
+
+        setCallback(for: .decreaseOpacity) { [weak appState] in
+            Task { @MainActor in
+                appState?.decreaseOpacity()
             }
         }
 
