@@ -1,8 +1,8 @@
-# Presenter Overlay - Claude Agent Grounding Document
+# Prompter - Claude Agent Grounding Document
 
 ## Project Overview
 
-**Presenter Overlay** is a macOS 14+ menu bar application designed for sales representatives and solution architects to display hidden speaker notes during technical demonstrations. The overlay window remains visible only to the presenter while screen-sharing in Google Meet or Microsoft Teams.
+**Prompter** is a macOS 14+ menu bar application designed for sales representatives and solution architects to display hidden speaker notes during technical demonstrations. The overlay window remains visible only to the presenter while screen-sharing in Google Meet or Microsoft Teams.
 
 ## Quick Start for Agents
 
@@ -19,12 +19,12 @@ When working on this project:
 - **UI Framework**: SwiftUI (views) + AppKit (window management)
 - **Minimum Target**: macOS 14.0 Sonoma
 - **App Type**: Menu bar only (LSUIElement = YES)
-- **Persistence**: JSON files in ~/Library/Application Support/PresenterOverlay/
+- **Persistence**: JSON files in ~/Library/Application Support/Prompter/
 
 ## Core Architecture
 
 ```
-PresenterOverlay/
+Prompter/
 ├── App/                    # App lifecycle, state, menu bar
 ├── Windows/                # NSWindow controllers for overlay, editor
 ├── Views/                  # SwiftUI views organized by feature
@@ -124,7 +124,7 @@ let buttons = 10px
 ## File Storage (from PERSISTENCE_SPEC.md)
 
 ```
-~/Library/Application Support/PresenterOverlay/
+~/Library/Application Support/Prompter/
 ├── Decks/
 │   └── <deckId>.json       # Individual deck files
 ├── Assets/

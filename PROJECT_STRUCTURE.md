@@ -1,9 +1,9 @@
 # Project Structure
 
-PresenterOverlay/
+Prompter/
 │
 ├── App/
-│   ├── PresenterOverlayApp.swift
+│   ├── PrompterApp.swift
 │   ├── AppState.swift
 │   ├── MenuBarController.swift
 │

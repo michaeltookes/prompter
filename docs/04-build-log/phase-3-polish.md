@@ -62,7 +62,7 @@ By the end of Phase 3, we should have:
 
 ### File Structure
 ```
-~/Library/Application Support/PresenterOverlay/
+~/Library/Application Support/Prompter/
 ├── Decks/
 │   └── {deck-id}.json     # Each deck in its own file
 ├── Assets/

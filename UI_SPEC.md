@@ -2,7 +2,7 @@
 
 ## Menu Bar Dropdown
 
-Presenter Overlay
+Prompter
 ────────────────────
 Show Overlay
 Open Deck Editor…

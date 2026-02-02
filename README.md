@@ -1,9 +1,26 @@
-# Presenter Overlay (macOS) — Deck Mode MVP (5 Layouts)
+# Prompter (macOS) — Deck Mode MVP (5 Layouts)
 
 A macOS menu bar app that shows a **presenter-only overlay** (teleprompter + slide-notes deck).
 Designed for presenters using **Google Meet** and sometimes **Microsoft Teams**, typically sharing **entire screen**.
 
 The overlay is intended to be visible only to the presenter. The app includes **Protected Mode** to attempt to hide the overlay from screen capture/screen sharing (best effort) and a built-in **Test Capture Setup** screen.
+
+## Installation
+
+### Homebrew (Recommended)
+
+```bash
+brew tap michaeltookes/prompter
+brew install --cask prompter
+```
+
+### Direct Download
+
+Download the latest release from [GitHub Releases](https://github.com/michaeltookes/prompter/releases):
+- **Prompter.dmg** — Drag-to-Applications installer
+- **Prompter.zip** — Direct app bundle
+
+The app is signed and notarized by Apple for Gatekeeper approval.
 
 ## Key Features
 - Menu bar app (NSStatusItem)
@@ -33,7 +50,18 @@ The overlay is intended to be visible only to the presenter. The app includes **
 - Cmd+Shift+P: Toggle Protected Mode
 
 ## Run
-Open the Xcode project and run the macOS target.
+
+After installation, launch **Prompter** from your Applications folder. The app runs in the menu bar.
+
+### Building from Source
+
+```bash
+git clone https://github.com/michaeltookes/prompter.git
+cd prompter/Prompter
+open Prompter.xcodeproj
+```
+
+Then build and run the macOS target in Xcode.
 
 ## Disclaimer
 Capture protection is best-effort. Some capture tools or capture methods may still display the overlay.

@@ -5,7 +5,7 @@
 
 ## What We're Building
 
-The foundation of Presenter Overlay:
+The foundation of Prompter:
 - Menu bar app that runs without a dock icon
 - Floating overlay window with capture protection
 - Global keyboard shortcuts
@@ -32,7 +32,7 @@ By the end of Phase 1, we should have:
 ### 2. App Foundation
 | File | Purpose |
 |------|---------|
-| PresenterOverlayApp.swift | App entry point |
+| PrompterApp.swift | App entry point |
 | AppDelegate.swift | Handles app lifecycle events |
 | AppState.swift | Central state container |
 | MenuBarController.swift | Menu bar icon and dropdown |
@@ -77,7 +77,7 @@ Created the docs/ folder structure with:
 ### Entry 2: Xcode Project Setup
 **Date**: January 2026
 
-Created the PresenterOverlay Xcode project with:
+Created the Prompter Xcode project with:
 - Folder structure matching our architecture plan
 - Info.plist with LSUIElement=YES (menu bar only app)
 - macOS 14.0 deployment target
@@ -108,7 +108,7 @@ Implemented all core data models:
 Built the central nervous system:
 - **AppState**: ObservableObject with all app state, published properties for reactivity
 - **AppDelegate**: Sets up menu bar, overlay, and hotkeys on launch
-- **PresenterOverlayApp**: SwiftUI app entry point with NSApplicationDelegateAdaptor
+- **PrompterApp**: SwiftUI app entry point with NSApplicationDelegateAdaptor
 
 **Why centralized state?**: All views observe AppState. When you press a hotkey to advance cards, AppState updates, and the overlay redraws automatically. No manual refresh calls needed.
 

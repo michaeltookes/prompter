@@ -1,10 +1,10 @@
-# How Presenter Overlay Works
+# How Prompter Works
 
 This document explains the app's architecture in plain English. No programming knowledge required.
 
 ## The Big Picture
 
-Presenter Overlay has four main parts that work together:
+Prompter has four main parts that work together:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -101,7 +101,7 @@ Everything is reactive - when something changes, all the parts that need to know
 Your decks and settings are stored on your Mac:
 
 ```
-~/Library/Application Support/PresenterOverlay/
+~/Library/Application Support/Prompter/
 ├── Decks/
 │   └── your-deck-id.json    ← Your cards and content
 ├── Assets/

@@ -1,4 +1,4 @@
-# Who is Presenter Overlay For?
+# Who is Prompter For?
 
 ## Primary Users
 
@@ -60,7 +60,7 @@ An engineer on the customer side wants details. Your notes include:
 | Second monitor | Eye movement is noticeable |
 | Notion/Docs on the side | Takes up screen space, visible when sharing |
 
-Presenter Overlay is purpose-built for the "sharing entire screen while demoing" scenario.
+Prompter is purpose-built for the "sharing entire screen while demoing" scenario.
 
 ---
 

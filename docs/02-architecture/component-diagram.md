@@ -1,6 +1,6 @@
 # Component Diagram
 
-This diagram shows how the parts of Presenter Overlay connect to each other.
+This diagram shows how the parts of Prompter connect to each other.
 
 ## Visual Overview
 

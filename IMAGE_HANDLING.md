@@ -7,7 +7,7 @@
 
 ## Storage
 All images are copied into:
-~/Library/Application Support/PresenterOverlay/Assets/
+~/Library/Application Support/Prompter/Assets/
 
 Rename each file to UUID:
 <uuid>.png (or preserve extension)

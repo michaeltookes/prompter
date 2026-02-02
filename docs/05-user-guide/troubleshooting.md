@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Solutions to common problems with Presenter Overlay.
+Solutions to common problems with Prompter.
 
 ## Overlay Issues
 
@@ -8,7 +8,7 @@ Solutions to common problems with Presenter Overlay.
 
 **Check if the app is running:**
 - Look for the icon in your menu bar (top-right of screen)
-- If not there, open Presenter Overlay from Applications
+- If not there, open Prompter from Applications
 
 **Try toggling it:**
 - Press Cmd+Shift+O
@@ -64,7 +64,7 @@ The overlay should float above all windows. If it's not:
 - Try exiting and re-entering fullscreen
 
 **Restart the app:**
-- Quit Presenter Overlay
+- Quit Prompter
 - Reopen it
 - Show the overlay again
 
@@ -79,11 +79,11 @@ The overlay should float above all windows. If it's not:
 **Grant Accessibility permissions:**
 1. Open System Settings (or System Preferences)
 2. Go to Privacy & Security → Accessibility
-3. Make sure Presenter Overlay is listed and enabled
+3. Make sure Prompter is listed and enabled
 4. If not, add it by clicking the + button
 
 **Restart after permission change:**
-- Quit and reopen Presenter Overlay
+- Quit and reopen Prompter
 - Permissions often require a restart to take effect
 
 ### Some hotkeys work, others don't
@@ -118,8 +118,8 @@ Changes should save automatically. If they're not:
 - Look for any alerts or notifications
 
 **Verify file permissions:**
-- Presenter Overlay saves to:
-  `~/Library/Application Support/PresenterOverlay/`
+- Prompter saves to:
+  `~/Library/Application Support/Prompter/`
 - Make sure this folder is writable
 
 **Force a save:**
@@ -146,7 +146,7 @@ Changes should save automatically. If they're not:
 
 ### App is slow
 
-Presenter Overlay should be very fast. If it's not:
+Prompter should be very fast. If it's not:
 
 **Check image sizes:**
 - Very large images (>5MB) might slow things down
@@ -162,7 +162,7 @@ The app should use minimal CPU. If it's using a lot:
 
 **Check Activity Monitor:**
 - Open Activity Monitor
-- Find "PresenterOverlay"
+- Find "Prompter"
 - Note the CPU percentage
 
 **Report the issue:**
@@ -175,7 +175,7 @@ The app should use minimal CPU. If it's using a lot:
 
 Your data is stored at:
 ```
-~/Library/Application Support/PresenterOverlay/
+~/Library/Application Support/Prompter/
 ├── Decks/        # Your deck files
 ├── Assets/       # Images you've added
 └── Settings.json # Your preferences
@@ -184,7 +184,7 @@ Your data is stored at:
 To find this folder:
 1. Open Finder
 2. Press Cmd+Shift+G
-3. Paste: `~/Library/Application Support/PresenterOverlay/`
+3. Paste: `~/Library/Application Support/Prompter/`
 
 ### How do I back up my decks?
 
@@ -195,7 +195,7 @@ Copy the entire folder mentioned above. It contains everything:
 
 ### Can I transfer decks to another Mac?
 
-Yes! Copy the `PresenterOverlay` folder to the same location on the other Mac.
+Yes! Copy the `Prompter` folder to the same location on the other Mac.
 
 ### My deck disappeared
 

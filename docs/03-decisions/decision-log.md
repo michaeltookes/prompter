@@ -1,6 +1,6 @@
 # Decision Log
 
-This document tracks all significant decisions made during the development of Presenter Overlay. Each entry explains what we decided, why, and what alternatives we considered.
+This document tracks all significant decisions made during the development of Prompter. Each entry explains what we decided, why, and what alternatives we considered.
 
 ---
 
@@ -274,7 +274,7 @@ If Mac App Store distribution becomes important, we would need to:
 
 For a productivity tool aimed at technical users (sales engineers), direct distribution is acceptable.
 
-**File Reference**: `PresenterOverlay/Resources/PresenterOverlay.entitlements`
+**File Reference**: `Prompter/Resources/Prompter.entitlements`
 
 ---
 
