@@ -1,10 +1,10 @@
-# Presenter Overlay Documentation
+# Prompter Documentation
 
-Welcome to Presenter Overlay - a macOS menu bar app that displays hidden speaker notes during presentations.
+Welcome to Prompter - a macOS menu bar app that displays hidden speaker notes during presentations.
 
-## What is Presenter Overlay?
+## What is Prompter?
 
-Presenter Overlay lets you see your notes while sharing your screen in Google Meet, Microsoft Teams, or Zoom. The overlay floats above all windows but is hidden from screen capture, so your audience sees your presentation while you see your notes.
+Prompter lets you see your notes while sharing your screen in Google Meet, Microsoft Teams, or Zoom. The overlay floats above all windows but is hidden from screen capture, so your audience sees your presentation while you see your notes.
 
 ## Documentation
 
@@ -14,7 +14,7 @@ Presenter Overlay lets you see your notes while sharing your screen in Google Me
 
 ## Quick Start
 
-1. Launch Presenter Overlay (appears in menu bar as a speech bubble icon)
+1. Launch Prompter (appears in menu bar as the Prompter menu-bar icon)
 2. Click the menu bar icon → "Open Deck Editor" to create your notes
 3. Press `Cmd+Shift+O` to show the overlay
 4. Start your screen share - the overlay stays hidden from capture

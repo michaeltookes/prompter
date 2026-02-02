@@ -2,13 +2,13 @@
 
 ## Installation
 
-1. Build the app from Xcode or copy `PresenterOverlay.app` to your Applications folder
-2. Launch the app - it appears as a speech bubble icon in your menu bar
+1. Build the app from Xcode or copy `Prompter.app` to your Applications folder
+2. Launch the app - it appears as the Prompter menu-bar icon in your menu bar
 3. No dock icon appears (it's a menu-bar-only app)
 
 ## First Launch
 
-When you first launch Presenter Overlay:
+When you first launch Prompter:
 
 1. A default deck is created with a sample card
 2. Settings are initialized with safe defaults (Protected Mode ON)

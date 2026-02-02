@@ -183,6 +183,7 @@ final class AppState: ObservableObject {
         decks.insert(deck, at: 0)
         currentCardIndex = 0
         selectedCardId = deck.cards.first?.id
+        overlayScrollOffset = .zero
         saveDeck()
         return true
     }
