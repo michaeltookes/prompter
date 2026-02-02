@@ -6,7 +6,7 @@ import SwiftUI
 /// throughout the app for consistent styling. Never hardcode colors
 /// or dimensions - always use these constants.
 ///
-/// Reference: docs/UI_UX_STYLE_GUIDE.md and CLAUDE.md
+/// Reference: .claude/reference-docs/UI_UX_STYLE_GUIDE.md and CLAUDE.md
 enum Theme {
 
     // MARK: - Colors

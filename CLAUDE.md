@@ -7,7 +7,7 @@
 ## Quick Start for Agents
 
 When working on this project:
-1. Read the relevant spec file in the project root before implementing a feature
+1. Read the relevant spec file in `.claude/reference-docs/` before implementing a feature
 2. Follow the SwiftUI/AppKit hybrid architecture pattern
 3. Use the established Theme constants for all UI styling
 4. Test hotkeys work system-wide (not just when app is focused)
@@ -62,7 +62,7 @@ All hotkeys use Cmd+Shift modifier and must work system-wide:
 | Cmd+Shift+C | Toggle click-through mode |
 | Cmd+Shift+P | Toggle Protected Mode |
 
-## Data Models (from DATA_MODEL.md)
+## Data Models (from .claude/reference-docs/DATA_MODEL.md)
 
 ```swift
 // Deck: Collection of cards
@@ -96,7 +96,7 @@ enum LayoutType: String, Codable {
 }
 ```
 
-## UI Theme (from UI_UX_STYLE_GUIDE.md)
+## UI Theme (from .claude/reference-docs/UI_UX_STYLE_GUIDE.md)
 
 ```swift
 // Color Palette
@@ -121,7 +121,7 @@ let imageSlots = 14px
 let buttons = 10px
 ```
 
-## File Storage (from PERSISTENCE_SPEC.md)
+## File Storage (from .claude/reference-docs/PERSISTENCE_SPEC.md)
 
 ```
 ~/Library/Application Support/Prompter/
@@ -160,21 +160,23 @@ let buttons = 10px
 
 ## Specification Files Reference
 
+All reference specs live in `.claude/reference-docs/`.
+
 | File | Purpose |
 |------|---------|
-| PRODUCT_REQUIREMENTS.md | Core problem, MVP outcomes, acceptance criteria |
-| PROJECT_STRUCTURE.md | File/folder architecture |
-| DATA_MODEL.md | All data structures |
-| UI_UX_STYLE_GUIDE.md | Colors, typography, design tokens |
-| HOTKEYS_SPEC.md | Global hotkey definitions |
-| OVERLAY_WINDOW_SPEC.md | Overlay technical requirements |
-| OVERLAY_UI_SPEC.md | Overlay visual design |
-| UI_SPEC.md | Menu bar and editor UI specs |
-| PERSISTENCE_SPEC.md | File storage structure |
-| CAPTURE_PROTECTION.md | Protected Mode implementation |
-| STATE_MANAGEMENT.md | AppState architecture |
-| IMAGE_HANDLING.md | Asset import workflow |
-| ENGINEERING_NOTES.md | Tech stack and strategies |
+| .claude/reference-docs/PRODUCT_REQUIREMENTS.md | Core problem, MVP outcomes, acceptance criteria |
+| .claude/reference-docs/PROJECT_STRUCTURE.md | File/folder architecture |
+| .claude/reference-docs/DATA_MODEL.md | All data structures |
+| .claude/reference-docs/UI_UX_STYLE_GUIDE.md | Colors, typography, design tokens |
+| .claude/reference-docs/HOTKEYS_SPEC.md | Global hotkey definitions |
+| .claude/reference-docs/OVERLAY_WINDOW_SPEC.md | Overlay technical requirements |
+| .claude/reference-docs/OVERLAY_UI_SPEC.md | Overlay visual design |
+| .claude/reference-docs/UI_SPEC.md | Menu bar and editor UI specs |
+| .claude/reference-docs/PERSISTENCE_SPEC.md | File storage structure |
+| .claude/reference-docs/CAPTURE_PROTECTION.md | Protected Mode implementation |
+| .claude/reference-docs/STATE_MANAGEMENT.md | AppState architecture |
+| .claude/reference-docs/IMAGE_HANDLING.md | Asset import workflow |
+| .claude/reference-docs/ENGINEERING_NOTES.md | Tech stack and strategies |
 
 ## Testing Checklist
 
