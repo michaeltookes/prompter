@@ -89,11 +89,14 @@ final class PersistenceService {
             return
         }
 
+        var migrationSucceeded = true
+
         if !newHasSettings && legacyHasSettings {
             do {
                 try fileManager.copyItem(at: legacySettingsURL, to: settingsURL)
                 print("PersistenceService: Migrated legacy settings")
             } catch {
+                migrationSucceeded = false
                 print("PersistenceService: Failed to migrate legacy settings: \(error)")
             }
         }
@@ -109,16 +112,20 @@ final class PersistenceService {
                     do {
                         try fileManager.copyItem(at: fileURL, to: destinationURL)
                     } catch {
+                        migrationSucceeded = false
                         print("PersistenceService: Failed to migrate deck \(fileURL.lastPathComponent): \(error)")
                     }
                 }
                 print("PersistenceService: Migrated legacy decks")
             } catch {
+                migrationSucceeded = false
                 print("PersistenceService: Failed to read legacy decks: \(error)")
             }
         }
 
-        defaults.set(true, forKey: Self.migrationFlagKey)
+        if migrationSucceeded {
+            defaults.set(true, forKey: Self.migrationFlagKey)
+        }
     }
 
     // MARK: - Settings

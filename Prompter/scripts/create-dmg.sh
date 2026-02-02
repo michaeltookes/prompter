@@ -60,6 +60,8 @@ check_requirements() {
 generate_background() {
     echo_step "Generating DMG background..."
 
+    mkdir -p "$(dirname "$BACKGROUND_IMG")"
+
     # Check if the Swift script exists and Swift is available, otherwise generate with Python
     if [ -f "$SCRIPT_DIR/generate-dmg-background.swift" ] && command -v swift >/dev/null 2>&1; then
         swift "$SCRIPT_DIR/generate-dmg-background.swift"

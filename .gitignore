@@ -1,1 +1,7 @@
 *.profraw
+build/
+DerivedData/
+*.xcarchive/
+*.xcarchive
+*.dSYM/
+*.dSYM
