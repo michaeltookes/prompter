@@ -60,13 +60,19 @@ check_requirements() {
 generate_background() {
     echo_step "Generating DMG background..."
 
-    # Check if the Swift script exists, if not generate with Python
-    if [ -f "$SCRIPT_DIR/generate-dmg-background.swift" ]; then
+    # Check if the Swift script exists and Swift is available, otherwise generate with Python
+    if [ -f "$SCRIPT_DIR/generate-dmg-background.swift" ] && command -v swift >/dev/null 2>&1; then
         swift "$SCRIPT_DIR/generate-dmg-background.swift"
     else
         # Simple Python fallback to create background
-        python3 << 'EOF'
+        BACKGROUND_IMG="$BACKGROUND_IMG" python3 << 'EOF'
+import os
 from PIL import Image, ImageDraw
+
+# Read output path from environment
+output_path = os.environ.get("BACKGROUND_IMG")
+if not output_path:
+    raise RuntimeError("BACKGROUND_IMG is not set")
 
 # Create 660x400 background
 width, height = 660, 400
@@ -89,7 +95,7 @@ draw.polygon([
     (arrow_end_x - 15, arrow_y + 10)
 ], fill=(100, 100, 100))
 
-img.save('/Users/michaeltookes/Desktop/prompter/Prompter/dist/dmg-background.png')
+img.save(output_path)
 print("Background generated")
 EOF
     fi
@@ -107,6 +113,7 @@ create_styled_dmg() {
     # Create the DMG with create-dmg
     create-dmg \
         --volname "$APP_NAME" \
+        --volicon "$ICON_FILE" \
         --background "$BACKGROUND_IMG" \
         --window-pos 200 120 \
         --window-size 660 400 \

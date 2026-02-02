@@ -43,6 +43,9 @@ final class PersistenceService {
     /// Background queue for I/O operations
     private let ioQueue = DispatchQueue(label: "com.tookes.prompter.persistence", qos: .utility)
 
+    /// Migration flag to avoid repeating legacy data migration
+    private static let migrationFlagKey = "PrompterPersistenceMigratedFromPresenterOverlay"
+
     // MARK: - Initialization
 
     private init() {
@@ -56,6 +59,66 @@ final class PersistenceService {
         // Create directories if needed
         try? fileManager.createDirectory(at: appSupportURL, withIntermediateDirectories: true)
         try? fileManager.createDirectory(at: decksURL, withIntermediateDirectories: true)
+
+        migrateLegacyDataIfNeeded(fileManager: fileManager, appSupport: appSupport)
+    }
+
+    private func migrateLegacyDataIfNeeded(fileManager: FileManager, appSupport: URL) {
+        let defaults = UserDefaults.standard
+        if defaults.bool(forKey: Self.migrationFlagKey) {
+            return
+        }
+
+        let legacySupportURL = appSupport.appendingPathComponent("PresenterOverlay", isDirectory: true)
+        let legacyDecksURL = legacySupportURL.appendingPathComponent("Decks", isDirectory: true)
+        let legacySettingsURL = legacySupportURL.appendingPathComponent("Settings.json")
+
+        let newHasSettings = fileManager.fileExists(atPath: settingsURL.path)
+        let newDecksEmpty: Bool = {
+            guard let files = try? fileManager.contentsOfDirectory(at: decksURL, includingPropertiesForKeys: nil) else {
+                return true
+            }
+            return files.isEmpty
+        }()
+
+        let legacyHasSettings = fileManager.fileExists(atPath: legacySettingsURL.path)
+        let legacyHasDecks = fileManager.fileExists(atPath: legacyDecksURL.path)
+
+        guard (!newHasSettings || newDecksEmpty), (legacyHasSettings || legacyHasDecks) else {
+            defaults.set(true, forKey: Self.migrationFlagKey)
+            return
+        }
+
+        if !newHasSettings && legacyHasSettings {
+            do {
+                try fileManager.copyItem(at: legacySettingsURL, to: settingsURL)
+                print("PersistenceService: Migrated legacy settings")
+            } catch {
+                print("PersistenceService: Failed to migrate legacy settings: \(error)")
+            }
+        }
+
+        if newDecksEmpty && legacyHasDecks {
+            do {
+                let legacyFiles = try fileManager.contentsOfDirectory(at: legacyDecksURL, includingPropertiesForKeys: nil)
+                for fileURL in legacyFiles {
+                    let destinationURL = decksURL.appendingPathComponent(fileURL.lastPathComponent)
+                    if fileManager.fileExists(atPath: destinationURL.path) {
+                        continue
+                    }
+                    do {
+                        try fileManager.copyItem(at: fileURL, to: destinationURL)
+                    } catch {
+                        print("PersistenceService: Failed to migrate deck \(fileURL.lastPathComponent): \(error)")
+                    }
+                }
+                print("PersistenceService: Migrated legacy decks")
+            } catch {
+                print("PersistenceService: Failed to read legacy decks: \(error)")
+            }
+        }
+
+        defaults.set(true, forKey: Self.migrationFlagKey)
     }
 
     // MARK: - Settings

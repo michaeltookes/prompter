@@ -106,7 +106,12 @@ let projectRoot = scriptDir.deletingLastPathComponent()
 let distDir = projectRoot.appendingPathComponent("dist")
 
 // Create dist directory if needed
-try? FileManager.default.createDirectory(at: distDir, withIntermediateDirectories: true)
+do {
+    try FileManager.default.createDirectory(at: distDir, withIntermediateDirectories: true)
+} catch {
+    print("Error creating dist directory at \(distDir.path): \(error.localizedDescription)")
+    exit(1)
+}
 
 do {
     let image = DMGBackgroundGenerator.generate()

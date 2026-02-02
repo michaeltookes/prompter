@@ -7,7 +7,6 @@ set -e
 
 # Configuration
 APP_NAME="Prompter"
-BUNDLE_ID="com.tookes.Prompter"
 
 # Signing identity - Developer ID Application certificate
 SIGNING_IDENTITY="Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)"
@@ -111,6 +110,11 @@ export_archive() {
 
     # Create ExportOptions.plist if it doesn't exist
     EXPORT_OPTIONS="$SCRIPT_DIR/ExportOptions.plist"
+
+    if [ ! -r "$EXPORT_OPTIONS" ]; then
+        echo_error "Export options file not found or not readable at $EXPORT_OPTIONS"
+        exit 1
+    fi
 
     xcodebuild -exportArchive \
         -archivePath "$ARCHIVE_PATH" \

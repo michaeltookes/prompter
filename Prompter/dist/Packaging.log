@@ -1,0 +1,101 @@
+2026-02-02 02:46:22 +0000 [MT] Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x14f33ada0; archive(resolved)="<IDEArchive: 0x6000038110a0>", distributionTask(resolved)="2", distributionDestination(resolved)="1", distributionMethod(resolved)="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team(resolved)="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	Chain (12, self inclusive):
+	<IDEDistributionProcessingPipelineContext: 0x14f33ada0; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionProcessingPipelineContext: 0x14f33ab10; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0x14f33a900; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0x14f24b890; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0x14f24c030; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0x14df36ae0; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0x14f14ee60; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0x14f14e950; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0x14de04690; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0x14f03b8b0; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="(null)">
+	<IDEDistributionContext: 0x14f332b70; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="(null)">
+	<IDEDistributionContext: 0x14f032e00; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="(null)", team="(null)">
+</IDEDistributionProcessingPipelineContext: 0x14f33ada0>
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionCreateDestRootStep
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionCopyItemStep
+2026-02-02 02:46:22 +0000 [MT] Running /usr/bin/ditto '-V' '/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app' '/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app'
+2026-02-02 02:46:22 +0000  >>> Copying /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app 
+2026-02-02 02:46:22 +0000  copying file ./Contents/_CodeSignature/CodeResources ... 
+2026-02-02 02:46:22 +0000  2672 bytes for ./Contents/_CodeSignature/CodeResources
+2026-02-02 02:46:22 +0000  copying file ./Contents/MacOS/Prompter ... 
+2026-02-02 02:46:22 +0000  685056 bytes for ./Contents/MacOS/Prompter
+2026-02-02 02:46:22 +0000  copying file ./Contents/Resources/AppIcon.icns ... 
+2026-02-02 02:46:22 +0000  91181 bytes for ./Contents/Resources/AppIcon.icns
+2026-02-02 02:46:22 +0000  copying file ./Contents/Resources/Assets.car ... 
+2026-02-02 02:46:22 +0000  914744 bytes for ./Contents/Resources/Assets.car
+2026-02-02 02:46:22 +0000  copying file ./Contents/Info.plist ... 
+2026-02-02 02:46:22 +0000  1834 bytes for ./Contents/Info.plist
+2026-02-02 02:46:22 +0000  copying file ./Contents/PkgInfo ... 
+2026-02-02 02:46:22 +0000  8 bytes for ./Contents/PkgInfo
+2026-02-02 02:46:22 +0000 [MT] /usr/bin/ditto exited with 0
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionEmbedProfileStep
+2026-02-02 02:46:22 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x6000037fdb60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0x6000037056e0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000037fdaa0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000026bc6c0; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
+    "com.apple.security.app-sandbox" = 0;
+}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0x600003700cc0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'>
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionInfoPlistStep
+2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionInfoPlistStep because it said so
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionAppThinningPlistStep
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionSymbolsStep
+2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionAppThinningStep
+2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionAppThinningStep because it said so
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionArchThinningStep
+2026-02-02 02:46:22 +0000 [MT] Item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app doesn't have the entitlement com.apple.developer.web-browser-engine.host enabled, returning ["arm64e"]
+2026-02-02 02:46:22 +0000 [MT] Archs to thin for item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app are ["arm64e"]
+2026-02-02 02:46:22 +0000 [MT] Running /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app/Contents/MacOS/Prompter' '-verify_arch' 'arm64e'
+2026-02-02 02:46:22 +0000 [MT] /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo exited with 1
+2026-02-02 02:46:22 +0000 [MT] Skipping architecture thinning for item "Prompter" because arch "arm64e" wasn't found
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionODRStep
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionStripXattrsStep
+2026-02-02 02:46:22 +0000 [MT] Skipping stripping extended attributes because the codesign step will strip them.
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionCodesignStep
+2026-02-02 02:46:22 +0000 [MT] Entitlements for <IDEDistributionItem: 0x6000037fdb60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0x6000037056e0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000037fdaa0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000026a1c80; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
+    "com.apple.security.app-sandbox" = 0;
+}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0x600003700cc0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'>: {
+    "com.apple.security.app-sandbox" = 0;
+}
+2026-02-02 02:46:22 +0000 [MT] Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2026-02-02 02:46:22 +0000 [MT] Entitlements for <IDEDistributionItem: 0x6000037fdb60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0x6000037056e0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000037fdaa0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000026a1d40; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
+    "com.apple.security.app-sandbox" = 0;
+}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0x600003700cc0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'> are: {
+    "com.apple.security.app-sandbox" = 0;
+}
+2026-02-02 02:46:22 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x6000037fdb60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0x6000037056e0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000037fdaa0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000026a1d40; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
+    "com.apple.security.app-sandbox" = 0;
+}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0x600003700cc0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'> to: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/entitlements~~~WysMN3
+2026-02-02 02:46:22 +0000 [MT] invoking codesign: <NSConcreteTask: 0x6000033d5860; launchPath='/usr/bin/codesign', arguments='(
+    "-f",
+    "-s",
+    8A363647D79DDDC4F9135535695CB883092C7F87,
+    "--entitlements",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/entitlements~~~WysMN3",
+    "--requirements",
+    "=designated => anchor apple generic  and identifier \"$self.identifier\" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = \"6739LM5834\" ))",
+    "--preserve-metadata=identifier,flags,runtime",
+    "--generate-entitlement-der",
+    "--strip-disallowed-xattrs",
+    "-vvv",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app"
+)'>
+2026-02-02 02:46:22 +0000 [MT] codesign output: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app: replacing existing signature
+/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app: signed app bundle with Mach-O thin (arm64) [com.tookes.Prompter]
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionZipODRItemStep
+2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionSkipPackagingStep
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionAppStoreInformationStep
+2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionAppStoreInformationStep because it said so
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionGenerateProcessedDistributionItems
+2026-02-02 02:46:22 +0000 [MT] IDEDistributionItem init <DVTFilePath:0x60000370f780:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app'>
+2026-02-02 02:46:22 +0000 [MT] [OPTIONAL] Didn't find embedded provisioning profile for <DVTFilePath:0x60000370f780:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app'>: Error Domain=NSCocoaErrorDomain Code=4 "No file at <DVTFilePath:0x600003845500:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app/Contents/embedded.provisionprofile'>" UserInfo={NSLocalizedDescription=No file at <DVTFilePath:0x600003845500:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app/Contents/embedded.provisionprofile'>}
+2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionCreateManifestStep
+2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionCreateManifestStep because it said so

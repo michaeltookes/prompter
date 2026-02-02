@@ -5,7 +5,7 @@ Welcome to the Prompter documentation. This guide explains what the app does, ho
 ## Quick Navigation
 
 ### Understanding the App
-- [What is Prompter?](01-overview/what-is-presenter-overlay.md) - Start here
+- [What is Prompter?](01-overview/what-is-prompter.md) - Start here
 - [Who is it for?](01-overview/who-is-it-for.md) - Target users and use cases
 - [Key Features](01-overview/key-features.md) - What the app can do
 
