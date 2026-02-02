@@ -1,6 +1,6 @@
 # Keyboard Shortcuts
 
-All shortcuts work globally - even when Presenter Overlay is not the active application. This lets you control your notes while presenting in Google Meet, Teams, or any other app.
+All shortcuts work globally - even when Prompter is not the active application. This lets you control your notes while presenting in Google Meet, Teams, or any other app.
 
 ## Overlay Controls
 

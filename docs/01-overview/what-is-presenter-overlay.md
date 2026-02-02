@@ -1,4 +1,4 @@
-# What is Presenter Overlay?
+# What is Prompter?
 
 ## The Problem
 
@@ -14,7 +14,7 @@ Traditional solutions don't work well:
 
 ## The Solution
 
-**Presenter Overlay** is a Mac app that displays your notes in a floating window that:
+**Prompter** is a Mac app that displays your notes in a floating window that:
 
 1. **Stays on top** of everything else on your screen
 2. **Only you can see** - it's hidden from screen sharing (best-effort)

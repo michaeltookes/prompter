@@ -3,7 +3,7 @@ import Foundation
 
 /// Manages image assets stored on disk.
 ///
-/// Assets are stored in ~/Library/Application Support/PresenterOverlay/Assets/
+/// Assets are stored in ~/Library/Application Support/Prompter/Assets/
 /// with UUID-based filenames to ensure uniqueness.
 ///
 /// Responsibilities:
@@ -38,7 +38,7 @@ final class AssetManager {
         // Get Application Support directory
         let fileManager = FileManager.default
         let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        appSupportURL = appSupport.appendingPathComponent("PresenterOverlay", isDirectory: true)
+        appSupportURL = appSupport.appendingPathComponent("Prompter", isDirectory: true)
         assetsURL = appSupportURL.appendingPathComponent("Assets", isDirectory: true)
 
         // Create directories if needed

@@ -2,7 +2,7 @@
 
 ## 1. Invisible Overlay Window
 
-The heart of Presenter Overlay is a special window that:
+The heart of Prompter is a special window that:
 
 - **Floats above everything**: Your notes stay visible even over full-screen apps
 - **Protected from capture**: Uses macOS features to hide from screen recording

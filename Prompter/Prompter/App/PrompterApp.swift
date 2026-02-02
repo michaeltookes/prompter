@@ -1,10 +1,10 @@
 import SwiftUI
 
-/// Main entry point for Presenter Overlay
+/// Main entry point for Prompter
 /// This is a menu bar application (LSUIElement = YES in Info.plist)
 /// that provides a floating overlay for presenter notes during demos.
 @main
-struct PresenterOverlayApp: App {
+struct PrompterApp: App {
     /// AppDelegate handles NSApplication lifecycle and window management
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 

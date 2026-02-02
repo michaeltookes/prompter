@@ -2,7 +2,7 @@
 
 ## The Decision
 
-We chose to make Presenter Overlay a **menu bar app** rather than a regular dock app.
+We chose to make Prompter a **menu bar app** rather than a regular dock app.
 
 ## What's the Difference?
 
@@ -22,7 +22,7 @@ We chose to make Presenter Overlay a **menu bar app** rather than a regular dock
 
 ### 1. Minimal Distraction During Demos
 
-When you're presenting, your dock is often visible to your audience. Having a "Presenter Overlay" icon in the dock could:
+When you're presenting, your dock is often visible to your audience. Having a "Prompter" icon in the dock could:
 - Reveal that you're using presentation aids
 - Raise questions from the audience
 - Look unprofessional to some viewers
@@ -40,7 +40,7 @@ Just glance up, click, and you have access to all controls.
 
 ### 3. Fits the Use Case
 
-Presenter Overlay is a **utility**, not a primary application. You don't spend hours working "in" it. You:
+Prompter is a **utility**, not a primary application. You don't spend hours working "in" it. You:
 - Set up your deck beforehand
 - Toggle it on during your presentation
 - Control it with keyboard shortcuts
@@ -55,7 +55,7 @@ Many professional tools live in the menu bar:
 - Meeting schedulers
 - System monitors
 
-Being a menu bar app puts Presenter Overlay in good company.
+Being a menu bar app puts Prompter in good company.
 
 ## What We Considered Instead
 

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1000001BBBBBBBB00000001 /* PresenterOverlayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000001 /* PresenterOverlayApp.swift */; };
+		A1000001BBBBBBBB00000001 /* PrompterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000001 /* PrompterApp.swift */; };
 		A1000001BBBBBBBB00000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000002 /* AppDelegate.swift */; };
 		A1000001BBBBBBBB00000003 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000003 /* AppState.swift */; };
 		A1000001BBBBBBBB00000004 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000004 /* MenuBarController.swift */; };
@@ -59,12 +59,12 @@
 			containerPortal = A9000001BBBBBBBB00000001 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A6000001BBBBBBBB00000001;
-			remoteInfo = PresenterOverlay;
+			remoteInfo = Prompter;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A2000001BBBBBBBB00000001 /* PresenterOverlayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterOverlayApp.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000001 /* PrompterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrompterApp.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000003 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000004 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 		A2000001BBBBBBBB00000012 /* OverlayWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindowController.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000013 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000020 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A2000001BBBBBBBB00000021 /* PresenterOverlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PresenterOverlay.entitlements; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000021 /* Prompter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Prompter.entitlements; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000022 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000100 /* ImageDropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropZone.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000101 /* FrostedPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrostedPanelView.swift; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 		A2000001BBBBBBBB00000201 /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000202 /* TestCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCaptureView.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000203 /* TestCaptureWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCaptureWindowController.swift; sourceTree = "<group>"; };
-		A3000001BBBBBBBB00000001 /* PresenterOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PresenterOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3000001BBBBBBBB00000001 /* Prompter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prompter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2000001CCCCCCCC00000001 /* CardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000002 /* DeckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000003 /* LayoutTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutTypeTests.swift; sourceTree = "<group>"; };
@@ -111,7 +111,7 @@
 		B2000001CCCCCCCC00000006 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000007 /* DebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncerTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceServiceTests.swift; sourceTree = "<group>"; };
-		B3000001CCCCCCCC00000001 /* PresenterOverlayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PresenterOverlayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3000001CCCCCCCC00000001 /* PrompterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrompterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,13 +135,13 @@
 		A5000001BBBBBBBB00000001 = {
 			isa = PBXGroup;
 			children = (
-				A5000001BBBBBBBB00000002 /* PresenterOverlay */,
-				B5000001CCCCCCCC00000001 /* PresenterOverlayTests */,
+				A5000001BBBBBBBB00000002 /* Prompter */,
+				B5000001CCCCCCCC00000001 /* PrompterTests */,
 				A5000001BBBBBBBB00000003 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		A5000001BBBBBBBB00000002 /* PresenterOverlay */ = {
+		A5000001BBBBBBBB00000002 /* Prompter */ = {
 			isa = PBXGroup;
 			children = (
 				A5000001BBBBBBBB00000004 /* App */,
@@ -154,14 +154,14 @@
 				A5000001BBBBBBBB00000011 /* Utilities */,
 				A5000001BBBBBBBB00000012 /* Resources */,
 			);
-			path = PresenterOverlay;
+			path = Prompter;
 			sourceTree = "<group>";
 		};
 		A5000001BBBBBBBB00000003 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A3000001BBBBBBBB00000001 /* PresenterOverlay.app */,
-				B3000001CCCCCCCC00000001 /* PresenterOverlayTests.xctest */,
+				A3000001BBBBBBBB00000001 /* Prompter.app */,
+				B3000001CCCCCCCC00000001 /* PrompterTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,7 +169,7 @@
 		A5000001BBBBBBBB00000004 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				A2000001BBBBBBBB00000001 /* PresenterOverlayApp.swift */,
+				A2000001BBBBBBBB00000001 /* PrompterApp.swift */,
 				A2000001BBBBBBBB00000002 /* AppDelegate.swift */,
 				A2000001BBBBBBBB00000003 /* AppState.swift */,
 				A2000001BBBBBBBB00000004 /* MenuBarController.swift */,
@@ -247,7 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000001BBBBBBBB00000020 /* Assets.xcassets */,
-				A2000001BBBBBBBB00000021 /* PresenterOverlay.entitlements */,
+				A2000001BBBBBBBB00000021 /* Prompter.entitlements */,
 				A2000001BBBBBBBB00000022 /* Info.plist */,
 			);
 			path = Resources;
@@ -315,7 +315,7 @@
 			path = TestCapture;
 			sourceTree = "<group>";
 		};
-		B5000001CCCCCCCC00000001 /* PresenterOverlayTests */ = {
+		B5000001CCCCCCCC00000001 /* PrompterTests */ = {
 			isa = PBXGroup;
 			children = (
 				B2000001CCCCCCCC00000001 /* CardTests.swift */,
@@ -327,15 +327,15 @@
 				B2000001CCCCCCCC00000007 /* DebouncerTests.swift */,
 				B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */,
 			);
-			path = PresenterOverlayTests;
+			path = PrompterTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A6000001BBBBBBBB00000001 /* PresenterOverlay */ = {
+		A6000001BBBBBBBB00000001 /* Prompter */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A8000001BBBBBBBB00000001 /* Build configuration list for PBXNativeTarget "PresenterOverlay" */;
+			buildConfigurationList = A8000001BBBBBBBB00000001 /* Build configuration list for PBXNativeTarget "Prompter" */;
 			buildPhases = (
 				A7000001BBBBBBBB00000001 /* Sources */,
 				A4000001BBBBBBBB00000001 /* Frameworks */,
@@ -345,14 +345,14 @@
 			);
 			dependencies = (
 			);
-			name = PresenterOverlay;
-			productName = PresenterOverlay;
-			productReference = A3000001BBBBBBBB00000001 /* PresenterOverlay.app */;
+			name = Prompter;
+			productName = Prompter;
+			productReference = A3000001BBBBBBBB00000001 /* Prompter.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B6000001CCCCCCCC00000001 /* PresenterOverlayTests */ = {
+		B6000001CCCCCCCC00000001 /* PrompterTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B8000001CCCCCCCC00000001 /* Build configuration list for PBXNativeTarget "PresenterOverlayTests" */;
+			buildConfigurationList = B8000001CCCCCCCC00000001 /* Build configuration list for PBXNativeTarget "PrompterTests" */;
 			buildPhases = (
 				B7000001CCCCCCCC00000001 /* Sources */,
 				B4000001CCCCCCCC00000002 /* Frameworks */,
@@ -363,9 +363,9 @@
 			dependencies = (
 				B4000001CCCCCCCC00000003 /* PBXTargetDependency */,
 			);
-			name = PresenterOverlayTests;
-			productName = PresenterOverlayTests;
-			productReference = B3000001CCCCCCCC00000001 /* PresenterOverlayTests.xctest */;
+			name = PrompterTests;
+			productName = PrompterTests;
+			productReference = B3000001CCCCCCCC00000001 /* PrompterTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -387,7 +387,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A8000001BBBBBBBB00000002 /* Build configuration list for PBXProject "PresenterOverlay" */;
+			buildConfigurationList = A8000001BBBBBBBB00000002 /* Build configuration list for PBXProject "Prompter" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -400,8 +400,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A6000001BBBBBBBB00000001 /* PresenterOverlay */,
-				B6000001CCCCCCCC00000001 /* PresenterOverlayTests */,
+				A6000001BBBBBBBB00000001 /* Prompter */,
+				B6000001CCCCCCCC00000001 /* PrompterTests */,
 			);
 		};
 /* End PBXProject section */
@@ -429,7 +429,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1000001BBBBBBBB00000001 /* PresenterOverlayApp.swift in Sources */,
+				A1000001BBBBBBBB00000001 /* PrompterApp.swift in Sources */,
 				A1000001BBBBBBBB00000002 /* AppDelegate.swift in Sources */,
 				A1000001BBBBBBBB00000003 /* AppState.swift in Sources */,
 				A1000001BBBBBBBB00000004 /* MenuBarController.swift in Sources */,
@@ -487,7 +487,7 @@
 /* Begin PBXTargetDependency section */
 		B4000001CCCCCCCC00000003 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A6000001BBBBBBBB00000001 /* PresenterOverlay */;
+			target = A6000001BBBBBBBB00000001 /* Prompter */;
 			targetProxy = B4000001CCCCCCCC00000001 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -616,15 +616,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = PresenterOverlay/Resources/PresenterOverlay.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Prompter/Resources/Prompter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6739LM5834;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = PresenterOverlay/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Presenter Overlay";
+				INFOPLIST_FILE = Prompter/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Prompter";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -632,7 +632,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tookes.Prompter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.9;
@@ -644,15 +644,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = PresenterOverlay/Resources/PresenterOverlay.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Prompter/Resources/Prompter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6739LM5834;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = PresenterOverlay/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Presenter Overlay";
+				INFOPLIST_FILE = Prompter/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Prompter";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -660,7 +660,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tookes.Prompter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.9;
@@ -673,15 +673,15 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6739LM5834;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tookes.PrompterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.9;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PresenterOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PresenterOverlay";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Prompter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Prompter";
 			};
 			name = Debug;
 		};
@@ -691,22 +691,22 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6739LM5834;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.presenteroverlay.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tookes.PrompterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.9;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PresenterOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PresenterOverlay";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Prompter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Prompter";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A8000001BBBBBBBB00000001 /* Build configuration list for PBXNativeTarget "PresenterOverlay" */ = {
+		A8000001BBBBBBBB00000001 /* Build configuration list for PBXNativeTarget "Prompter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA000001BBBBBBBB00000003 /* Debug */,
@@ -715,7 +715,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A8000001BBBBBBBB00000002 /* Build configuration list for PBXProject "PresenterOverlay" */ = {
+		A8000001BBBBBBBB00000002 /* Build configuration list for PBXProject "Prompter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA000001BBBBBBBB00000001 /* Debug */,
@@ -724,7 +724,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B8000001CCCCCCCC00000001 /* Build configuration list for PBXNativeTarget "PresenterOverlayTests" */ = {
+		B8000001CCCCCCCC00000001 /* Build configuration list for PBXNativeTarget "PrompterTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA000001CCCCCCCC00000001 /* Debug */,

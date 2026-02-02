@@ -2,7 +2,7 @@
 
 ## The Decision
 
-We chose to build Presenter Overlay using **Swift** (Apple's programming language) and **SwiftUI** (Apple's modern user interface framework), with **AppKit** for advanced window features.
+We chose to build Prompter using **Swift** (Apple's programming language) and **SwiftUI** (Apple's modern user interface framework), with **AppKit** for advanced window features.
 
 ## What Are These Technologies?
 
@@ -35,7 +35,7 @@ JavaScript-based alternatives (like Electron) don't expose these APIs fully.
 
 ### 2. Performance
 
-Presenter Overlay runs during live demos. It must:
+Prompter runs during live demos. It must:
 - Start instantly
 - Respond to hotkeys with zero lag
 - Not consume noticeable CPU/memory

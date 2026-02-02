@@ -1,12 +1,12 @@
-# Getting Started with Presenter Overlay
+# Getting Started with Prompter
 
-Welcome! This guide will help you get Presenter Overlay set up and ready for your first demo.
+Welcome! This guide will help you get Prompter set up and ready for your first demo.
 
 ## Quick Start (5 minutes)
 
 ### Step 1: Launch the App
 
-After installing, open Presenter Overlay. You'll notice:
+After installing, open Prompter. You'll notice:
 - A small icon appears in your **menu bar** (top-right of your screen)
 - **No dock icon** - that's by design!
 
@@ -104,7 +104,7 @@ All shortcuts use **Cmd+Shift** plus another key:
 | Cmd+Shift+C | Toggle click-through mode |
 | Cmd+Shift+P | Toggle Protected Mode |
 
-**Important:** These shortcuts work globally - you don't need to have Presenter Overlay focused!
+**Important:** These shortcuts work globally - you don't need to have Prompter focused!
 
 ---
 

@@ -1,4 +1,4 @@
-# Presenter Overlay (macOS) — Deck Mode MVP (5 Layouts)
+# Prompter (macOS) — Deck Mode MVP (5 Layouts)
 
 A macOS menu bar app that shows a **presenter-only overlay** (teleprompter + slide-notes deck).
 Designed for presenters using **Google Meet** and sometimes **Microsoft Teams**, typically sharing **entire screen**.

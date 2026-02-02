@@ -89,7 +89,7 @@ Created the reusable UI components for Phase 2:
 **Date**: January 2026
 
 Implemented the AssetManager service for image storage:
-- Stores images in `~/Library/Application Support/PresenterOverlay/Assets/`
+- Stores images in `~/Library/Application Support/Prompter/Assets/`
 - Uses UUID-based filenames for uniqueness
 - Includes in-memory LRU cache (50 images max)
 - Provides import from file URL or raw data

@@ -120,7 +120,7 @@ Adjust text size for readability:
 Your data is automatically saved to:
 
 ```
-~/Library/Application Support/PresenterOverlay/
+~/Library/Application Support/Prompter/
 ├── Decks/          # Your deck files (JSON)
 ├── Assets/         # Imported images
 └── Settings.json   # App preferences

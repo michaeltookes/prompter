@@ -1,5 +1,5 @@
 import XCTest
-@testable import PresenterOverlay
+@testable import Prompter
 
 /// Tests for PersistenceService.
 ///

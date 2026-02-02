@@ -2,7 +2,7 @@ import Foundation
 
 /// Handles all file-based persistence for the application.
 ///
-/// Data is stored in ~/Library/Application Support/PresenterOverlay/:
+/// Data is stored in ~/Library/Application Support/Prompter/:
 /// - Decks/<deckId>.json - Individual deck files
 /// - Settings.json - Application settings
 ///
@@ -41,7 +41,7 @@ final class PersistenceService {
     }()
 
     /// Background queue for I/O operations
-    private let ioQueue = DispatchQueue(label: "com.presenteroverlay.persistence", qos: .utility)
+    private let ioQueue = DispatchQueue(label: "com.tookes.prompter.persistence", qos: .utility)
 
     // MARK: - Initialization
 
@@ -49,7 +49,7 @@ final class PersistenceService {
         // Get Application Support directory
         let fileManager = FileManager.default
         let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        appSupportURL = appSupport.appendingPathComponent("PresenterOverlay", isDirectory: true)
+        appSupportURL = appSupport.appendingPathComponent("Prompter", isDirectory: true)
         decksURL = appSupportURL.appendingPathComponent("Decks", isDirectory: true)
         settingsURL = appSupportURL.appendingPathComponent("Settings.json")
 

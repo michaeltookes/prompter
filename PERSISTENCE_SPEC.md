@@ -1,7 +1,7 @@
 # Persistence Spec
 
 ## Filesystem Layout
-~/Library/Application Support/PresenterOverlay/
+~/Library/Application Support/Prompter/
 - Decks/
   - <deckId>.json
 - Assets/

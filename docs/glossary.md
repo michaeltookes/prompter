@@ -1,6 +1,6 @@
 # Glossary
 
-Plain English definitions of terms used in Presenter Overlay documentation.
+Plain English definitions of terms used in Prompter documentation.
 
 ---
 
@@ -52,7 +52,7 @@ A collection of cards that you create for a presentation. Like a deck of index c
 When Apple marks something as "deprecated," they're saying "this still works, but we don't recommend it for new projects." Carbon is deprecated, but we use it because there's no better alternative for global hotkeys.
 
 ### Dock
-The row of app icons at the bottom (or side) of your Mac screen. Presenter Overlay doesn't appear in the dock - it lives in the menu bar instead.
+The row of app icons at the bottom (or side) of your Mac screen. Prompter doesn't appear in the dock - it lives in the menu bar instead.
 
 ---
 
@@ -100,14 +100,14 @@ A text-based format for storing data. It's human-readable (you can open it in a 
 A pre-designed arrangement of text and images for a card. We offer 5 layouts so you can quickly create cards without designing from scratch.
 
 ### LSUIElement
-A setting in Info.plist that makes an app run without a dock icon. This is how we make Presenter Overlay a menu bar-only app.
+A setting in Info.plist that makes an app run without a dock icon. This is how we make Prompter a menu bar-only app.
 
 ---
 
 ## M
 
 ### Menu Bar
-The row of icons and menus at the very top of your Mac screen. Presenter Overlay's icon lives here.
+The row of icons and menus at the very top of your Mac screen. Prompter's icon lives here.
 
 ### MVP (Minimum Viable Product)
 The simplest version of a product that still provides value. Our MVP includes the core features needed for presenter notes, without extra bells and whistles.
@@ -160,7 +160,7 @@ Apple's library of icons that come built into macOS. We use them for buttons and
 Virtual desktops on Mac. You can have multiple Spaces and switch between them. Our overlay follows you across Spaces.
 
 ### Swift
-Apple's modern programming language for building apps on Mac, iPhone, iPad, etc. It's what we use to write Presenter Overlay.
+Apple's modern programming language for building apps on Mac, iPhone, iPad, etc. It's what we use to write Prompter.
 
 ### SwiftUI
 Apple's modern toolkit for building user interfaces. It makes creating buttons, menus, and layouts faster and easier than older approaches.

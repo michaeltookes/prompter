@@ -1,12 +1,12 @@
-# Presenting with Presenter Overlay
+# Presenting with Prompter
 
-You've created your deck. Now it's showtime. This guide covers everything about using Presenter Overlay during an actual presentation.
+You've created your deck. Now it's showtime. This guide covers everything about using Prompter during an actual presentation.
 
 ## Before the Call
 
 ### 5 Minutes Before
 
-1. **Open Presenter Overlay** (if not already running)
+1. **Open Prompter** (if not already running)
 2. **Show the overlay** (Cmd+Shift+O)
 3. **Go to card 1** - make sure you're at the beginning
 4. **Position the overlay** - drag it where you want it

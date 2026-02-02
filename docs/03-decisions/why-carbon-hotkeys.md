@@ -10,9 +10,9 @@ A **global hotkey** is a keyboard shortcut that works across your entire system,
 
 **Example**:
 - **Local shortcut**: Cmd+C copies text, but only when you're in an app that supports it
-- **Global hotkey**: Cmd+Shift+O toggles the Presenter Overlay, no matter what app you're using
+- **Global hotkey**: Cmd+Shift+O toggles the Prompter, no matter what app you're using
 
-Global hotkeys are essential because during a demo, you're focused on *your demo app*, not Presenter Overlay. You need shortcuts that work from anywhere.
+Global hotkeys are essential because during a demo, you're focused on *your demo app*, not Prompter. You need shortcuts that work from anywhere.
 
 ## What is Carbon?
 

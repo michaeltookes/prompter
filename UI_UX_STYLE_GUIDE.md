@@ -1,4 +1,4 @@
-# UI / UX Style Guide — Presenter Overlay
+# UI / UX Style Guide — Prompter
 
 ## Design Principles
 The UI should feel:
