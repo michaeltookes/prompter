@@ -196,7 +196,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
                 object: editorWindow,
                 queue: .main
             ) { [weak self] _ in
-                self?.handleEditorWindowClose()
+                Task { @MainActor in
+                    self?.handleEditorWindowClose()
+                }
             }
         }
 
