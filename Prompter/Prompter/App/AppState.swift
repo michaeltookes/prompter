@@ -17,7 +17,7 @@ final class AppState: ObservableObject {
     // MARK: - Constants
 
     /// Maximum number of decks allowed
-    static let maxDecks = 5
+    static let maxDecks = 10
 
     // MARK: - Deck State
 
