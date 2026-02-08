@@ -235,20 +235,70 @@ struct OverlayContentView: View {
 
 /// A visual drag handle at the top of the overlay for moving the window.
 struct DragHandleView: View {
-    var body: some View {
-        VStack(spacing: 4) {
-            // Drag indicator pill
-            RoundedRectangle(cornerRadius: 2)
-                .fill(Theme.textSecondary.opacity(0.5))
-                .frame(width: 40, height: 4)
-                .padding(.top, 8)
+    @EnvironmentObject var appState: AppState
 
-            Text("Drag to move • Edges to resize")
-                .font(.system(size: 10))
-                .foregroundColor(Theme.textSecondary.opacity(0.6))
+    var body: some View {
+        ZStack {
+            // Centered drag indicator
+            VStack(spacing: 4) {
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(Theme.textSecondary.opacity(0.5))
+                    .frame(width: 40, height: 4)
+                    .padding(.top, 8)
+
+                Text("Drag to move • Edges to resize")
+                    .font(.system(size: 10))
+                    .foregroundColor(Theme.textSecondary.opacity(0.6))
+            }
+
+            // Traffic light buttons (top-left)
+            HStack(spacing: 8) {
+                TrafficLightButton(color: .red) {
+                    appState.toggleOverlay()
+                }
+                TrafficLightButton(color: .gray, disabled: true)
+                TrafficLightButton(color: .gray, disabled: true)
+                Spacer()
+            }
+            .padding(.leading, 12)
+            .padding(.top, 6)
         }
         .frame(maxWidth: .infinity)
         .padding(.bottom, 4)
         .contentShape(Rectangle())
+    }
+}
+
+/// macOS-style traffic light circle button.
+struct TrafficLightButton: View {
+    let color: Color
+    var disabled: Bool = false
+    var action: (() -> Void)? = nil
+
+    @State private var isHovered = false
+
+    private let size: CGFloat = 12
+
+    var body: some View {
+        Circle()
+            .fill(disabled ? Color.gray.opacity(0.3) : color)
+            .frame(width: size, height: size)
+            .overlay(
+                Group {
+                    if isHovered && !disabled {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 7, weight: .bold))
+                            .foregroundColor(.black.opacity(0.7))
+                    }
+                }
+            )
+            .onHover { hovering in
+                isHovered = hovering
+            }
+            .onTapGesture {
+                if !disabled {
+                    action?()
+                }
+            }
     }
 }
