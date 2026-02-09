@@ -10,6 +10,7 @@ Read this before making changes.
 3. Use Theme constants for styling; avoid hardcoded colors/sizes.
 4. Validate global hotkeys work system-wide (not just app-focused).
 5. Verify overlay behavior in fullscreen and across Spaces.
+6. Check the **backlog** document (maintained separately, not in repo) for prioritized planned work — ask the user for the file path when needed.
 
 ## Tech Stack
 - Language: Swift 5.9+

@@ -12,6 +12,7 @@ When working on this project:
 3. Use the established Theme constants for all UI styling
 4. Test hotkeys work system-wide (not just when app is focused)
 5. Verify overlay behavior in fullscreen and across Spaces
+6. Check the **backlog** document (maintained separately, not in repo) for prioritized planned work — ask the user for the file path when needed.
 
 ## Tech Stack
 
@@ -61,6 +62,7 @@ All hotkeys use Cmd+Shift modifier and must work system-wide:
 | Cmd+Shift+↑ / ↓ | Scroll overlay content |
 | Cmd+Shift+C | Toggle click-through mode |
 | Cmd+Shift+P | Toggle Protected Mode |
+| Cmd+Shift+T | Start/Pause/Resume timer |
 
 ## Data Models (from .claude/reference-docs/DATA_MODEL.md)
 
