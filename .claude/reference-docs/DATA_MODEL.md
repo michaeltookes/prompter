@@ -39,4 +39,10 @@
 - clickThroughEnabled: Bool
 - protectedModeEnabled: Bool
 - lastOpenedDeckId: UUID?
-
+- timerEnabled: Bool
+- timerMode: String ("deck" | "perCard")
+- timerTotalSeconds: Int
+- timerPerCardSeconds: Int
+- timerShowPauseButton: Bool
+- timerApplyMode: String ("all" | "selected")
+- timerSelectedDeckIds: [UUID]

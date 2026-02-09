@@ -15,19 +15,19 @@ struct DeckPickerPanelView: View {
         VStack(spacing: 20) {
             // Title
             Text("Select Decks for Timer")
-                .font(.system(size: 18, weight: .semibold))
+                .font(Theme.titleSemibold)
                 .foregroundColor(Theme.textPrimary)
 
             // Subtitle
             Text("Choose which decks should use the presentation timer:")
-                .font(.system(size: Theme.captionFontSize))
+                .font(Theme.caption)
                 .foregroundColor(Theme.textSecondary)
                 .multilineTextAlignment(.center)
 
             // Deck list
             if decks.isEmpty {
                 Text("No decks available")
-                    .font(.system(size: Theme.captionFontSize))
+                    .font(Theme.note)
                     .foregroundColor(Theme.textSecondary)
                     .italic()
                     .padding(.vertical, 16)
@@ -76,12 +76,12 @@ struct DeckPickerPanelView: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(deck.title)
-                        .font(.system(size: 13, weight: .medium))
+                        .font(Theme.footerMedium)
                         .foregroundColor(Theme.textPrimary)
                         .lineLimit(1)
 
                     Text("\(deck.cards.count) card\(deck.cards.count == 1 ? "" : "s")")
-                        .font(.system(size: 11))
+                        .font(Theme.caption)
                         .foregroundColor(Theme.textSecondary)
                 }
 
@@ -90,7 +90,7 @@ struct DeckPickerPanelView: View {
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .background(
-                RoundedRectangle(cornerRadius: 6)
+                RoundedRectangle(cornerRadius: 10)
                     .fill(selectedIds.contains(deck.id) ? Theme.accent.opacity(0.1) : .clear)
             )
         }

@@ -88,6 +88,15 @@ final class HotkeyManager: ObservableObject {
     /// Whether hotkeys are currently registered
     @Published private(set) var isRegistered: Bool = false
 
+    /// Whether we've already prompted for Accessibility this app launch
+    private var hasPromptedAccessibilityThisLaunch = false
+
+    /// UserDefaults key for throttling Accessibility prompt frequency
+    private static let lastAccessibilityPromptAtKey = "PrompterLastAccessibilityPromptAt"
+
+    /// Minimum interval between automatic Accessibility prompts
+    private let accessibilityPromptCooldown: TimeInterval = 12 * 60 * 60
+
     /// Lookup table mapping key codes to actions for fast matching
     private let keyCodeToAction: [UInt32: HotkeyAction] = {
         var map: [UInt32: HotkeyAction] = [:]
@@ -107,15 +116,21 @@ final class HotkeyManager: ObservableObject {
     ///
     /// Requires Accessibility permissions. If not granted, the system will
     /// prompt the user and registration will be skipped until retried.
-    func registerAllHotkeys() {
+    /// - Parameter promptIfNeeded: Whether to allow a system permission prompt.
+    ///   Retries should typically pass `false` to avoid repeatedly opening Settings.
+    func registerAllHotkeys(promptIfNeeded: Bool = false) {
         guard !isRegistered else {
             print("Hotkeys already registered")
             return
         }
 
-        // Check accessibility permissions (prompts user if not yet granted)
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue(): true] as CFDictionary
+        // Check accessibility permissions and throttle automatic prompts to avoid pop-up loops.
+        let shouldPrompt = promptIfNeeded && shouldPromptForAccessibility()
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue(): shouldPrompt] as CFDictionary
         guard AXIsProcessTrustedWithOptions(options) else {
+            if shouldPrompt {
+                recordAccessibilityPrompt()
+            }
             print("Accessibility permission not granted — hotkeys not registered")
             return
         }
@@ -131,7 +146,7 @@ final class HotkeyManager: ObservableObject {
             callback: HotkeyManager.eventTapCallback,
             userInfo: Unmanaged.passUnretained(self).toOpaque()
         ) else {
-            print("Failed to create CGEvent tap — check Accessibility permissions")
+            print("Failed to create CGEvent tap — verify Accessibility and Input Monitoring permissions")
             return
         }
 
@@ -147,6 +162,25 @@ final class HotkeyManager: ObservableObject {
 
         isRegistered = true
         print("Global hotkeys registered successfully (CGEvent tap)")
+    }
+
+    // MARK: - Permission Prompt Management
+
+    /// Avoid repeatedly opening the Accessibility prompt/settings flow.
+    private func shouldPromptForAccessibility() -> Bool {
+        guard !hasPromptedAccessibilityThisLaunch else { return false }
+
+        let defaults = UserDefaults.standard
+        if let lastPromptAt = defaults.object(forKey: Self.lastAccessibilityPromptAtKey) as? Date,
+           Date().timeIntervalSince(lastPromptAt) < accessibilityPromptCooldown {
+            return false
+        }
+        return true
+    }
+
+    private func recordAccessibilityPrompt() {
+        hasPromptedAccessibilityThisLaunch = true
+        UserDefaults.standard.set(Date(), forKey: Self.lastAccessibilityPromptAtKey)
     }
 
     /// Unregisters all global hotkeys

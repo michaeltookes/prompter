@@ -41,6 +41,6 @@
 	<key>SUPublicEDKey</key>
 	<string>PLACEHOLDER_PUBLIC_KEY</string>
 	<key>SUEnableAutomaticChecks</key>
-	<true/>
+	<false/>
 </dict>
 </plist>

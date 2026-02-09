@@ -165,11 +165,15 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         // Check for Updates
         let updateItem = NSMenuItem(
-            title: "Check for Updates\u{2026}",
+            title: updateManager.isConfigured ? "Check for Updates\u{2026}" : "Check for Updates (Unavailable)",
             action: #selector(checkForUpdates),
             keyEquivalent: ""
         )
         updateItem.target = self
+        updateItem.isEnabled = updateManager.canCheckForUpdates
+        if let reason = updateManager.unavailableReason {
+            updateItem.toolTip = reason
+        }
         items.append(updateItem)
 
         items.append(NSMenuItem.separator())

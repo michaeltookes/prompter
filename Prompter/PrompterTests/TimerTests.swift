@@ -61,11 +61,11 @@ final class TimerTests: XCTestCase {
     }
 
     func testEffectivePerCardSeconds_deckMode_noDeck() {
-        // No deck loaded, totalCards == 0, division by max(1, 0) == 1
+        // No deck loaded should disable deck-mode timing
         appState.timerMode = "deck"
         appState.timerTotalSeconds = 300
 
-        XCTAssertEqual(appState.effectivePerCardSeconds, 300)
+        XCTAssertEqual(appState.effectivePerCardSeconds, 0)
     }
 
     // MARK: - Timer Activation Scope
@@ -105,6 +105,14 @@ final class TimerTests: XCTestCase {
         appState.isTimerEnabled = true
         appState.timerApplyMode = "selected"
         // No deck loaded
+        XCTAssertFalse(appState.isTimerActiveForCurrentDeck)
+    }
+
+    func testIsTimerActiveForCurrentDeck_allMode_noCards() {
+        appState.isTimerEnabled = true
+        appState.timerApplyMode = "all"
+        appState.loadDeck(Deck(title: "Empty", cards: []))
+
         XCTAssertFalse(appState.isTimerActiveForCurrentDeck)
     }
 
@@ -390,5 +398,22 @@ final class TimerTests: XCTestCase {
         await fulfillment(of: [expectation], timeout: 3)
 
         XCTAssertEqual(appState.timerSecondsRemaining, remainingAfterPause)
+    }
+
+    func testTimerTick_marksStoppedAtZero() async {
+        loadTimerDeck()
+        appState.timerMode = "perCard"
+        appState.timerPerCardSeconds = 1
+        appState.startTimer()
+
+        let expectation = XCTestExpectation(description: "Timer reaches zero and stops")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            expectation.fulfill()
+        }
+        await fulfillment(of: [expectation], timeout: 3)
+
+        XCTAssertFalse(appState.isTimerRunning)
+        XCTAssertEqual(appState.timerSecondsRemaining, 0)
+        XCTAssertTrue(appState.isTimerWarning)
     }
 }

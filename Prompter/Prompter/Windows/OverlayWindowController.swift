@@ -247,17 +247,17 @@ struct DragHandleView: View {
                     .padding(.top, 8)
 
                 Text("Drag to move • Edges to resize")
-                    .font(.system(size: 10))
+                    .font(.system(size: Theme.smallFontSize))
                     .foregroundColor(Theme.textSecondary.opacity(0.6))
             }
 
             // Traffic light buttons (top-left)
             HStack(spacing: 8) {
-                TrafficLightButton(color: .red) {
+                TrafficLightButton(color: Theme.trafficLightRed) {
                     appState.toggleOverlay()
                 }
-                TrafficLightButton(color: .gray, disabled: true)
-                TrafficLightButton(color: .gray, disabled: true)
+                TrafficLightButton(color: Theme.trafficLightDisabled, disabled: true)
+                TrafficLightButton(color: Theme.trafficLightDisabled, disabled: true)
                 Spacer()
             }
             .padding(.leading, 12)
@@ -281,14 +281,14 @@ struct TrafficLightButton: View {
 
     var body: some View {
         Circle()
-            .fill(disabled ? Color.gray.opacity(0.3) : color)
+            .fill(disabled ? Theme.trafficLightDisabled : color)
             .frame(width: size, height: size)
             .overlay(
                 Group {
                     if isHovered && !disabled {
                         Image(systemName: "xmark")
-                            .font(.system(size: 7, weight: .bold))
-                            .foregroundColor(.black.opacity(0.7))
+                            .font(.system(size: Theme.iconSmallFontSize, weight: .bold))
+                            .foregroundColor(Theme.trafficLightIcon)
                     }
                 }
             )

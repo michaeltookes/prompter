@@ -520,7 +520,8 @@ final class AppState: ObservableObject {
     /// Effective per-card time based on current mode
     var effectivePerCardSeconds: Int {
         if timerMode == "deck" {
-            return timerTotalSeconds / max(1, totalCards)
+            guard totalCards > 0 else { return 0 }
+            return timerTotalSeconds / totalCards
         } else {
             return timerPerCardSeconds
         }
@@ -529,6 +530,7 @@ final class AppState: ObservableObject {
     /// Whether the timer is active for the current deck
     var isTimerActiveForCurrentDeck: Bool {
         guard isTimerEnabled else { return false }
+        guard totalCards > 0 else { return false }
         if timerApplyMode == "all" { return true }
         guard let deckId = currentDeck?.id else { return false }
         return timerSelectedDeckIds.contains(deckId)
@@ -608,10 +610,22 @@ final class AppState: ObservableObject {
         guard timerSecondsRemaining > 0 else {
             timerCancellable?.cancel()
             timerCancellable = nil
+            isTimerRunning = false
+            isTimerPaused = false
+            timerSecondsRemaining = 0
             isTimerWarning = true
             return
         }
         timerSecondsRemaining -= 1
+
+        if timerSecondsRemaining == 0 {
+            timerCancellable?.cancel()
+            timerCancellable = nil
+            isTimerRunning = false
+            isTimerPaused = false
+            isTimerWarning = true
+            return
+        }
 
         // Warning at last 20% of per-card time
         let threshold = Int(Double(effectivePerCardSeconds) * 0.2)

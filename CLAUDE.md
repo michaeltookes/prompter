@@ -203,4 +203,4 @@ All reference specs live in `.claude/reference-docs/`.
 
 5. **Accessibility Permissions**: Required for global hotkeys (CGEvent tap). The app prompts the user on first launch and retries registration after 5 seconds.
 
-5. **Auto-Save**: Use 0.5s debouncer to avoid excessive disk writes during editing.
+6. **Auto-Save**: Use 0.5s debouncer to avoid excessive disk writes during editing.

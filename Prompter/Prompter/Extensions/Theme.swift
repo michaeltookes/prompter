@@ -37,6 +37,18 @@ enum Theme {
     /// rgba(93, 169, 255, 0.35)
     static let accentGlow = Color(red: 93/255, green: 169/255, blue: 255/255).opacity(0.35)
 
+    /// Error text color
+    static let errorColor = Color(red: 255/255, green: 107/255, blue: 107/255)
+
+    /// Traffic light close button color
+    static let trafficLightRed = Color(red: 255/255, green: 95/255, blue: 86/255)
+
+    /// Traffic light disabled fill color
+    static let trafficLightDisabled = Color(red: 140/255, green: 140/255, blue: 140/255).opacity(0.35)
+
+    /// Traffic light icon color
+    static let trafficLightIcon = Color.black.opacity(0.7)
+
     /// Background for drop zones
     static let dropZoneBackground = Color.gray.opacity(0.1)
 
@@ -71,11 +83,28 @@ enum Theme {
     /// Notes font size range (18-22pt)
     static let notesFontSize: CGFloat = 20
 
+    /// Alias for note text size (18-22pt)
+    static let noteFontSize: CGFloat = notesFontSize
+
     /// Caption font size (16pt)
     static let captionFontSize: CGFloat = 16
 
     /// Footer font size (13pt)
     static let footerFontSize: CGFloat = 13
+
+    /// Small utility font size (11pt)
+    static let smallFontSize: CGFloat = 11
+
+    /// Extra small utility icon/text font size (7pt)
+    static let iconSmallFontSize: CGFloat = 7
+
+    // MARK: - Typography Helpers
+
+    static let titleSemibold = Font.system(size: titleFontSize, weight: .semibold)
+    static let note = Font.system(size: noteFontSize, weight: .regular)
+    static let caption = Font.system(size: captionFontSize, weight: .regular)
+    static let footerMedium = Font.system(size: footerFontSize, weight: .medium)
+    static let smallSemibold = Font.system(size: smallFontSize, weight: .semibold)
 
     // MARK: - Shadows
 

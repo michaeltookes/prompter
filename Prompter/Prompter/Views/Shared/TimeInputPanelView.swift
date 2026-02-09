@@ -17,7 +17,7 @@ struct TimeInputPanelView: View {
         VStack(spacing: 20) {
             // Title
             Text(title)
-                .font(.system(size: 18, weight: .semibold))
+                .font(.system(size: Theme.titleFontSize, weight: .semibold))
                 .foregroundColor(Theme.textPrimary)
 
             // Description
@@ -30,7 +30,7 @@ struct TimeInputPanelView: View {
             VStack(spacing: 6) {
                 TextField("MM:SS", text: $timeText)
                     .textFieldStyle(.roundedBorder)
-                    .font(.system(size: 18, design: .monospaced))
+                    .font(.system(size: Theme.noteFontSize, design: .monospaced))
                     .multilineTextAlignment(.center)
                     .frame(width: 120)
                     .onChange(of: timeText) { _, _ in
@@ -39,8 +39,8 @@ struct TimeInputPanelView: View {
 
                 if isInvalid {
                     Text("Enter a valid time (e.g. 5:00)")
-                        .font(.system(size: 11))
-                        .foregroundColor(.red.opacity(0.8))
+                        .font(.system(size: Theme.footerFontSize))
+                        .foregroundColor(Theme.errorColor)
                 }
             }
 
@@ -87,7 +87,8 @@ struct TimeInputPanelView: View {
            let minutes = Int(parts[0]),
            let seconds = Int(parts[1]),
            minutes >= 0, seconds >= 0, seconds < 60 {
-            return minutes * 60 + seconds
+            let totalSeconds = minutes * 60 + seconds
+            return totalSeconds > 0 ? totalSeconds : nil
         }
         if let minutes = Int(trimmed), minutes > 0 {
             return minutes * 60
