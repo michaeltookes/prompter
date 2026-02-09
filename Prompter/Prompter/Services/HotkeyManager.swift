@@ -32,6 +32,7 @@ final class HotkeyManager: ObservableObject {
         case toggleProtectedMode // Cmd+Shift+P
         case increaseOpacity     // Cmd+Shift+]
         case decreaseOpacity     // Cmd+Shift+[
+        case toggleTimer         // Cmd+Shift+T
 
         /// The virtual key code for this action
         var keyCode: UInt32 {
@@ -47,6 +48,7 @@ final class HotkeyManager: ObservableObject {
             case .toggleProtectedMode: return UInt32(kVK_ANSI_P)
             case .increaseOpacity:     return UInt32(kVK_ANSI_RightBracket)
             case .decreaseOpacity:     return UInt32(kVK_ANSI_LeftBracket)
+            case .toggleTimer:         return UInt32(kVK_ANSI_T)
             }
         }
 
@@ -69,6 +71,7 @@ final class HotkeyManager: ObservableObject {
             case .toggleProtectedMode: return "⌘⇧P"
             case .increaseOpacity:     return "⌘⇧]"
             case .decreaseOpacity:     return "⌘⇧["
+            case .toggleTimer:         return "⌘⇧T"
             }
         }
     }
@@ -250,6 +253,12 @@ final class HotkeyManager: ObservableObject {
         setCallback(for: .decreaseOpacity) { [weak appState] in
             Task { @MainActor in
                 appState?.decreaseOpacity()
+            }
+        }
+
+        setCallback(for: .toggleTimer) { [weak appState] in
+            Task { @MainActor in
+                appState?.toggleTimerStartPause()
             }
         }
 

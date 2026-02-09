@@ -127,6 +127,11 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         items.append(NSMenuItem.separator())
 
+        // Presentation Timer submenu
+        items.append(buildTimerSubmenuItem())
+
+        items.append(NSMenuItem.separator())
+
         // Test Protected Mode
         let testItem = NSMenuItem(
             title: "Test Protected Mode…",
@@ -252,6 +257,224 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         testCaptureWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    // MARK: - Timer Submenu
+
+    /// Builds the Presentation Timer submenu item
+    private func buildTimerSubmenuItem() -> NSMenuItem {
+        let timerMenuItem = NSMenuItem(title: "Presentation Timer", action: nil, keyEquivalent: "")
+        let submenu = NSMenu(title: "Presentation Timer")
+
+        // Start/Stop Timer
+        let startStopTitle = appState.isTimerRunning ? "Stop Timer" : "Start Timer"
+        let startStopItem = NSMenuItem(title: startStopTitle, action: #selector(toggleTimer), keyEquivalent: "")
+        startStopItem.target = self
+        submenu.addItem(startStopItem)
+
+        submenu.addItem(NSMenuItem.separator())
+
+        // Deck Timer mode (radio)
+        let deckTimerItem = NSMenuItem(
+            title: "Deck Timer (\(formatTime(appState.timerTotalSeconds)))",
+            action: #selector(setDeckTimerMode),
+            keyEquivalent: ""
+        )
+        deckTimerItem.target = self
+        deckTimerItem.state = appState.timerMode == "deck" ? .on : .off
+        submenu.addItem(deckTimerItem)
+
+        // Per-Card Timer mode (radio)
+        let perCardItem = NSMenuItem(
+            title: "Per-Card Timer (\(formatTime(appState.timerPerCardSeconds)))",
+            action: #selector(setPerCardTimerMode),
+            keyEquivalent: ""
+        )
+        perCardItem.target = self
+        perCardItem.state = appState.timerMode == "perCard" ? .on : .off
+        submenu.addItem(perCardItem)
+
+        submenu.addItem(NSMenuItem.separator())
+
+        // Set Deck Time...
+        let setDeckTimeItem = NSMenuItem(title: "Set Deck Time\u{2026}", action: #selector(showSetDeckTime), keyEquivalent: "")
+        setDeckTimeItem.target = self
+        submenu.addItem(setDeckTimeItem)
+
+        // Set Per-Card Time...
+        let setPerCardTimeItem = NSMenuItem(title: "Set Per-Card Time\u{2026}", action: #selector(showSetPerCardTime), keyEquivalent: "")
+        setPerCardTimeItem.target = self
+        submenu.addItem(setPerCardTimeItem)
+
+        submenu.addItem(NSMenuItem.separator())
+
+        // Show Pause Button toggle
+        let pauseItem = NSMenuItem(title: "Show Pause Button", action: #selector(togglePauseButton), keyEquivalent: "")
+        pauseItem.target = self
+        pauseItem.state = appState.timerShowPauseButton ? .on : .off
+        submenu.addItem(pauseItem)
+
+        submenu.addItem(NSMenuItem.separator())
+
+        // Apply To sub-submenu
+        let applyToItem = NSMenuItem(title: "Apply To", action: nil, keyEquivalent: "")
+        let applyToSubmenu = NSMenu(title: "Apply To")
+
+        let allDecksItem = NSMenuItem(title: "All Decks", action: #selector(setApplyToAll), keyEquivalent: "")
+        allDecksItem.target = self
+        allDecksItem.state = appState.timerApplyMode == "all" ? .on : .off
+        applyToSubmenu.addItem(allDecksItem)
+
+        let selectedDecksItem = NSMenuItem(title: "Selected Decks\u{2026}", action: #selector(showDeckPicker), keyEquivalent: "")
+        selectedDecksItem.target = self
+        selectedDecksItem.state = appState.timerApplyMode == "selected" ? .on : .off
+        applyToSubmenu.addItem(selectedDecksItem)
+
+        applyToItem.submenu = applyToSubmenu
+        submenu.addItem(applyToItem)
+
+        timerMenuItem.submenu = submenu
+        return timerMenuItem
+    }
+
+    @objc private func toggleTimer() {
+        appState.toggleTimerStartPause()
+    }
+
+    @objc private func setDeckTimerMode() {
+        appState.timerMode = "deck"
+    }
+
+    @objc private func setPerCardTimerMode() {
+        appState.timerMode = "perCard"
+    }
+
+    @objc private func togglePauseButton() {
+        appState.timerShowPauseButton.toggle()
+    }
+
+    @objc private func setApplyToAll() {
+        appState.timerApplyMode = "all"
+    }
+
+    @objc private func showSetDeckTime() {
+        showTimeInputDialog(
+            title: "Set Deck Time",
+            message: "Enter the total time for the entire deck (MM:SS):",
+            currentSeconds: appState.timerTotalSeconds
+        ) { [weak self] seconds in
+            self?.appState.timerTotalSeconds = seconds
+        }
+    }
+
+    @objc private func showSetPerCardTime() {
+        showTimeInputDialog(
+            title: "Set Per-Card Time",
+            message: "Enter the time allotted per card (MM:SS):",
+            currentSeconds: appState.timerPerCardSeconds
+        ) { [weak self] seconds in
+            self?.appState.timerPerCardSeconds = seconds
+        }
+    }
+
+    @objc private func showDeckPicker() {
+        let alert = NSAlert()
+        alert.messageText = "Select Decks for Timer"
+        alert.informativeText = "Choose which decks should use the presentation timer:"
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "Apply")
+        alert.addButton(withTitle: "Cancel")
+
+        // Create scrollable checkbox list
+        let scrollView = NSScrollView(frame: NSRect(x: 0, y: 0, width: 300, height: 200))
+        scrollView.hasVerticalScroller = true
+        scrollView.borderType = .bezelBorder
+
+        let stackView = NSStackView()
+        stackView.orientation = .vertical
+        stackView.alignment = .leading
+        stackView.spacing = 6
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+
+        var checkboxes: [(NSButton, UUID)] = []
+
+        for deck in appState.decks {
+            let checkbox = NSButton(checkboxWithTitle: deck.title, target: nil, action: nil)
+            checkbox.state = appState.timerSelectedDeckIds.contains(deck.id) ? .on : .off
+            stackView.addArrangedSubview(checkbox)
+            checkboxes.append((checkbox, deck.id))
+        }
+
+        let documentView = NSView()
+        documentView.translatesAutoresizingMaskIntoConstraints = false
+        documentView.addSubview(stackView)
+
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: documentView.topAnchor, constant: 8),
+            stackView.leadingAnchor.constraint(equalTo: documentView.leadingAnchor, constant: 8),
+            stackView.trailingAnchor.constraint(equalTo: documentView.trailingAnchor, constant: -8),
+            stackView.bottomAnchor.constraint(equalTo: documentView.bottomAnchor, constant: -8)
+        ])
+
+        scrollView.documentView = documentView
+        documentView.widthAnchor.constraint(equalTo: scrollView.contentView.widthAnchor).isActive = true
+
+        alert.accessoryView = scrollView
+
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            let selectedIds = checkboxes
+                .filter { $0.0.state == .on }
+                .map { $0.1 }
+            appState.timerSelectedDeckIds = selectedIds
+            appState.timerApplyMode = "selected"
+        }
+    }
+
+    /// Shows a time input dialog and calls the completion with the parsed seconds
+    private func showTimeInputDialog(title: String, message: String, currentSeconds: Int, completion: @escaping (Int) -> Void) {
+        let alert = NSAlert()
+        alert.messageText = title
+        alert.informativeText = message
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "Set")
+        alert.addButton(withTitle: "Cancel")
+
+        let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 120, height: 24))
+        textField.stringValue = formatTime(currentSeconds)
+        textField.placeholderString = "MM:SS"
+        alert.accessoryView = textField
+
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            let input = textField.stringValue.trimmingCharacters(in: .whitespaces)
+            if let seconds = parseTime(input) {
+                completion(seconds)
+            }
+        }
+    }
+
+    /// Formats seconds as MM:SS
+    private func formatTime(_ totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
+    /// Parses MM:SS or M:SS string to total seconds
+    private func parseTime(_ input: String) -> Int? {
+        let parts = input.split(separator: ":")
+        if parts.count == 2,
+           let minutes = Int(parts[0]),
+           let seconds = Int(parts[1]),
+           minutes >= 0, seconds >= 0, seconds < 60 {
+            return minutes * 60 + seconds
+        }
+        // Try parsing as plain number of minutes
+        if let minutes = Int(input), minutes > 0 {
+            return minutes * 60
+        }
+        return nil
     }
 
     @objc private func quitApp() {
