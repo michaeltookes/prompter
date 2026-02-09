@@ -194,6 +194,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             editorWindow?.contentView = NSHostingView(rootView: editorView)
             editorWindow?.center()
             editorWindow?.minSize = NSSize(width: 800, height: 500)
+            editorWindow?.isReleasedWhenClosed = false
 
             // Observe window close to update app state
             editorCloseObserver = NotificationCenter.default.addObserver(
