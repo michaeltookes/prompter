@@ -25,6 +25,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Handles global keyboard shortcuts
     private var hotkeyManager: HotkeyManager!
 
+    /// Manages application updates via Sparkle
+    private var updateManager: UpdateManager!
+
     // MARK: - NSApplicationDelegate
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -38,10 +41,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Initialize the overlay window controller
         overlayWindowController = OverlayWindowController(appState: appState)
 
+        // Initialize the update manager
+        updateManager = UpdateManager()
+
         // Initialize the menu bar
         menuBarController = MenuBarController(
             appState: appState,
-            overlayController: overlayWindowController
+            overlayController: overlayWindowController,
+            updateManager: updateManager
         )
 
         // Set up global hotkeys
@@ -49,11 +56,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         hotkeyManager.bindToAppState(appState)
         hotkeyManager.registerAllHotkeys()
 
+        // Retry hotkey registration if user is granting Accessibility permission
+        if !hotkeyManager.isRegistered {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                guard let self = self, !self.hotkeyManager.isRegistered else { return }
+                self.hotkeyManager.registerAllHotkeys()
+            }
+        }
+
         // Load persisted data (deck, settings)
         appState.loadLastOpenedDeck()
 
         // Create the overlay window (hidden initially)
         overlayWindowController.createWindow()
+
+        // Start the Sparkle updater
+        updateManager.startUpdater()
 
         print("Presenter Overlay launched successfully")
     }

@@ -12,7 +12,8 @@ When working on this project:
 3. Use the established Theme constants for all UI styling
 4. Test hotkeys work system-wide (not just when app is focused)
 5. Verify overlay behavior in fullscreen and across Spaces
-6. Check the **backlog** document (maintained separately, not in repo) for prioritized planned work — ask the user for the file path when needed.
+6. Check the **backlog** document (maintained separately, not in repo) for prioritized planned work — ask the user for the file path if you don't already have it in context.
+7. Keep the backlog up to date: when completing backlog items during a session, mark them as done with a brief summary of what was implemented. When asked to update the backlog, ask the user for the file path if not already known.
 
 ## Tech Stack
 
@@ -141,7 +142,7 @@ let buttons = 10px
 - AppState central state container
 - Menu bar with dropdown (NSStatusItem)
 - Overlay window with capture protection
-- Global hotkey registration (Carbon/CGEvent)
+- Global hotkey registration (CGEvent tap)
 - Basic card navigation
 
 ### Phase 2: Deck Editor & Layouts
@@ -194,10 +195,12 @@ All reference specs live in `.claude/reference-docs/`.
 
 1. **Protected Mode is Best-Effort**: `NSWindow.sharingType = .none` may not work with all capture tools. Always include a disclaimer and test instructions.
 
-2. **Carbon Hotkeys**: Using Carbon Event Manager for hotkeys (deprecated but functional). Consider CGEvent tap for future versions.
+2. **CGEvent Tap Hotkeys**: Global hotkeys use a CGEvent tap (migrated from deprecated Carbon Event Manager). Requires Accessibility permissions — the app prompts automatically on first launch via `AXIsProcessTrustedWithOptions` with a 5-second retry.
 
-3. **LSUIElement**: Must be set to YES in Info.plist for menu bar-only behavior.
+3. **Sparkle Auto-Update**: Sparkle 2.x is integrated via SPM. `Info.plist` contains placeholder values for `SUFeedURL` and `SUPublicEDKey` that must be replaced before shipping. Generate an EdDSA keypair with Sparkle's `generate_keys` tool and host an `appcast.xml` alongside GitHub Releases.
 
-4. **Accessibility Permissions**: May be required for global hotkeys. Handle permission requests gracefully.
+4. **LSUIElement**: Must be set to YES in Info.plist for menu bar-only behavior.
+
+5. **Accessibility Permissions**: Required for global hotkeys (CGEvent tap). The app prompts the user on first launch and retries registration after 5 seconds.
 
 5. **Auto-Save**: Use 0.5s debouncer to avoid excessive disk writes during editing.

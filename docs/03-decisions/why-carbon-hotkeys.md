@@ -1,8 +1,8 @@
-# Why Carbon for Global Hotkeys?
+# Global Hotkeys: From Carbon to CGEvent Tap
 
 ## The Decision
 
-We use Apple's **Carbon Event Manager** to register global keyboard shortcuts (hotkeys) that work even when other applications are focused.
+We use a **CGEvent tap** to register global keyboard shortcuts (hotkeys) that work even when other applications are focused. This replaced the original Carbon Event Manager implementation.
 
 ## What's a Global Hotkey?
 
@@ -14,65 +14,58 @@ A **global hotkey** is a keyboard shortcut that works across your entire system,
 
 Global hotkeys are essential because during a demo, you're focused on *your demo app*, not Prompter. You need shortcuts that work from anywhere.
 
-## What is Carbon?
+## History
 
-Carbon is an older set of Apple programming tools (APIs) that date back to the Mac OS 9 era (early 2000s). While most of Carbon has been replaced by modern alternatives, the **Event Manager** portion is still the standard way to register global hotkeys.
+### Phase 1: Carbon Event Manager (January 2026)
 
-**Why does this old technology still get used?**
-- It works reliably
-- Apple hasn't provided a modern replacement
-- Many popular apps use it (Alfred, Spectacle, etc.)
+The initial implementation used Apple's **Carbon Event Manager**, an older API dating back to Mac OS 9. It was chosen because:
+- It was the established method for global hotkeys
+- Many popular apps used it (Alfred, Spectacle, etc.)
+- Simpler to implement than alternatives
 
-## Why We Chose Carbon
+### Pre-Release Migration: CGEvent Tap (February 2026)
 
-### 1. Industry Standard for This Purpose
+Before the first release, we migrated to **CGEvent tap** because:
+- Carbon Event Manager is deprecated with no guarantee of future macOS support
+- CGEvent tap is a modern, actively supported API
+- It provides finer control over event handling (consuming events to prevent propagation)
+- Long-term maintainability outweighs the slight increase in complexity
 
-Almost every Mac app with global hotkeys uses Carbon Event Manager:
-- Alfred (productivity app)
-- Spectacle (window management)
-- Bartender (menu bar organizer)
-- Many others
+## How CGEvent Tap Works
 
-When so many successful apps use the same approach, it's a safe choice.
+```
+1. App starts up
 
-### 2. Reliable Across macOS Versions
+2. We check for Accessibility permissions
+   └─→ If not granted, macOS prompts the user
+   └─→ App retries after 5 seconds
 
-Carbon hotkey registration has worked consistently for decades. Apple maintains backward compatibility because so many apps depend on it.
+3. We create a CGEvent tap listening for keyDown events
+   └─→ Tap is added to the main run loop
 
-### 3. Well-Documented
+4. User presses Cmd+Shift+O (while in any app)
 
-Because Carbon has been used for so long, there are:
-- Many code examples available
-- Known solutions to common problems
-- Community knowledge from years of use
+5. macOS routes the event through our tap
+   └─→ We check: is it Cmd+Shift + a registered key?
+   └─→ If yes: consume the event (return nil) and dispatch the action
+   └─→ If no: pass the event through (return the event)
+```
 
-### 4. Simpler Than Alternatives
+This all happens in milliseconds, so the overlay responds instantly.
 
-The alternative (CGEvent tap) requires:
-- More complex code
-- Accessibility permissions
-- Handling more edge cases
+## What We Considered
 
-Carbon is more straightforward for our needs.
-
-## What We Considered Instead
-
-### CGEvent Tap
-
-**What it is**: A lower-level API that intercepts input events at the system level.
+### Carbon Event Manager (Original Choice, Now Replaced)
 
 **Pros**:
-- More modern API
-- More control over event handling
-- Can intercept any input, not just keyboards
+- Simple to implement
+- Well-documented with many examples
+- No Accessibility permissions required
 
 **Cons**:
-- Requires Accessibility permissions
-- More complex to implement correctly
-- Overkill for our needs (we just need keyboard shortcuts)
-- Potential security concerns (can log keystrokes)
-
-**Why we didn't choose it**: More complexity for no benefit; Carbon does exactly what we need.
+- Deprecated by Apple
+- No guarantee of future macOS support
+- Less control over event propagation
 
 ### Third-Party Libraries
 
@@ -80,66 +73,33 @@ Carbon is more straightforward for our needs.
 
 **Pros**:
 - Higher-level API (easier to use)
-- Handles edge cases
 - Some offer UI for shortcut recording
 
 **Cons**:
 - Another dependency to maintain
 - May not be updated for future macOS versions
-- Adds to app size
 
-**Why we didn't choose it**: Carbon is simple enough that we don't need a wrapper; we'd rather own the code.
+**Why we didn't choose it**: CGEvent tap is well-contained in a single file and we prefer owning the code.
 
 ### Listening Only When App is Active
 
 **Idea**: Just use regular keyboard shortcuts that work when the app is focused.
 
-**Pros**:
-- Much simpler
-- No special APIs needed
-
-**Cons**:
-- Completely defeats the purpose! Users would have to click on the overlay before using shortcuts.
-
-**Why we didn't choose it**: This would make the app unusable during demos.
+**Why we didn't choose it**: This would make the app unusable during demos — the entire point is hands-free control from any app.
 
 ## Tradeoffs We Accept
 
-### 1. Carbon is "Deprecated"
+### 1. Accessibility Permissions Required
 
-Apple has marked Carbon as deprecated, meaning they don't recommend it for new code. However:
-- "Deprecated" doesn't mean "will stop working"
-- Apple can't remove it without breaking thousands of apps
-- There's no replacement for global hotkeys
+CGEvent tap requires the user to grant Accessibility permissions. We handle this gracefully:
+- `AXIsProcessTrustedWithOptions` prompts the user automatically on first launch
+- AppDelegate retries registration after 5 seconds (gives the user time to approve)
+- If denied, the app still works — just without global hotkeys
 
-We'll monitor macOS updates and migrate if Apple provides a modern alternative.
+### 2. Tap Can Be Disabled by the System
 
-### 2. Importing Carbon Framework
+macOS may disable our event tap if it takes too long to process events or if the user's input gets blocked. We handle `tapDisabledByTimeout` and `tapDisabledByUserInput` events by re-enabling the tap automatically.
 
-Using Carbon requires importing a legacy framework into our modern Swift project. This:
-- Adds a small amount of complexity
-- Is a well-known pattern (many Swift apps do this)
-- Works perfectly fine
+### 3. Carbon.HIToolbox Still Imported
 
-### 3. Can't Record Custom Shortcuts (Yet)
-
-The Carbon API makes it easy to *register* shortcuts but harder to *record* new ones from user input. For MVP, we use fixed shortcuts. Custom shortcuts could be added later.
-
-## How It Works (Simplified)
-
-```
-1. App starts up
-
-2. We tell Carbon: "Listen for Cmd+Shift+O globally"
-   └─→ Carbon registers this with macOS
-
-3. User presses Cmd+Shift+O (while in any app)
-
-4. macOS recognizes the shortcut
-   └─→ Sends event to Carbon
-
-5. Carbon sends event to our app
-   └─→ Our code runs: toggle the overlay
-```
-
-This all happens in milliseconds, so the overlay responds instantly.
+We still import `Carbon.HIToolbox` for virtual key code constants (`kVK_ANSI_O`, `kVK_RightArrow`, etc.). These are stable constants, not deprecated API calls.

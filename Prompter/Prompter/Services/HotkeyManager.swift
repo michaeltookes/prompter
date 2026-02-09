@@ -1,16 +1,14 @@
-import Carbon
+import Carbon.HIToolbox
 import AppKit
 import Combine
 
-/// Manages system-wide global hotkeys using Carbon Event Manager.
+/// Manages system-wide global hotkeys using a CGEvent tap.
 ///
 /// This service:
 /// - Registers hotkeys that work even when other apps are focused
 /// - Handles hotkey events and dispatches to callbacks
 /// - Supports registration/unregistration lifecycle
-///
-/// Note: Carbon is technically deprecated but is still the standard
-/// approach for global hotkeys on macOS. Many popular apps use it.
+/// - Requires Accessibility permissions (prompted automatically on first launch)
 final class HotkeyManager: ObservableObject {
 
     // MARK: - Singleton
@@ -52,9 +50,9 @@ final class HotkeyManager: ObservableObject {
             }
         }
 
-        /// Modifier keys for this action (Cmd+Shift for all)
-        var modifiers: UInt32 {
-            return UInt32(cmdKey | shiftKey)
+        /// Modifier flags for this action (Cmd+Shift for all)
+        var modifiers: CGEventFlags {
+            return [.maskCommand, .maskShift]
         }
 
         /// Human-readable shortcut string
@@ -78,11 +76,11 @@ final class HotkeyManager: ObservableObject {
 
     // MARK: - Properties
 
-    /// Registered hotkey references (for unregistration)
-    private var hotkeyRefs: [HotkeyAction: EventHotKeyRef] = [:]
+    /// The CGEvent tap port
+    private var eventTap: CFMachPort?
 
-    /// The Carbon event handler reference
-    private var eventHandler: EventHandlerRef?
+    /// The run loop source for the event tap
+    private var runLoopSource: CFRunLoopSource?
 
     /// Callbacks for each hotkey action
     private var actionCallbacks: [HotkeyAction: () -> Void] = [:]
@@ -90,92 +88,79 @@ final class HotkeyManager: ObservableObject {
     /// Whether hotkeys are currently registered
     @Published private(set) var isRegistered: Bool = false
 
+    /// Lookup table mapping key codes to actions for fast matching
+    private let keyCodeToAction: [UInt32: HotkeyAction] = {
+        var map: [UInt32: HotkeyAction] = [:]
+        for action in HotkeyAction.allCases {
+            map[action.keyCode] = action
+        }
+        return map
+    }()
+
     // MARK: - Initialization
 
     private init() {}
 
     // MARK: - Registration
 
-    /// Registers all global hotkeys
+    /// Registers all global hotkeys via a CGEvent tap.
+    ///
+    /// Requires Accessibility permissions. If not granted, the system will
+    /// prompt the user and registration will be skipped until retried.
     func registerAllHotkeys() {
         guard !isRegistered else {
             print("Hotkeys already registered")
             return
         }
 
-        // Install the event handler
-        var eventSpec = EventTypeSpec(
-            eventClass: OSType(kEventClassKeyboard),
-            eventKind: UInt32(kEventHotKeyPressed)
-        )
-
-        let handlerResult = InstallEventHandler(
-            GetApplicationEventTarget(),
-            { (_, event, userData) -> OSStatus in
-                guard let userData = userData else {
-                    return OSStatus(eventNotHandledErr)
-                }
-                let manager = Unmanaged<HotkeyManager>.fromOpaque(userData).takeUnretainedValue()
-                return manager.handleHotkeyEvent(event)
-            },
-            1,
-            &eventSpec,
-            Unmanaged.passUnretained(self).toOpaque(),
-            &eventHandler
-        )
-
-        guard handlerResult == noErr else {
-            print("Failed to install hotkey event handler: \(handlerResult)")
+        // Check accessibility permissions (prompts user if not yet granted)
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue(): true] as CFDictionary
+        guard AXIsProcessTrustedWithOptions(options) else {
+            print("Accessibility permission not granted — hotkeys not registered")
             return
         }
 
-        // Register each hotkey
-        for (index, action) in HotkeyAction.allCases.enumerated() {
-            registerHotkey(action: action, id: UInt32(index + 1))
+        // Create event tap for keyDown events
+        let eventMask = (1 << CGEventType.keyDown.rawValue)
+
+        guard let tap = CGEvent.tapCreate(
+            tap: .cgSessionEventTap,
+            place: .headInsertEventTap,
+            options: .defaultTap,
+            eventsOfInterest: CGEventMask(eventMask),
+            callback: HotkeyManager.eventTapCallback,
+            userInfo: Unmanaged.passUnretained(self).toOpaque()
+        ) else {
+            print("Failed to create CGEvent tap — check Accessibility permissions")
+            return
         }
+
+        eventTap = tap
+
+        // Add to the current run loop
+        let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
+        runLoopSource = source
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), source, .commonModes)
+
+        // Enable the tap
+        CGEvent.tapEnable(tap: tap, enable: true)
 
         isRegistered = true
-        print("Global hotkeys registered successfully")
-    }
-
-    /// Registers a single hotkey
-    private func registerHotkey(action: HotkeyAction, id: UInt32) {
-        var hotkeyRef: EventHotKeyRef?
-
-        // Signature: "POVS" (Presenter Overlay)
-        let signature = OSType(0x504F5653)
-        let hotkeyID = EventHotKeyID(signature: signature, id: id)
-
-        let result = RegisterEventHotKey(
-            action.keyCode,
-            action.modifiers,
-            hotkeyID,
-            GetApplicationEventTarget(),
-            0,
-            &hotkeyRef
-        )
-
-        if result == noErr, let ref = hotkeyRef {
-            hotkeyRefs[action] = ref
-            print("Registered hotkey: \(action.displayString) for \(action.rawValue)")
-        } else {
-            print("Failed to register hotkey \(action.displayString): \(result)")
-        }
+        print("Global hotkeys registered successfully (CGEvent tap)")
     }
 
     /// Unregisters all global hotkeys
     func unregisterAllHotkeys() {
-        for (action, ref) in hotkeyRefs {
-            UnregisterEventHotKey(ref)
-            print("Unregistered hotkey: \(action.displayString)")
-        }
-        hotkeyRefs.removeAll()
-
-        if let handler = eventHandler {
-            RemoveEventHandler(handler)
-            eventHandler = nil
+        if let tap = eventTap {
+            CGEvent.tapEnable(tap: tap, enable: false)
         }
 
+        if let source = runLoopSource {
+            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, .commonModes)
+            runLoopSource = nil
+        }
+
+        eventTap = nil
         isRegistered = false
         print("Global hotkeys unregistered")
     }
@@ -267,34 +252,44 @@ final class HotkeyManager: ObservableObject {
 
     // MARK: - Event Handling
 
-    /// Handles incoming hotkey events from Carbon
-    private func handleHotkeyEvent(_ event: EventRef?) -> OSStatus {
-        guard let event = event else {
-            return OSStatus(eventNotHandledErr)
+    /// C-function callback for the CGEvent tap
+    private static let eventTapCallback: CGEventTapCallBack = { _, type, event, userInfo in
+        // Handle tap being disabled by the system
+        if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
+            if let userInfo = userInfo {
+                let manager = Unmanaged<HotkeyManager>.fromOpaque(userInfo).takeUnretainedValue()
+                manager.reEnableTap()
+            }
+            return Unmanaged.passUnretained(event)
         }
 
-        var hotkeyID = EventHotKeyID()
-        let result = GetEventParameter(
-            event,
-            EventParamName(kEventParamDirectObject),
-            EventParamType(typeEventHotKeyID),
-            nil,
-            MemoryLayout<EventHotKeyID>.size,
-            nil,
-            &hotkeyID
-        )
-
-        guard result == noErr else {
-            return result
+        guard let userInfo = userInfo else {
+            return Unmanaged.passUnretained(event)
         }
 
-        // Find the action by ID (1-indexed)
-        let index = Int(hotkeyID.id) - 1
-        guard index >= 0, index < HotkeyAction.allCases.count else {
-            return OSStatus(eventNotHandledErr)
+        let manager = Unmanaged<HotkeyManager>.fromOpaque(userInfo).takeUnretainedValue()
+        return manager.handleEvent(event)
+    }
+
+    /// Processes a key event and dispatches matching hotkeys
+    private func handleEvent(_ event: CGEvent) -> Unmanaged<CGEvent>? {
+        let flags = event.flags
+
+        // Require both Cmd and Shift
+        guard flags.contains(.maskCommand), flags.contains(.maskShift) else {
+            return Unmanaged.passUnretained(event)
         }
 
-        let action = HotkeyAction.allCases[index]
+        // Reject if Ctrl or Option are also held
+        if flags.contains(.maskControl) || flags.contains(.maskAlternate) {
+            return Unmanaged.passUnretained(event)
+        }
+
+        let keyCode = UInt32(event.getIntegerValueField(.keyboardEventKeycode))
+
+        guard let action = keyCodeToAction[keyCode] else {
+            return Unmanaged.passUnretained(event)
+        }
 
         // Execute the callback on the main thread
         DispatchQueue.main.async { [weak self] in
@@ -302,7 +297,15 @@ final class HotkeyManager: ObservableObject {
             print("Hotkey triggered: \(action.rawValue)")
         }
 
-        return noErr
+        // Consume the event so it doesn't propagate to other apps
+        return nil
+    }
+
+    /// Re-enables the event tap if the system disabled it
+    private func reEnableTap() {
+        guard let tap = eventTap else { return }
+        CGEvent.tapEnable(tap: tap, enable: true)
+        print("CGEvent tap re-enabled")
     }
 
     // MARK: - Cleanup

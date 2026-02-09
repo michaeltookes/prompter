@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- Sparkle auto-update framework (code integration with placeholder appcast URL and EdDSA key)
+- "Check for Updates..." menu item in the menu bar dropdown
+- Unit tests for timer logic (33 tests covering configuration, state machine, toggle cycle, card navigation, real-time tick)
+- Themed NSPanel dialogs for timer configuration (TimeInputPanelView, DeckPickerPanelView)
+- ThemedPanelWindow reusable NSPanel subclass for utility dialogs
 - Presentation timer with per-card countdown displayed in the overlay footer
 - Play/pause button in overlay to start timer inline
 - Timer auto-starts when navigating from card 1 to card 2
@@ -18,6 +23,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Confirmation prompt before deleting a deck
 
 ### Changed
+- Migrated global hotkeys from deprecated Carbon Event Manager to CGEvent tap
+- Replaced NSAlert-based timer dialogs with custom themed NSPanel windows
+- Hotkey registration now prompts for Accessibility permission with automatic retry
 - Increased maximum deck limit from 5 to 10
 - Moved "Delete Deck" button to bottom of sidebar to prevent accidental deletions
 

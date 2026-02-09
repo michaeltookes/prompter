@@ -78,7 +78,8 @@ All reference docs live in `.claude/reference-docs/`:
 
 ## Important Notes
 1. Protected Mode is best-effort. Test before presentations.
-2. Carbon hotkeys are deprecated but functional.
+2. Global hotkeys use a CGEvent tap (requires Accessibility permissions, prompted on first launch).
 3. LSUIElement must remain YES in Info.plist.
-4. Accessibility permissions may be required for hotkeys.
+4. Accessibility permissions are required for hotkeys. The app auto-prompts and retries after 5 seconds.
 5. Auto-save uses a 0.5s debouncer.
+6. Sparkle auto-update is integrated (Info.plist has placeholder keys — replace before shipping).

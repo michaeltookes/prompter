@@ -31,11 +31,27 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     /// Observer for test capture window close
     private var testCaptureWindowObserver: NSObjectProtocol?
 
+    /// The time input panel (created lazily)
+    private var timeInputPanel: ThemedPanelWindow?
+
+    /// Observer for time input panel close
+    private var timeInputPanelObserver: NSObjectProtocol?
+
+    /// The deck picker panel (created lazily)
+    private var deckPickerPanel: ThemedPanelWindow?
+
+    /// Observer for deck picker panel close
+    private var deckPickerPanelObserver: NSObjectProtocol?
+
+    /// Manages application updates via Sparkle
+    private var updateManager: UpdateManager
+
     // MARK: - Initialization
 
-    init(appState: AppState, overlayController: OverlayWindowController) {
+    init(appState: AppState, overlayController: OverlayWindowController, updateManager: UpdateManager) {
         self.appState = appState
         self.overlayController = overlayController
+        self.updateManager = updateManager
         super.init()
         setupStatusItem()
     }
@@ -45,6 +61,12 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             NotificationCenter.default.removeObserver(observer)
         }
         if let observer = testCaptureWindowObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = timeInputPanelObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = deckPickerPanelObserver {
             NotificationCenter.default.removeObserver(observer)
         }
     }
@@ -140,6 +162,15 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         )
         testItem.target = self
         items.append(testItem)
+
+        // Check for Updates
+        let updateItem = NSMenuItem(
+            title: "Check for Updates\u{2026}",
+            action: #selector(checkForUpdates),
+            keyEquivalent: ""
+        )
+        updateItem.target = self
+        items.append(updateItem)
 
         items.append(NSMenuItem.separator())
 
@@ -379,78 +410,85 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     }
 
     @objc private func showDeckPicker() {
-        let alert = NSAlert()
-        alert.messageText = "Select Decks for Timer"
-        alert.informativeText = "Choose which decks should use the presentation timer:"
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: "Apply")
-        alert.addButton(withTitle: "Cancel")
+        // Close existing panel if open
+        deckPickerPanel?.close()
 
-        // Create scrollable checkbox list
-        let scrollView = NSScrollView(frame: NSRect(x: 0, y: 0, width: 300, height: 200))
-        scrollView.hasVerticalScroller = true
-        scrollView.borderType = .bezelBorder
+        let panel = ThemedPanelWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 320, height: 400),
+            title: "Select Decks"
+        )
 
-        let stackView = NSStackView()
-        stackView.orientation = .vertical
-        stackView.alignment = .leading
-        stackView.spacing = 6
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
-        var checkboxes: [(NSButton, UUID)] = []
-
-        for deck in appState.decks {
-            let checkbox = NSButton(checkboxWithTitle: deck.title, target: nil, action: nil)
-            checkbox.state = appState.timerSelectedDeckIds.contains(deck.id) ? .on : .off
-            stackView.addArrangedSubview(checkbox)
-            checkboxes.append((checkbox, deck.id))
+        let view = DeckPickerPanelView(
+            decks: appState.decks,
+            initialSelection: appState.timerSelectedDeckIds
+        ) { [weak self, weak panel] result in
+            panel?.close()
+            if let selectedIds = result {
+                self?.appState.timerSelectedDeckIds = selectedIds
+                self?.appState.timerApplyMode = "selected"
+            }
         }
 
-        let documentView = NSView()
-        documentView.translatesAutoresizingMaskIntoConstraints = false
-        documentView.addSubview(stackView)
+        panel.contentView = NSHostingView(rootView: view)
+        panel.center()
+        panel.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
 
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: documentView.topAnchor, constant: 8),
-            stackView.leadingAnchor.constraint(equalTo: documentView.leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(equalTo: documentView.trailingAnchor, constant: -8),
-            stackView.bottomAnchor.constraint(equalTo: documentView.bottomAnchor, constant: -8)
-        ])
-
-        scrollView.documentView = documentView
-        documentView.widthAnchor.constraint(equalTo: scrollView.contentView.widthAnchor).isActive = true
-
-        alert.accessoryView = scrollView
-
-        let response = alert.runModal()
-        if response == .alertFirstButtonReturn {
-            let selectedIds = checkboxes
-                .filter { $0.0.state == .on }
-                .map { $0.1 }
-            appState.timerSelectedDeckIds = selectedIds
-            appState.timerApplyMode = "selected"
+        deckPickerPanel = panel
+        deckPickerPanelObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification,
+            object: panel,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                if let observer = self?.deckPickerPanelObserver {
+                    NotificationCenter.default.removeObserver(observer)
+                    self?.deckPickerPanelObserver = nil
+                }
+                self?.deckPickerPanel = nil
+            }
         }
     }
 
-    /// Shows a time input dialog and calls the completion with the parsed seconds
+    /// Shows a themed time input panel
     private func showTimeInputDialog(title: String, message: String, currentSeconds: Int, completion: @escaping (Int) -> Void) {
-        let alert = NSAlert()
-        alert.messageText = title
-        alert.informativeText = message
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: "Set")
-        alert.addButton(withTitle: "Cancel")
+        // Close existing panel if open
+        timeInputPanel?.close()
 
-        let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 120, height: 24))
-        textField.stringValue = formatTime(currentSeconds)
-        textField.placeholderString = "MM:SS"
-        alert.accessoryView = textField
+        let panel = ThemedPanelWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 280, height: 220),
+            title: title
+        )
 
-        let response = alert.runModal()
-        if response == .alertFirstButtonReturn {
-            let input = textField.stringValue.trimmingCharacters(in: .whitespaces)
-            if let seconds = parseTime(input) {
+        let view = TimeInputPanelView(
+            title: title,
+            message: message,
+            currentSeconds: currentSeconds
+        ) { [weak self, weak panel] result in
+            panel?.close()
+            if let seconds = result {
                 completion(seconds)
+            }
+            _ = self // prevent unused capture warning
+        }
+
+        panel.contentView = NSHostingView(rootView: view)
+        panel.center()
+        panel.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+
+        timeInputPanel = panel
+        timeInputPanelObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification,
+            object: panel,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                if let observer = self?.timeInputPanelObserver {
+                    NotificationCenter.default.removeObserver(observer)
+                    self?.timeInputPanelObserver = nil
+                }
+                self?.timeInputPanel = nil
             }
         }
     }
@@ -462,20 +500,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         return String(format: "%d:%02d", minutes, seconds)
     }
 
-    /// Parses MM:SS or M:SS string to total seconds
-    private func parseTime(_ input: String) -> Int? {
-        let parts = input.split(separator: ":")
-        if parts.count == 2,
-           let minutes = Int(parts[0]),
-           let seconds = Int(parts[1]),
-           minutes >= 0, seconds >= 0, seconds < 60 {
-            return minutes * 60 + seconds
-        }
-        // Try parsing as plain number of minutes
-        if let minutes = Int(input), minutes > 0 {
-            return minutes * 60
-        }
-        return nil
+    @objc private func checkForUpdates() {
+        NSApp.activate(ignoringOtherApps: true)
+        updateManager.checkForUpdates()
     }
 
     @objc private func quitApp() {

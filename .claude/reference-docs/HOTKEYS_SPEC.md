@@ -15,6 +15,6 @@ Cmd+Shift+P  -> Toggle Protected Mode
 
 ## Notes
 - Hotkeys must not require the app to be focused.
-- Use a reliable macOS global hotkey mechanism (Carbon hotkeys or a trusted wrapper).
+- Implementation uses a CGEvent tap (`CGEvent.tapCreate`) for system-wide hotkey interception. Requires Accessibility permissions (prompted automatically on first launch).
 - Provide UI showing current hotkeys (Help screen or footer).
 
