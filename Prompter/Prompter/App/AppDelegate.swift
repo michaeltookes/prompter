@@ -1,5 +1,8 @@
 import AppKit
+import os
 import SwiftUI
+
+private let logger = Logger(subsystem: "com.tookes.Prompter", category: "AppDelegate")
 
 /// AppDelegate manages the application lifecycle and coordinates all major components.
 ///
@@ -70,7 +73,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Start the Sparkle updater
         updateManager.startUpdater()
 
-        print("Presenter Overlay launched successfully")
+        logger.info("Prompter launched successfully")
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -82,7 +85,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         appState.saveSettingsSync()
         hotkeyManager.unregisterAllHotkeys()
 
-        print("Presenter Overlay terminating")
+        logger.info("Prompter terminating")
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

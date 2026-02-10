@@ -1,6 +1,9 @@
 import AppKit
 import SwiftUI
 import Combine
+import os
+
+private let logger = Logger(subsystem: "com.tookes.Prompter", category: "Overlay")
 
 /// Controller managing the overlay window lifecycle.
 ///
@@ -58,7 +61,7 @@ final class OverlayWindowController: NSObject, ObservableObject {
         // Observe window frame changes for persistence
         setupFrameObservers()
 
-        print("Overlay window created")
+        logger.debug("Overlay window created")
     }
 
     /// Shows the overlay window
@@ -67,13 +70,13 @@ final class OverlayWindowController: NSObject, ObservableObject {
             createWindow()
         }
         overlayWindow?.orderFront(nil)
-        print("Overlay window shown")
+        logger.debug("Overlay window shown")
     }
 
     /// Hides the overlay window
     func hideWindow() {
         overlayWindow?.orderOut(nil)
-        print("Overlay window hidden")
+        logger.debug("Overlay window hidden")
     }
 
     /// Toggles overlay visibility
@@ -89,7 +92,7 @@ final class OverlayWindowController: NSObject, ObservableObject {
     func closeWindow() {
         overlayWindow?.close()
         overlayWindow = nil
-        print("Overlay window closed")
+        logger.debug("Overlay window closed")
     }
 
     // MARK: - Bindings

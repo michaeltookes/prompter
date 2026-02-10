@@ -1,5 +1,8 @@
 import AppKit
 import Foundation
+import os
+
+private let logger = Logger(subsystem: "com.tookes.Prompter", category: "Assets")
 
 /// Manages image assets stored on disk.
 ///
@@ -53,7 +56,7 @@ final class AssetManager {
     /// - Returns: An AssetRef if successful, nil otherwise
     func importImage(from url: URL) -> AssetRef? {
         guard let imageData = try? Data(contentsOf: url) else {
-            print("AssetManager: Failed to read image data from \(url)")
+            logger.error("Failed to read image data from \(url)")
             return nil
         }
 
@@ -79,7 +82,7 @@ final class AssetManager {
         }.value
 
         guard let data = imageData else {
-            print("AssetManager: Failed to read image data from \(url)")
+            logger.error("Failed to read image data from \(url)")
             return nil
         }
 
@@ -99,10 +102,10 @@ final class AssetManager {
 
         do {
             try data.write(to: destinationURL)
-            print("AssetManager: Imported image as \(filename)")
+            logger.debug("Imported image as \(filename)")
             return AssetRef(id: id, filename: filename)
         } catch {
-            print("AssetManager: Failed to write image: \(error)")
+            logger.error("Failed to write image: \(error.localizedDescription)")
             return nil
         }
     }
@@ -123,13 +126,13 @@ final class AssetManager {
                 try data.write(to: destinationURL)
                 return true
             } catch {
-                print("AssetManager: Failed to write image: \(error)")
+                logger.error("Failed to write image: \(error.localizedDescription)")
                 return false
             }
         }.value
 
         if success {
-            print("AssetManager: Imported image as \(filename)")
+            logger.debug("Imported image as \(filename)")
             return AssetRef(id: id, filename: filename)
         }
         return nil
@@ -150,7 +153,7 @@ final class AssetManager {
         let fileURL = assetsURL.appendingPathComponent(assetRef.filename)
 
         guard let image = NSImage(contentsOf: fileURL) else {
-            print("AssetManager: Failed to load image from \(fileURL)")
+            logger.error("Failed to load image from \(fileURL)")
             return nil
         }
 
@@ -177,7 +180,7 @@ final class AssetManager {
         }.value
 
         guard let loadedImage = image else {
-            print("AssetManager: Failed to load image from \(fileURL)")
+            logger.error("Failed to load image from \(fileURL)")
             return nil
         }
 
@@ -202,9 +205,9 @@ final class AssetManager {
         do {
             try FileManager.default.removeItem(at: fileURL)
             imageCache.removeValue(forKey: assetRef.id)
-            print("AssetManager: Deleted asset \(assetRef.filename)")
+            logger.info("Deleted asset \(assetRef.filename)")
         } catch {
-            print("AssetManager: Failed to delete asset: \(error)")
+            logger.error("Failed to delete asset: \(error.localizedDescription)")
         }
     }
 
@@ -225,7 +228,7 @@ final class AssetManager {
             if let uuid = UUID(uuidString: uuidString), !referencedAssets.contains(uuid) {
                 try? fileManager.removeItem(at: fileURL)
                 imageCache.removeValue(forKey: uuid)
-                print("AssetManager: Cleaned up unused asset \(filename)")
+                logger.debug("Cleaned up unused asset \(filename)")
             }
         }
     }

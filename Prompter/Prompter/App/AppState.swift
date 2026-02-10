@@ -1,5 +1,8 @@
 import SwiftUI
 import Combine
+import os
+
+private let logger = Logger(subsystem: "com.tookes.Prompter", category: "AppState")
 
 /// Central application state container.
 ///
@@ -190,7 +193,7 @@ final class AppState: ObservableObject {
             currentDeck = deck
             currentCardIndex = 0
             selectedCardId = deck.cards.first?.id
-            print("AppState: Loaded last opened deck '\(deck.title)'")
+            logger.debug("Loaded last opened deck '\(deck.title)'")
             return
         }
 
@@ -199,7 +202,7 @@ final class AppState: ObservableObject {
             currentDeck = firstDeck
             currentCardIndex = 0
             selectedCardId = firstDeck.cards.first?.id
-            print("AppState: Loaded existing deck '\(firstDeck.title)'")
+            logger.debug("Loaded existing deck '\(firstDeck.title)'")
             return
         }
 
@@ -210,7 +213,7 @@ final class AppState: ObservableObject {
         currentCardIndex = 0
         selectedCardId = defaultDeck.cards.first?.id
         persistence.saveDeck(defaultDeck)
-        print("AppState: Created default deck")
+        logger.debug("Created default deck")
     }
 
     /// Reloads the deck list from persistence
@@ -225,7 +228,7 @@ final class AppState: ObservableObject {
     @discardableResult
     func createNewDeck(title: String = "Untitled Deck") -> Bool {
         guard canCreateNewDeck else {
-            print("AppState: Cannot create deck - limit of \(Self.maxDecks) reached")
+            logger.info("Cannot create deck - limit of \(Self.maxDecks) reached")
             return false
         }
 
