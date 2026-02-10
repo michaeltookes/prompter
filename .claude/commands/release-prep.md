@@ -77,6 +77,22 @@ xcodebuild build \
   -quiet
 ```
 
+#### 2.4 Smoke Test Built App
+
+Launch the Release artifact and perform a quick manual smoke test:
+
+```bash
+open Prompter/build/Release/Prompter.app
+```
+
+Smoke test checklist:
+- App launches without crash, hang, or immediate error dialogs
+- Load a presentation/deck and confirm content appears
+- Navigate cards (next/previous/jump) and verify state updates correctly
+- Start/pause/stop timer and confirm countdown behavior is correct
+- Confirm key UI surfaces render correctly (menu bar, overlay, deck editor/sidebar)
+- Check Console for unexpected runtime warnings/errors during core flows
+
 ---
 
 ### Phase 3: Commit & Merge
