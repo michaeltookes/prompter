@@ -7,11 +7,13 @@
 ## Quick Start for Agents
 
 When working on this project:
-1. Read the relevant spec file in the project root before implementing a feature
+1. Read the relevant spec file in `.claude/reference-docs/` before implementing a feature
 2. Follow the SwiftUI/AppKit hybrid architecture pattern
 3. Use the established Theme constants for all UI styling
 4. Test hotkeys work system-wide (not just when app is focused)
 5. Verify overlay behavior in fullscreen and across Spaces
+6. Check the **backlog** document (maintained separately, not in repo) for prioritized planned work — ask the user for the file path if you don't already have it in context.
+7. Keep the backlog up to date: when completing backlog items during a session, mark them as done with a brief summary of what was implemented. When asked to update the backlog, ask the user for the file path if not already known.
 
 ## Tech Stack
 
@@ -61,8 +63,11 @@ All hotkeys use Cmd+Shift modifier and must work system-wide:
 | Cmd+Shift+↑ / ↓ | Scroll overlay content |
 | Cmd+Shift+C | Toggle click-through mode |
 | Cmd+Shift+P | Toggle Protected Mode |
+| Cmd+Shift+] | Increase overlay opacity |
+| Cmd+Shift+[ | Decrease overlay opacity |
+| Cmd+Shift+T | Start/Pause/Resume timer |
 
-## Data Models (from DATA_MODEL.md)
+## Data Models (from .claude/reference-docs/DATA_MODEL.md)
 
 ```swift
 // Deck: Collection of cards
@@ -96,7 +101,7 @@ enum LayoutType: String, Codable {
 }
 ```
 
-## UI Theme (from UI_UX_STYLE_GUIDE.md)
+## UI Theme (from .claude/reference-docs/UI_UX_STYLE_GUIDE.md)
 
 ```swift
 // Color Palette
@@ -121,7 +126,7 @@ let imageSlots = 14px
 let buttons = 10px
 ```
 
-## File Storage (from PERSISTENCE_SPEC.md)
+## File Storage (from .claude/reference-docs/PERSISTENCE_SPEC.md)
 
 ```
 ~/Library/Application Support/Prompter/
@@ -139,7 +144,7 @@ let buttons = 10px
 - AppState central state container
 - Menu bar with dropdown (NSStatusItem)
 - Overlay window with capture protection
-- Global hotkey registration (Carbon/CGEvent)
+- Global hotkey registration (CGEvent tap)
 - Basic card navigation
 
 ### Phase 2: Deck Editor & Layouts
@@ -160,21 +165,23 @@ let buttons = 10px
 
 ## Specification Files Reference
 
+All reference specs live in `.claude/reference-docs/`.
+
 | File | Purpose |
 |------|---------|
-| PRODUCT_REQUIREMENTS.md | Core problem, MVP outcomes, acceptance criteria |
-| PROJECT_STRUCTURE.md | File/folder architecture |
-| DATA_MODEL.md | All data structures |
-| UI_UX_STYLE_GUIDE.md | Colors, typography, design tokens |
-| HOTKEYS_SPEC.md | Global hotkey definitions |
-| OVERLAY_WINDOW_SPEC.md | Overlay technical requirements |
-| OVERLAY_UI_SPEC.md | Overlay visual design |
-| UI_SPEC.md | Menu bar and editor UI specs |
-| PERSISTENCE_SPEC.md | File storage structure |
-| CAPTURE_PROTECTION.md | Protected Mode implementation |
-| STATE_MANAGEMENT.md | AppState architecture |
-| IMAGE_HANDLING.md | Asset import workflow |
-| ENGINEERING_NOTES.md | Tech stack and strategies |
+| .claude/reference-docs/PRODUCT_REQUIREMENTS.md | Core problem, MVP outcomes, acceptance criteria |
+| .claude/reference-docs/PROJECT_STRUCTURE.md | File/folder architecture |
+| .claude/reference-docs/DATA_MODEL.md | All data structures |
+| .claude/reference-docs/UI_UX_STYLE_GUIDE.md | Colors, typography, design tokens |
+| .claude/reference-docs/HOTKEYS_SPEC.md | Global hotkey definitions |
+| .claude/reference-docs/OVERLAY_WINDOW_SPEC.md | Overlay technical requirements |
+| .claude/reference-docs/OVERLAY_UI_SPEC.md | Overlay visual design |
+| .claude/reference-docs/UI_SPEC.md | Menu bar and editor UI specs |
+| .claude/reference-docs/PERSISTENCE_SPEC.md | File storage structure |
+| .claude/reference-docs/CAPTURE_PROTECTION.md | Protected Mode implementation |
+| .claude/reference-docs/STATE_MANAGEMENT.md | AppState architecture |
+| .claude/reference-docs/IMAGE_HANDLING.md | Asset import workflow |
+| .claude/reference-docs/ENGINEERING_NOTES.md | Tech stack and strategies |
 
 ## Testing Checklist
 
@@ -190,10 +197,12 @@ let buttons = 10px
 
 1. **Protected Mode is Best-Effort**: `NSWindow.sharingType = .none` may not work with all capture tools. Always include a disclaimer and test instructions.
 
-2. **Carbon Hotkeys**: Using Carbon Event Manager for hotkeys (deprecated but functional). Consider CGEvent tap for future versions.
+2. **CGEvent Tap Hotkeys**: Global hotkeys use a CGEvent tap (migrated from deprecated Carbon Event Manager). Requires Accessibility permissions — the app prompts automatically on first launch via `AXIsProcessTrustedWithOptions` with a 5-second retry.
 
-3. **LSUIElement**: Must be set to YES in Info.plist for menu bar-only behavior.
+3. **Sparkle Auto-Update**: Sparkle 2.x is integrated via SPM. `Info.plist` contains placeholder values for `SUFeedURL` and `SUPublicEDKey` that must be replaced before shipping. Generate an EdDSA keypair with Sparkle's `generate_keys` tool and host an `appcast.xml` alongside GitHub Releases.
 
-4. **Accessibility Permissions**: May be required for global hotkeys. Handle permission requests gracefully.
+4. **LSUIElement**: Must be set to YES in Info.plist for menu bar-only behavior.
 
-5. **Auto-Save**: Use 0.5s debouncer to avoid excessive disk writes during editing.
+5. **Accessibility Permissions**: Required for global hotkeys (CGEvent tap). The app prompts the user on first launch and retries registration after 5 seconds.
+
+6. **Auto-Save**: Use 0.5s debouncer to avoid excessive disk writes during editing.

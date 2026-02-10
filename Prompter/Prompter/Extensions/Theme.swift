@@ -6,7 +6,7 @@ import SwiftUI
 /// throughout the app for consistent styling. Never hardcode colors
 /// or dimensions - always use these constants.
 ///
-/// Reference: docs/UI_UX_STYLE_GUIDE.md and CLAUDE.md
+/// Reference: .claude/reference-docs/UI_UX_STYLE_GUIDE.md and CLAUDE.md
 enum Theme {
 
     // MARK: - Colors
@@ -36,6 +36,21 @@ enum Theme {
     /// Accent glow for shadows
     /// rgba(93, 169, 255, 0.35)
     static let accentGlow = Color(red: 93/255, green: 169/255, blue: 255/255).opacity(0.35)
+
+    /// Timer warning color (matches changelog/UX expectation)
+    static let timerWarning = Color.orange
+
+    /// Error text color (mapped to approved palette token)
+    static let errorColor = secondaryAccent
+
+    /// Traffic light close button color (mapped to approved palette token)
+    static let trafficLightRed = secondaryAccent
+
+    /// Traffic light disabled fill color (mapped to approved palette token)
+    static let trafficLightDisabled = textSecondary.opacity(0.35)
+
+    /// Traffic light icon color (mapped to approved palette token)
+    static let trafficLightIcon = textPrimary.opacity(0.7)
 
     /// Background for drop zones
     static let dropZoneBackground = Color.gray.opacity(0.1)
@@ -71,11 +86,22 @@ enum Theme {
     /// Notes font size range (18-22pt)
     static let notesFontSize: CGFloat = 20
 
+    /// Alias for note text size (18-22pt)
+    static let noteFontSize: CGFloat = notesFontSize
+
     /// Caption font size (16pt)
     static let captionFontSize: CGFloat = 16
 
     /// Footer font size (13pt)
     static let footerFontSize: CGFloat = 13
+
+    // MARK: - Typography Helpers
+
+    static let titleSemibold = Font.system(size: titleFontSize, weight: .semibold, design: .default)
+    static let note = Font.system(size: noteFontSize, weight: .regular, design: .default)
+    static let caption = Font.system(size: captionFontSize, weight: .regular, design: .default)
+    static let footerMedium = Font.system(size: footerFontSize, weight: .medium, design: .default)
+    static let smallSemibold = Font.system(size: footerFontSize, weight: .semibold, design: .default)
 
     // MARK: - Shadows
 

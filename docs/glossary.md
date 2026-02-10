@@ -33,7 +33,7 @@ A window without the usual title bar (the bar with the red/yellow/green buttons)
 A macOS feature that tells screen recording tools to skip certain windows. We use this to try to hide the overlay from your audience during screen sharing.
 
 ### Carbon
-An older set of Apple programming tools. We use one small part of it (the Event Manager) for global keyboard shortcuts because Apple hasn't provided a modern replacement.
+An older set of Apple programming tools. The app originally used Carbon Event Manager for global hotkeys but has since migrated to CGEvent tap for long-term compatibility. The `Carbon.HIToolbox` import is still used for virtual key code constants (e.g., `kVK_ANSI_O`).
 
 ### Click-Through Mode
 When enabled, mouse clicks pass through the overlay window to whatever is underneath. This lets you interact with your demo without moving the overlay.

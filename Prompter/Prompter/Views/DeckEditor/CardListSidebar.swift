@@ -19,6 +19,9 @@ struct CardListSidebar: View {
     /// Whether to show the new deck dialog
     @State private var showNewDeckDialog = false
 
+    /// Whether to show the delete deck confirmation
+    @State private var showDeleteConfirmation = false
+
     /// New deck title input
     @State private var newDeckTitle = ""
 
@@ -77,6 +80,32 @@ struct CardListSidebar: View {
             } else {
                 // Empty state
                 emptyState
+            }
+
+            // Delete deck button pinned to bottom
+            if appState.decks.count > 1 {
+                Divider()
+
+                Button(action: { showDeleteConfirmation = true }) {
+                    HStack {
+                        Image(systemName: "trash")
+                            .font(.system(size: 11))
+                        Text("Delete Deck")
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.red.opacity(0.8))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                }
+                .buttonStyle(.plain)
+                .alert("Delete Deck", isPresented: $showDeleteConfirmation) {
+                    Button("Cancel", role: .cancel) {}
+                    Button("Delete", role: .destructive) {
+                        deleteCurrentDeck()
+                    }
+                } message: {
+                    Text("Are you sure you want to delete \"\(appState.currentDeck?.title ?? "this deck")\"? This action cannot be undone.")
+                }
             }
         }
         .frame(width: 220)
@@ -149,19 +178,6 @@ struct CardListSidebar: View {
             }
             .menuStyle(.borderlessButton)
 
-            // Delete deck button (only if more than one deck)
-            if appState.decks.count > 1 {
-                Button(action: deleteCurrentDeck) {
-                    HStack {
-                        Image(systemName: "trash")
-                            .font(.system(size: 11))
-                        Text("Delete Deck")
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.red.opacity(0.8))
-                }
-                .buttonStyle(.plain)
-            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

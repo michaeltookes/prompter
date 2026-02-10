@@ -36,5 +36,11 @@
 	<string></string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>SUFeedURL</key>
+	<string>PLACEHOLDER_APPCAST_URL</string>
+	<key>SUPublicEDKey</key>
+	<string>PLACEHOLDER_PUBLIC_KEY</string>
+	<key>SUEnableAutomaticChecks</key>
+	<false/>
 </dict>
 </plist>

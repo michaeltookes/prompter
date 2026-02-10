@@ -25,6 +25,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Handles global keyboard shortcuts
     private var hotkeyManager: HotkeyManager!
 
+    /// Manages application updates via Sparkle
+    private var updateManager: UpdateManager!
+
+    /// Pending retry task for hotkey registration
+    private var hotkeyRetryWorkItem: DispatchWorkItem?
+
     // MARK: - NSApplicationDelegate
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -38,16 +44,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Initialize the overlay window controller
         overlayWindowController = OverlayWindowController(appState: appState)
 
+        // Initialize the update manager
+        updateManager = UpdateManager()
+
         // Initialize the menu bar
         menuBarController = MenuBarController(
             appState: appState,
-            overlayController: overlayWindowController
+            overlayController: overlayWindowController,
+            updateManager: updateManager
         )
 
         // Set up global hotkeys
         hotkeyManager = HotkeyManager.shared
         hotkeyManager.bindToAppState(appState)
-        hotkeyManager.registerAllHotkeys()
+        hotkeyManager.registerAllHotkeys(promptIfNeeded: true)
+        scheduleHotkeyRegistrationRetryIfNeeded()
 
         // Load persisted data (deck, settings)
         appState.loadLastOpenedDeck()
@@ -55,10 +66,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Create the overlay window (hidden initially)
         overlayWindowController.createWindow()
 
+        // Start the Sparkle updater
+        updateManager.startUpdater()
+
         print("Presenter Overlay launched successfully")
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        hotkeyRetryWorkItem?.cancel()
+        hotkeyRetryWorkItem = nil
+
         // Save settings and current deck synchronously before quitting
         appState.saveDeckSync()
         appState.saveSettingsSync()
@@ -69,5 +86,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
+    }
+
+    // MARK: - Hotkey Retry
+
+    /// Retries hotkey registration silently while the user grants permissions.
+    private func scheduleHotkeyRegistrationRetryIfNeeded(
+        maxAttempts: Int = 12,
+        interval: TimeInterval = 5,
+        attempt: Int = 1
+    ) {
+        guard !hotkeyManager.isRegistered, attempt <= maxAttempts else { return }
+
+        hotkeyRetryWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self, !self.hotkeyManager.isRegistered else { return }
+            self.hotkeyManager.registerAllHotkeys(promptIfNeeded: false)
+            self.scheduleHotkeyRegistrationRetryIfNeeded(
+                maxAttempts: maxAttempts,
+                interval: interval,
+                attempt: attempt + 1
+            )
+        }
+        hotkeyRetryWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + interval, execute: workItem)
     }
 }

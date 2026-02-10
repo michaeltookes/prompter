@@ -103,32 +103,32 @@ See: [Why Menu Bar App](../02-architecture/why-menu-bar-app.md)
 
 ---
 
-### D004: Carbon Event Manager for Hotkeys
+### D004: CGEvent Tap for Hotkeys
 
-**Decision**: Use Carbon Event Manager for global hotkeys
+**Decision**: Use CGEvent tap for global hotkeys (migrated from Carbon Event Manager)
 
-**Date**: Phase 1 implementation
+**Date**: Phase 1 implementation (Carbon); migrated to CGEvent tap pre-release
 
-**Context**: We need keyboard shortcuts that work even when other apps are focused.
+**Context**: We need keyboard shortcuts that work even when other apps are focused. Originally implemented with Carbon Event Manager, migrated to CGEvent tap before v1.0 release for long-term compatibility.
 
 **Options Considered**:
-1. Carbon Event Manager (legacy Apple API)
-2. CGEvent tap
+1. Carbon Event Manager (legacy Apple API) — used initially, now replaced
+2. CGEvent tap — **current implementation**
 3. Third-party hotkey library
 4. Accessibility API
 
-**Why This Choice**:
-- Carbon is the established, reliable method for global hotkeys
-- Well-documented with many examples
-- Works consistently across macOS versions
-- Simpler to implement than CGEvent tap
+**Why CGEvent Tap**:
+- Carbon Event Manager is deprecated with no guarantee of future support
+- CGEvent tap is a modern, supported API
+- Provides finer control over event handling (can consume events to prevent propagation)
+- Requires Accessibility permissions, which the app handles with automatic prompting and retry
 
 **Tradeoffs**:
-- Carbon is technically deprecated (but still works and is used by many apps)
-- Requires importing Carbon framework
-- May need migration in future macOS versions
+- Requires Accessibility permissions (prompted on first launch via `AXIsProcessTrustedWithOptions`)
+- Slightly more complex than Carbon, but well-contained in `HotkeyManager.swift`
+- Must handle tap-disabled-by-timeout events (auto re-enabled)
 
-See: [Why Carbon Hotkeys](why-carbon-hotkeys.md)
+See: [Hotkey Implementation History](why-carbon-hotkeys.md)
 
 ---
 

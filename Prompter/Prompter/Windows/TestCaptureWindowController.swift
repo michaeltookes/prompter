@@ -55,7 +55,9 @@ final class TestCaptureWindowController {
             object: window,
             queue: .main
         ) { [weak self] _ in
-            self?.window = nil
+            Task { @MainActor in
+                self?.window = nil
+            }
         }
 
         self.window = window

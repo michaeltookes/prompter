@@ -1,8 +1,9 @@
 import SwiftUI
 
-/// Footer view for the overlay showing card position and status indicators.
+/// Footer view for the overlay showing card position, timer, and status indicators.
 struct OverlayFooterView: View {
     @EnvironmentObject var appState: AppState
+    @State private var warningPulse = false
 
     var body: some View {
         HStack {
@@ -10,6 +11,45 @@ struct OverlayFooterView: View {
             Text("Card \(appState.currentCardIndex + 1) / \(appState.totalCards)")
                 .font(.system(size: Theme.footerFontSize, weight: .medium))
                 .foregroundColor(Theme.textSecondary)
+
+            // Timer display
+            if appState.isTimerActiveForCurrentDeck {
+                Text("|")
+                    .font(.system(size: Theme.footerFontSize))
+                    .foregroundColor(Theme.textSecondary.opacity(0.3))
+
+                // Play/Pause button
+                Button(action: { appState.toggleTimerStartPause() }) {
+                    Image(systemName: timerButtonIcon)
+                        .font(.system(size: Theme.footerFontSize))
+                        .foregroundColor(Theme.accent)
+                }
+                .buttonStyle(.plain)
+                .help(timerButtonHelp)
+
+                // Countdown display
+                Text(appState.isTimerRunning || appState.timerSecondsRemaining > 0
+                     ? appState.timerDisplayText
+                     : formatTime(appState.effectivePerCardSeconds))
+                    .font(.system(size: Theme.footerFontSize, weight: .medium, design: .monospaced))
+                    .foregroundColor(appState.isTimerWarning ? Theme.timerWarning : Theme.textSecondary)
+                    .opacity(appState.isTimerWarning ? (warningPulse ? 0.4 : 1.0) : 1.0)
+                    .animation(
+                        appState.isTimerWarning
+                            ? .easeInOut(duration: 0.6).repeatForever(autoreverses: true)
+                            : .default,
+                        value: warningPulse
+                    )
+                    .onChange(of: appState.isTimerWarning) { _, isWarning in
+                        warningPulse = isWarning
+                    }
+
+                if appState.isTimerPaused {
+                    Text("PAUSED")
+                        .font(Theme.smallSemibold)
+                        .foregroundColor(Theme.accent.opacity(0.7))
+                }
+            }
 
             Spacer()
 
@@ -64,6 +104,38 @@ struct OverlayFooterView: View {
         }
         .padding(.vertical, 8)
         .opacity(0.8)
+    }
+
+    // MARK: - Timer Helpers
+
+    private var timerButtonIcon: String {
+        if !appState.isTimerRunning {
+            return "play.fill"
+        } else if appState.isTimerPaused {
+            return "play.fill"
+        } else if appState.timerShowPauseButton {
+            return "pause.fill"
+        } else {
+            return "stop.fill"
+        }
+    }
+
+    private var timerButtonHelp: String {
+        if !appState.isTimerRunning {
+            return "Start timer (⌘⇧T)"
+        } else if appState.isTimerPaused {
+            return "Resume timer (⌘⇧T)"
+        } else if appState.timerShowPauseButton {
+            return "Pause timer (⌘⇧T)"
+        } else {
+            return "Stop timer (⌘⇧T)"
+        }
+    }
+
+    private func formatTime(_ totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
     }
 }
 

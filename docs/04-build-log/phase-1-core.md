@@ -144,14 +144,15 @@ Created the core overlay:
 ---
 
 ### Entry 7: Global Hotkeys
-**Date**: January 2026
+**Date**: January 2026 (Carbon); February 2026 (migrated to CGEvent tap)
 
-Implemented HotkeyManager using Carbon Event Manager:
-- Registers 9 global hotkeys (Cmd+Shift+...)
+Implemented HotkeyManager using CGEvent tap (originally Carbon Event Manager, migrated pre-release):
+- Registers 12 global hotkeys (Cmd+Shift+...)
 - Works even when other apps are focused
 - Callbacks bound to AppState methods
+- Requires Accessibility permissions (prompted automatically on first launch with 5-second retry)
 
-**Why Carbon?**: Despite being deprecated, it's still the standard for global hotkeys. Many popular apps (Alfred, Rectangle) use it. There's no modern replacement.
+**Why CGEvent tap?**: Carbon Event Manager is deprecated. CGEvent tap is a modern, supported API that provides the same global hotkey functionality with finer control over event handling. The migration preserved the entire public API (`HotkeyManager.shared`, `bindToAppState()`, `registerAllHotkeys()`, etc.).
 
 ---
 

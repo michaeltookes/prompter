@@ -31,11 +31,27 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     /// Observer for test capture window close
     private var testCaptureWindowObserver: NSObjectProtocol?
 
+    /// The time input panel (created lazily)
+    private var timeInputPanel: ThemedPanelWindow?
+
+    /// Observer for time input panel close
+    private var timeInputPanelObserver: NSObjectProtocol?
+
+    /// The deck picker panel (created lazily)
+    private var deckPickerPanel: ThemedPanelWindow?
+
+    /// Observer for deck picker panel close
+    private var deckPickerPanelObserver: NSObjectProtocol?
+
+    /// Manages application updates via Sparkle
+    private var updateManager: UpdateManager
+
     // MARK: - Initialization
 
-    init(appState: AppState, overlayController: OverlayWindowController) {
+    init(appState: AppState, overlayController: OverlayWindowController, updateManager: UpdateManager) {
         self.appState = appState
         self.overlayController = overlayController
+        self.updateManager = updateManager
         super.init()
         setupStatusItem()
     }
@@ -45,6 +61,12 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             NotificationCenter.default.removeObserver(observer)
         }
         if let observer = testCaptureWindowObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = timeInputPanelObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = deckPickerPanelObserver {
             NotificationCenter.default.removeObserver(observer)
         }
     }
@@ -127,6 +149,11 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         items.append(NSMenuItem.separator())
 
+        // Presentation Timer submenu
+        items.append(buildTimerSubmenuItem())
+
+        items.append(NSMenuItem.separator())
+
         // Test Protected Mode
         let testItem = NSMenuItem(
             title: "Test Protected Mode…",
@@ -135,6 +162,19 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         )
         testItem.target = self
         items.append(testItem)
+
+        // Check for Updates
+        let updateItem = NSMenuItem(
+            title: updateManager.isConfigured ? "Check for Updates\u{2026}" : "Check for Updates (Unavailable)",
+            action: #selector(checkForUpdates),
+            keyEquivalent: ""
+        )
+        updateItem.target = self
+        updateItem.isEnabled = updateManager.canCheckForUpdates
+        if let reason = updateManager.unavailableReason {
+            updateItem.toolTip = reason
+        }
+        items.append(updateItem)
 
         items.append(NSMenuItem.separator())
 
@@ -189,6 +229,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             editorWindow?.contentView = NSHostingView(rootView: editorView)
             editorWindow?.center()
             editorWindow?.minSize = NSSize(width: 800, height: 500)
+            editorWindow?.isReleasedWhenClosed = false
 
             // Observe window close to update app state
             editorCloseObserver = NotificationCenter.default.addObserver(
@@ -196,7 +237,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
                 object: editorWindow,
                 queue: .main
             ) { [weak self] _ in
-                self?.handleEditorWindowClose()
+                Task { @MainActor in
+                    self?.handleEditorWindowClose()
+                }
             }
         }
 
@@ -250,6 +293,227 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         testCaptureWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    // MARK: - Timer Submenu
+
+    /// Builds the Presentation Timer submenu item
+    private func buildTimerSubmenuItem() -> NSMenuItem {
+        let timerMenuItem = NSMenuItem(title: "Presentation Timer", action: nil, keyEquivalent: "")
+        let submenu = NSMenu(title: "Presentation Timer")
+
+        // Start/Stop Timer
+        let startStopTitle: String
+        if !appState.isTimerRunning {
+            startStopTitle = "Start Timer"
+        } else if appState.timerShowPauseButton {
+            startStopTitle = appState.isTimerPaused ? "Resume Timer" : "Pause Timer"
+        } else {
+            startStopTitle = "Stop Timer"
+        }
+        let startStopItem = NSMenuItem(title: startStopTitle, action: #selector(toggleTimer), keyEquivalent: "")
+        startStopItem.target = self
+        submenu.addItem(startStopItem)
+
+        submenu.addItem(NSMenuItem.separator())
+
+        // Deck Timer mode (radio)
+        let deckTimerItem = NSMenuItem(
+            title: "Deck Timer (\(formatTime(appState.timerTotalSeconds)))",
+            action: #selector(setDeckTimerMode),
+            keyEquivalent: ""
+        )
+        deckTimerItem.target = self
+        deckTimerItem.state = appState.timerMode == "deck" ? .on : .off
+        submenu.addItem(deckTimerItem)
+
+        // Per-Card Timer mode (radio)
+        let perCardItem = NSMenuItem(
+            title: "Per-Card Timer (\(formatTime(appState.timerPerCardSeconds)))",
+            action: #selector(setPerCardTimerMode),
+            keyEquivalent: ""
+        )
+        perCardItem.target = self
+        perCardItem.state = appState.timerMode == "perCard" ? .on : .off
+        submenu.addItem(perCardItem)
+
+        submenu.addItem(NSMenuItem.separator())
+
+        // Set Deck Time...
+        let setDeckTimeItem = NSMenuItem(title: "Set Deck Time\u{2026}", action: #selector(showSetDeckTime), keyEquivalent: "")
+        setDeckTimeItem.target = self
+        submenu.addItem(setDeckTimeItem)
+
+        // Set Per-Card Time...
+        let setPerCardTimeItem = NSMenuItem(title: "Set Per-Card Time\u{2026}", action: #selector(showSetPerCardTime), keyEquivalent: "")
+        setPerCardTimeItem.target = self
+        submenu.addItem(setPerCardTimeItem)
+
+        submenu.addItem(NSMenuItem.separator())
+
+        // Show Pause Button toggle
+        let pauseItem = NSMenuItem(title: "Show Pause Button", action: #selector(togglePauseButton), keyEquivalent: "")
+        pauseItem.target = self
+        pauseItem.state = appState.timerShowPauseButton ? .on : .off
+        submenu.addItem(pauseItem)
+
+        submenu.addItem(NSMenuItem.separator())
+
+        // Apply To sub-submenu
+        let applyToItem = NSMenuItem(title: "Apply To", action: nil, keyEquivalent: "")
+        let applyToSubmenu = NSMenu(title: "Apply To")
+
+        let allDecksItem = NSMenuItem(title: "All Decks", action: #selector(setApplyToAll), keyEquivalent: "")
+        allDecksItem.target = self
+        allDecksItem.state = appState.timerApplyMode == "all" ? .on : .off
+        applyToSubmenu.addItem(allDecksItem)
+
+        let selectedDecksItem = NSMenuItem(title: "Selected Decks\u{2026}", action: #selector(showDeckPicker), keyEquivalent: "")
+        selectedDecksItem.target = self
+        selectedDecksItem.state = appState.timerApplyMode == "selected" ? .on : .off
+        applyToSubmenu.addItem(selectedDecksItem)
+
+        applyToItem.submenu = applyToSubmenu
+        submenu.addItem(applyToItem)
+
+        timerMenuItem.submenu = submenu
+        return timerMenuItem
+    }
+
+    @objc private func toggleTimer() {
+        appState.toggleTimerStartPause()
+    }
+
+    @objc private func setDeckTimerMode() {
+        appState.timerMode = "deck"
+    }
+
+    @objc private func setPerCardTimerMode() {
+        appState.timerMode = "perCard"
+    }
+
+    @objc private func togglePauseButton() {
+        appState.timerShowPauseButton.toggle()
+    }
+
+    @objc private func setApplyToAll() {
+        appState.timerApplyMode = "all"
+    }
+
+    @objc private func showSetDeckTime() {
+        showTimeInputDialog(
+            title: "Set Deck Time",
+            message: "Enter the total time for the entire deck (MM:SS):",
+            currentSeconds: appState.timerTotalSeconds
+        ) { [weak self] seconds in
+            self?.appState.timerTotalSeconds = seconds
+        }
+    }
+
+    @objc private func showSetPerCardTime() {
+        showTimeInputDialog(
+            title: "Set Per-Card Time",
+            message: "Enter the time allotted per card (MM:SS):",
+            currentSeconds: appState.timerPerCardSeconds
+        ) { [weak self] seconds in
+            self?.appState.timerPerCardSeconds = seconds
+        }
+    }
+
+    @objc private func showDeckPicker() {
+        // Close existing panel if open
+        deckPickerPanel?.close()
+
+        let panel = ThemedPanelWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 320, height: 400),
+            title: "Select Decks"
+        )
+
+        let view = DeckPickerPanelView(
+            decks: appState.decks,
+            initialSelection: appState.timerSelectedDeckIds
+        ) { [weak self, weak panel] result in
+            panel?.close()
+            if let selectedIds = result {
+                self?.appState.timerSelectedDeckIds = selectedIds
+                self?.appState.timerApplyMode = "selected"
+            }
+        }
+
+        panel.contentView = NSHostingView(rootView: view)
+        panel.center()
+        panel.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+
+        deckPickerPanel = panel
+        deckPickerPanelObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification,
+            object: panel,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                if let observer = self?.deckPickerPanelObserver {
+                    NotificationCenter.default.removeObserver(observer)
+                    self?.deckPickerPanelObserver = nil
+                }
+                self?.deckPickerPanel = nil
+            }
+        }
+    }
+
+    /// Shows a themed time input panel
+    private func showTimeInputDialog(title: String, message: String, currentSeconds: Int, completion: @escaping (Int) -> Void) {
+        // Close existing panel if open
+        timeInputPanel?.close()
+
+        let panel = ThemedPanelWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 280, height: 220),
+            title: title
+        )
+
+        let view = TimeInputPanelView(
+            title: title,
+            message: message,
+            currentSeconds: currentSeconds
+        ) { [weak self, weak panel] result in
+            panel?.close()
+            if let seconds = result {
+                completion(seconds)
+            }
+            _ = self // prevent unused capture warning
+        }
+
+        panel.contentView = NSHostingView(rootView: view)
+        panel.center()
+        panel.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+
+        timeInputPanel = panel
+        timeInputPanelObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification,
+            object: panel,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                if let observer = self?.timeInputPanelObserver {
+                    NotificationCenter.default.removeObserver(observer)
+                    self?.timeInputPanelObserver = nil
+                }
+                self?.timeInputPanel = nil
+            }
+        }
+    }
+
+    /// Formats seconds as MM:SS
+    private func formatTime(_ totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
+    @objc private func checkForUpdates() {
+        NSApp.activate(ignoringOtherApps: true)
+        updateManager.checkForUpdates()
     }
 
     @objc private func quitApp() {

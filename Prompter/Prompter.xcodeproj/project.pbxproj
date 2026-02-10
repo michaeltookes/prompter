@@ -43,6 +43,11 @@
 		A1000001BBBBBBBB00000201 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000201 /* PersistenceService.swift */; };
 		A1000001BBBBBBBB00000202 /* TestCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000202 /* TestCaptureView.swift */; };
 		A1000001BBBBBBBB00000203 /* TestCaptureWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000203 /* TestCaptureWindowController.swift */; };
+		A1000001BBBBBBBB00000204 /* ThemedPanelWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000204 /* ThemedPanelWindow.swift */; };
+		A1000001BBBBBBBB00000205 /* TimeInputPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000205 /* TimeInputPanelView.swift */; };
+		A1000001BBBBBBBB00000206 /* DeckPickerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000206 /* DeckPickerPanelView.swift */; };
+		A1000001BBBBBBBB00000207 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000207 /* UpdateManager.swift */; };
+		C1000001DDDDDDDD00000001 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = C3000001DDDDDDDD00000001 /* Sparkle */; };
 		B1000001CCCCCCCC00000001 /* CardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000001 /* CardTests.swift */; };
 		B1000001CCCCCCCC00000002 /* DeckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000002 /* DeckTests.swift */; };
 		B1000001CCCCCCCC00000003 /* LayoutTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000003 /* LayoutTypeTests.swift */; };
@@ -51,6 +56,7 @@
 		B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000006 /* AppStateTests.swift */; };
 		B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000007 /* DebouncerTests.swift */; };
 		B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */; };
+		B1000001CCCCCCCC00000009 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000009 /* TimerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +108,10 @@
 		A2000001BBBBBBBB00000201 /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000202 /* TestCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCaptureView.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000203 /* TestCaptureWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCaptureWindowController.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000204 /* ThemedPanelWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedPanelWindow.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000205 /* TimeInputPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInputPanelView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000206 /* DeckPickerPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckPickerPanelView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000207 /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
 		A3000001BBBBBBBB00000001 /* Prompter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prompter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2000001CCCCCCCC00000001 /* CardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000002 /* DeckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckTests.swift; sourceTree = "<group>"; };
@@ -111,6 +121,7 @@
 		B2000001CCCCCCCC00000006 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000007 /* DebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncerTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceServiceTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC00000009 /* TimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTests.swift; sourceTree = "<group>"; };
 		B3000001CCCCCCCC00000001 /* PrompterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrompterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -119,6 +130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1000001DDDDDDDD00000001 /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +195,7 @@
 				A2000001BBBBBBBB00000011 /* OverlayWindow.swift */,
 				A2000001BBBBBBBB00000012 /* OverlayWindowController.swift */,
 				A2000001BBBBBBBB00000203 /* TestCaptureWindowController.swift */,
+				A2000001BBBBBBBB00000204 /* ThemedPanelWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -216,6 +229,7 @@
 				A2000001BBBBBBBB00000010 /* HotkeyManager.swift */,
 				A2000001BBBBBBBB00000103 /* AssetManager.swift */,
 				A2000001BBBBBBBB00000201 /* PersistenceService.swift */,
+				A2000001BBBBBBBB00000207 /* UpdateManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -259,6 +273,8 @@
 				A2000001BBBBBBBB00000100 /* ImageDropZone.swift */,
 				A2000001BBBBBBBB00000101 /* FrostedPanelView.swift */,
 				A2000001BBBBBBBB00000102 /* IconButton.swift */,
+				A2000001BBBBBBBB00000205 /* TimeInputPanelView.swift */,
+				A2000001BBBBBBBB00000206 /* DeckPickerPanelView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -326,6 +342,7 @@
 				B2000001CCCCCCCC00000006 /* AppStateTests.swift */,
 				B2000001CCCCCCCC00000007 /* DebouncerTests.swift */,
 				B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */,
+				B2000001CCCCCCCC00000009 /* TimerTests.swift */,
 			);
 			path = PrompterTests;
 			sourceTree = "<group>";
@@ -346,6 +363,9 @@
 			dependencies = (
 			);
 			name = Prompter;
+			packageProductDependencies = (
+				C3000001DDDDDDDD00000001 /* Sparkle */,
+			);
 			productName = Prompter;
 			productReference = A3000001BBBBBBBB00000001 /* Prompter.app */;
 			productType = "com.apple.product-type.application";
@@ -399,6 +419,9 @@
 			productRefGroup = A5000001BBBBBBBB00000003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
+			packageReferences = (
+				C2000001DDDDDDDD00000001 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			targets = (
 				A6000001BBBBBBBB00000001 /* Prompter */,
 				B6000001CCCCCCCC00000001 /* PrompterTests */,
@@ -464,6 +487,10 @@
 				A1000001BBBBBBBB00000201 /* PersistenceService.swift in Sources */,
 				A1000001BBBBBBBB00000202 /* TestCaptureView.swift in Sources */,
 				A1000001BBBBBBBB00000203 /* TestCaptureWindowController.swift in Sources */,
+				A1000001BBBBBBBB00000204 /* ThemedPanelWindow.swift in Sources */,
+				A1000001BBBBBBBB00000205 /* TimeInputPanelView.swift in Sources */,
+				A1000001BBBBBBBB00000206 /* DeckPickerPanelView.swift in Sources */,
+				A1000001BBBBBBBB00000207 /* UpdateManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,6 +506,7 @@
 				B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */,
 				B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */,
 				B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */,
+				B1000001CCCCCCCC00000009 /* TimerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -734,6 +762,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C2000001DDDDDDDD00000001 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C3000001DDDDDDDD00000001 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2000001DDDDDDDD00000001 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A9000001BBBBBBBB00000001 /* Project object */;
 }
