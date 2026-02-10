@@ -303,7 +303,12 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         let submenu = NSMenu(title: "Presentation Timer")
 
         // Start/Stop Timer
-        let startStopTitle = appState.isTimerRunning ? "Stop Timer" : "Start Timer"
+        let startStopTitle: String
+        if appState.timerShowPauseButton {
+            startStopTitle = appState.isTimerRunning && !appState.isTimerPaused ? "Pause Timer" : "Resume Timer"
+        } else {
+            startStopTitle = appState.isTimerRunning ? "Stop Timer" : "Start Timer"
+        }
         let startStopItem = NSMenuItem(title: startStopTitle, action: #selector(toggleTimer), keyEquivalent: "")
         startStopItem.target = self
         submenu.addItem(startStopItem)

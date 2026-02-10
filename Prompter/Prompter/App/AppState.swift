@@ -315,6 +315,12 @@ final class AppState: ObservableObject {
             currentCardIndex = index
             overlayScrollOffset = 0
         }
+        // Auto-start timer on first navigation if not yet running
+        if isTimerActiveForCurrentDeck && !isTimerRunning {
+            startTimer()
+        } else {
+            resetCardTimer()
+        }
     }
 
     /// Navigates to a specific card (alias for goToCard)
@@ -539,7 +545,10 @@ final class AppState: ObservableObject {
     /// Starts the timer for the current card
     func startTimer() {
         guard isTimerActiveForCurrentDeck else { return }
-        timerSecondsRemaining = effectivePerCardSeconds
+        let seconds = effectivePerCardSeconds
+        guard seconds > 0 else { return }
+
+        timerSecondsRemaining = seconds
         isTimerRunning = true
         isTimerPaused = false
         isTimerWarning = false
@@ -588,7 +597,14 @@ final class AppState: ObservableObject {
     func resetCardTimer() {
         guard isTimerRunning else { return }
         timerCancellable?.cancel()
-        timerSecondsRemaining = effectivePerCardSeconds
+
+        let seconds = effectivePerCardSeconds
+        guard seconds > 0 else {
+            stopTimer()
+            return
+        }
+
+        timerSecondsRemaining = seconds
         isTimerWarning = false
         if !isTimerPaused {
             startTimerTick()
@@ -671,7 +687,10 @@ final class AppState: ObservableObject {
         // Auto-save timer configuration changes
         $isTimerEnabled
             .dropFirst()
-            .sink { [weak self] _ in self?.saveSettings() }
+            .sink { [weak self] newValue in
+                self?.saveSettings()
+                self?.stopTimerIfCurrentDeckIneligible(isTimerEnabled: newValue)
+            }
             .store(in: &cancellables)
 
         $timerMode
@@ -696,13 +715,51 @@ final class AppState: ObservableObject {
 
         $timerApplyMode
             .dropFirst()
-            .sink { [weak self] _ in self?.saveSettings() }
+            .sink { [weak self] newValue in
+                self?.saveSettings()
+                self?.stopTimerIfCurrentDeckIneligible(timerApplyMode: newValue)
+            }
             .store(in: &cancellables)
 
         $timerSelectedDeckIds
             .dropFirst()
-            .sink { [weak self] _ in self?.saveSettings() }
+            .sink { [weak self] newValue in
+                self?.saveSettings()
+                self?.stopTimerIfCurrentDeckIneligible(timerSelectedDeckIds: newValue)
+            }
             .store(in: &cancellables)
+    }
+
+    /// Stops the running timer when config changes make the current deck ineligible.
+    private func stopTimerIfCurrentDeckIneligible(
+        isTimerEnabled: Bool? = nil,
+        timerApplyMode: String? = nil,
+        timerSelectedDeckIds: [UUID]? = nil
+    ) {
+        guard isTimerRunning else { return }
+        guard !wouldTimerBeActiveForCurrentDeck(
+            isTimerEnabled: isTimerEnabled,
+            timerApplyMode: timerApplyMode,
+            timerSelectedDeckIds: timerSelectedDeckIds
+        ) else { return }
+        stopTimer()
+    }
+
+    /// Evaluates timer eligibility using optional override values from incoming publisher updates.
+    private func wouldTimerBeActiveForCurrentDeck(
+        isTimerEnabled: Bool? = nil,
+        timerApplyMode: String? = nil,
+        timerSelectedDeckIds: [UUID]? = nil
+    ) -> Bool {
+        let enabled = isTimerEnabled ?? self.isTimerEnabled
+        let applyMode = timerApplyMode ?? self.timerApplyMode
+        let selectedDeckIds = timerSelectedDeckIds ?? self.timerSelectedDeckIds
+
+        guard enabled else { return false }
+        guard totalCards > 0 else { return false }
+        if applyMode == "all" { return true }
+        guard let deckId = currentDeck?.id else { return false }
+        return selectedDeckIds.contains(deckId)
     }
 
     /// Saves the current deck to disk (debounced)

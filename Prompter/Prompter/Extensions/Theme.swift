@@ -37,17 +37,20 @@ enum Theme {
     /// rgba(93, 169, 255, 0.35)
     static let accentGlow = Color(red: 93/255, green: 169/255, blue: 255/255).opacity(0.35)
 
-    /// Error text color
-    static let errorColor = Color(red: 255/255, green: 107/255, blue: 107/255)
+    /// Timer warning color (matches changelog/UX expectation)
+    static let timerWarning = Color.orange
 
-    /// Traffic light close button color
-    static let trafficLightRed = Color(red: 255/255, green: 95/255, blue: 86/255)
+    /// Error text color (mapped to approved palette token)
+    static let errorColor = secondaryAccent
 
-    /// Traffic light disabled fill color
-    static let trafficLightDisabled = Color(red: 140/255, green: 140/255, blue: 140/255).opacity(0.35)
+    /// Traffic light close button color (mapped to approved palette token)
+    static let trafficLightRed = secondaryAccent
 
-    /// Traffic light icon color
-    static let trafficLightIcon = Color.black.opacity(0.7)
+    /// Traffic light disabled fill color (mapped to approved palette token)
+    static let trafficLightDisabled = textSecondary.opacity(0.35)
+
+    /// Traffic light icon color (mapped to approved palette token)
+    static let trafficLightIcon = textPrimary.opacity(0.7)
 
     /// Background for drop zones
     static let dropZoneBackground = Color.gray.opacity(0.1)
@@ -92,19 +95,13 @@ enum Theme {
     /// Footer font size (13pt)
     static let footerFontSize: CGFloat = 13
 
-    /// Small utility font size (11pt)
-    static let smallFontSize: CGFloat = 11
-
-    /// Extra small utility icon/text font size (7pt)
-    static let iconSmallFontSize: CGFloat = 7
-
     // MARK: - Typography Helpers
 
-    static let titleSemibold = Font.system(size: titleFontSize, weight: .semibold)
-    static let note = Font.system(size: noteFontSize, weight: .regular)
-    static let caption = Font.system(size: captionFontSize, weight: .regular)
-    static let footerMedium = Font.system(size: footerFontSize, weight: .medium)
-    static let smallSemibold = Font.system(size: smallFontSize, weight: .semibold)
+    static let titleSemibold = Font.system(size: titleFontSize, weight: .semibold, design: .default)
+    static let note = Font.system(size: noteFontSize, weight: .regular, design: .default)
+    static let caption = Font.system(size: captionFontSize, weight: .regular, design: .default)
+    static let footerMedium = Font.system(size: footerFontSize, weight: .medium, design: .default)
+    static let smallSemibold = Font.system(size: footerFontSize, weight: .semibold, design: .default)
 
     // MARK: - Shadows
 

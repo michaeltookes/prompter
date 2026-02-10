@@ -247,7 +247,7 @@ struct DragHandleView: View {
                     .padding(.top, 8)
 
                 Text("Drag to move • Edges to resize")
-                    .font(.system(size: Theme.smallFontSize))
+                    .font(.system(size: Theme.footerFontSize))
                     .foregroundColor(Theme.textSecondary.opacity(0.6))
             }
 
@@ -287,7 +287,7 @@ struct TrafficLightButton: View {
                 Group {
                     if isHovered && !disabled {
                         Image(systemName: "xmark")
-                            .font(.system(size: Theme.iconSmallFontSize, weight: .bold))
+                            .font(.system(size: Theme.footerFontSize, weight: .bold))
                             .foregroundColor(Theme.trafficLightIcon)
                     }
                 }

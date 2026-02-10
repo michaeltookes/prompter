@@ -21,7 +21,7 @@ struct OverlayFooterView: View {
                 // Play/Pause button
                 Button(action: { appState.toggleTimerStartPause() }) {
                     Image(systemName: timerButtonIcon)
-                        .font(.system(size: Theme.smallFontSize))
+                        .font(.system(size: Theme.footerFontSize))
                         .foregroundColor(Theme.accent)
                 }
                 .buttonStyle(.plain)
@@ -32,7 +32,7 @@ struct OverlayFooterView: View {
                      ? appState.timerDisplayText
                      : formatTime(appState.effectivePerCardSeconds))
                     .font(.system(size: Theme.footerFontSize, weight: .medium, design: .monospaced))
-                    .foregroundColor(appState.isTimerWarning ? Theme.accentGlow : Theme.textSecondary)
+                    .foregroundColor(appState.isTimerWarning ? Theme.timerWarning : Theme.textSecondary)
                     .opacity(appState.isTimerWarning ? (warningPulse ? 0.4 : 1.0) : 1.0)
                     .animation(
                         appState.isTimerWarning

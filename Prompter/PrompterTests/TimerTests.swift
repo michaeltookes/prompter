@@ -141,6 +141,17 @@ final class TimerTests: XCTestCase {
         XCTAssertEqual(appState.timerSecondsRemaining, 0)
     }
 
+    func testStartTimer_zeroEffectiveSeconds_doesNothing() {
+        loadTimerDeck(cardCount: 3)
+        appState.timerMode = "deck"
+        appState.timerTotalSeconds = 1 // 1 / 3 => 0 seconds
+
+        appState.startTimer()
+
+        XCTAssertFalse(appState.isTimerRunning)
+        XCTAssertEqual(appState.timerSecondsRemaining, 0)
+    }
+
     // MARK: - Stop Timer
 
     func testStopTimer_resetsAllState() {
@@ -293,9 +304,30 @@ final class TimerTests: XCTestCase {
         XCTAssertEqual(appState.timerSecondsRemaining, 60)
     }
 
+    func testGoToCard_autoStartsTimer() {
+        loadTimerDeck(cardCount: 3)
+        XCTAssertFalse(appState.isTimerRunning)
+
+        appState.goToCard(at: 1)
+
+        XCTAssertTrue(appState.isTimerRunning)
+    }
+
+    func testGoToCard_resetsTimer_whenRunning() {
+        loadTimerDeck(cardCount: 3)
+        appState.timerMode = "perCard"
+        appState.timerPerCardSeconds = 60
+        appState.startTimer()
+
+        appState.timerSecondsRemaining = 15
+        appState.goToCard(at: 1)
+
+        XCTAssertEqual(appState.timerSecondsRemaining, 60)
+    }
+
     func testPreviousCard_autoStartsTimer() {
         loadTimerDeck(cardCount: 3)
-        appState.goToCard(at: 2)
+        appState.currentCardIndex = 2
         XCTAssertFalse(appState.isTimerRunning)
 
         appState.previousCard()
@@ -342,6 +374,60 @@ final class TimerTests: XCTestCase {
 
         // Should not change since timer isn't running
         XCTAssertEqual(appState.timerSecondsRemaining, 10)
+    }
+
+    func testResetCardTimer_zeroEffectiveSeconds_stopsTimer() {
+        loadTimerDeck(cardCount: 3)
+        appState.timerMode = "perCard"
+        appState.timerPerCardSeconds = 60
+        appState.startTimer()
+        XCTAssertTrue(appState.isTimerRunning)
+
+        appState.timerMode = "deck"
+        appState.timerTotalSeconds = 1 // 1 / 3 => 0 seconds
+        appState.resetCardTimer()
+
+        XCTAssertFalse(appState.isTimerRunning)
+        XCTAssertEqual(appState.timerSecondsRemaining, 0)
+    }
+
+    func testTimerStopsWhenDisabledViaSettingsChange() {
+        loadTimerDeck(cardCount: 3)
+        appState.startTimer()
+        XCTAssertTrue(appState.isTimerRunning)
+
+        appState.isTimerEnabled = false
+
+        XCTAssertFalse(appState.isTimerRunning)
+        XCTAssertEqual(appState.timerSecondsRemaining, 0)
+    }
+
+    func testTimerStopsWhenApplyModeChangeMakesDeckIneligible() {
+        loadTimerDeck(cardCount: 3)
+        appState.startTimer()
+        XCTAssertTrue(appState.isTimerRunning)
+
+        appState.timerApplyMode = "selected"
+
+        XCTAssertFalse(appState.isTimerRunning)
+        XCTAssertEqual(appState.timerSecondsRemaining, 0)
+    }
+
+    func testTimerStopsWhenSelectedDecksChangeExcludesCurrentDeck() {
+        loadTimerDeck(cardCount: 3)
+        guard let currentDeckId = appState.currentDeck?.id else {
+            XCTFail("Expected current deck")
+            return
+        }
+        appState.timerApplyMode = "selected"
+        appState.timerSelectedDeckIds = [currentDeckId]
+        appState.startTimer()
+        XCTAssertTrue(appState.isTimerRunning)
+
+        appState.timerSelectedDeckIds = []
+
+        XCTAssertFalse(appState.isTimerRunning)
+        XCTAssertEqual(appState.timerSecondsRemaining, 0)
     }
 
     // MARK: - Timer Tick (real timer, short delays)

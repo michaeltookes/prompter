@@ -63,6 +63,8 @@ All hotkeys use Cmd+Shift modifier and must work system-wide:
 | Cmd+Shift+↑ / ↓ | Scroll overlay content |
 | Cmd+Shift+C | Toggle click-through mode |
 | Cmd+Shift+P | Toggle Protected Mode |
+| Cmd+Shift+] | Increase overlay opacity |
+| Cmd+Shift+[ | Decrease overlay opacity |
 | Cmd+Shift+T | Start/Pause/Resume timer |
 
 ## Data Models (from .claude/reference-docs/DATA_MODEL.md)

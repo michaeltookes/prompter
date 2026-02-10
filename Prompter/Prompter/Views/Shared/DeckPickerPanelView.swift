@@ -71,7 +71,7 @@ struct DeckPickerPanelView: View {
         Button(action: { toggleDeck(deck.id) }) {
             HStack(spacing: 12) {
                 Image(systemName: selectedIds.contains(deck.id) ? "checkmark.square.fill" : "square")
-                    .font(.system(size: 16))
+                    .font(.system(size: Theme.captionFontSize))
                     .foregroundColor(selectedIds.contains(deck.id) ? Theme.accent : Theme.textSecondary)
 
                 VStack(alignment: .leading, spacing: 2) {
