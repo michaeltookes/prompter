@@ -61,7 +61,9 @@ Click the icon to see:
 | Open Deck Editor | Opens the card editing window |
 | Protected Mode | Hides overlay from screen capture |
 | Click-through Overlay | Mouse clicks pass through overlay |
+| Timer submenu | Configure and control the presentation timer |
 | Test Capture Setup | Instructions to test protection |
+| Check for Updates... | Check for new versions of Prompter |
 | Quit | Closes the app completely |
 
 ### The Deck Editor
@@ -82,8 +84,10 @@ The editor has two main areas:
 ### The Overlay
 
 When visible, the overlay shows:
+- A traffic light close button (top-left corner)
 - Your current card's content
 - A footer with card number (e.g., "3 / 10")
+- Timer countdown (when enabled)
 - Status icons for Protected Mode and Click-through
 
 ---
@@ -103,6 +107,7 @@ All shortcuts use **Cmd+Shift** plus another key:
 | Cmd+Shift+↓ | Scroll down |
 | Cmd+Shift+C | Toggle click-through mode |
 | Cmd+Shift+P | Toggle Protected Mode |
+| Cmd+Shift+T | Start / Pause / Resume timer |
 
 **Important:** These shortcuts work globally - you don't need to have Prompter focused!
 

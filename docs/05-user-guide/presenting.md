@@ -12,12 +12,22 @@ You've created your deck. Now it's showtime. This guide covers everything about 
 4. **Position the overlay** - drag it where you want it
 5. **Enable Protected Mode** - via menu bar or Cmd+Shift+P
 
+### Set Up the Timer (Optional)
+
+If you want pacing reminders:
+1. Click the menu bar icon and go to the **Timer** submenu
+2. Enable the timer and choose a mode:
+   - **Deck mode**: Set a total time and it divides evenly across cards
+   - **Per-card mode**: Set a fixed time for each card
+3. Press **Cmd+Shift+T** to start the timer when your demo begins
+
 ### Quick Checklist
 
 - [ ] Overlay is visible and positioned
 - [ ] You're on the first card
 - [ ] Protected Mode is enabled
-- [ ] You know your hotkeys (→ next, ← prev)
+- [ ] Timer configured (if using)
+- [ ] You know your hotkeys (→ next, ← prev, T timer)
 
 ### Test (If Time Allows)
 
@@ -57,6 +67,14 @@ If the overlay is in the way of something you need to click:
 - **Cmd+Shift+C** again to disable
 
 Use this when the overlay covers a button you need to press.
+
+### Using the Timer
+
+If you set up the timer before your call:
+- **Cmd+Shift+T** starts the timer
+- **Cmd+Shift+T** again pauses it (press again to resume)
+- The timer resets automatically when you navigate to the next card
+- When time runs low, the countdown turns yellow/red as a visual warning
 
 ### Adjusting Text Size
 
@@ -154,10 +172,10 @@ For question-heavy demos:
 
 ### Timing Reminders
 
-Add timing hints to your cards:
-- "MAX 5 MIN on this feature"
-- "Check time - should be at 15 min mark"
-- "If running short, skip to card 8"
+Use the built-in presentation timer instead of manual hints:
+- Set **Deck mode** with your total demo time to auto-distribute across cards
+- Set **Per-card mode** for strict timing on each section
+- The timer countdown appears in the overlay footer so you always know where you stand
 
 ### Emergency Card
 

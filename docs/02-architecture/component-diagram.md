@@ -31,6 +31,7 @@ This diagram shows how the parts of Prompter connect to each other.
 │  │  • Current deck              • Overlay visibility             │   │
 │  │  • Current card index        • Click-through mode             │   │
 │  │  • Font size                 • Protected mode                 │   │
+│  │  • Timer state               • Timer settings                 │   │
 │  └──────────────────────────────────────────────────────────────┘   │
 │             │                          │                             │
 │             ▼                          ▼                             │
@@ -80,6 +81,7 @@ When you press a hotkey or click a menu item, the App State updates, and all the
 | **Hotkey Manager** | Listens for keyboard shortcuts even when app isn't focused |
 | **Persistence Service** | Saves your work to disk; loads it when app starts |
 | **Asset Manager** | Handles images you drag into cards |
+| **Update Manager** | Checks for and installs app updates via Sparkle |
 
 ### File System
 

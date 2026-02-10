@@ -31,7 +31,9 @@ The app is signed and notarized by Apple for Gatekeeper approval.
 - Always-on-top overlay window
 - Protected Mode (attempt hide from capture)
 - Click-through overlay mode
+- Presentation timer with per-card countdown and configurable modes
 - Global hotkeys (works while presenting)
+- Automatic updates via Sparkle
 - Persistence (deck, assets, settings)
 
 ## Layout Templates (5)
@@ -48,6 +50,7 @@ The app is signed and notarized by Apple for Gatekeeper approval.
 - Cmd+Shift+Up / Cmd+Shift+Down: Scroll within card notes (if overflow)
 - Cmd+Shift+C: Toggle Click-through Overlay
 - Cmd+Shift+P: Toggle Protected Mode
+- Cmd+Shift+T: Start / Pause / Resume Timer
 
 ## Run
 
@@ -62,6 +65,10 @@ open Prompter.xcodeproj
 ```
 
 Then build and run the macOS target in Xcode.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
 
 ## Disclaimer
 Capture protection is best-effort. Some capture tools or capture methods may still display the overlay.

@@ -206,11 +206,50 @@ Yes! Copy the `Prompter` folder to the same location on the other Mac.
 **Check for backups:**
 - If you use Time Machine, you can restore previous versions
 
+## Timer Issues
+
+### Timer isn't showing in the overlay
+
+**Make sure the timer is enabled:**
+- Click the menu bar icon
+- Go to the Timer submenu
+- Ensure "Enable Timer" is checked
+
+**Check timer scope:**
+- If set to "Selected Decks," make sure the current deck is included
+- Switch to "All Decks" to test
+
+### Timer isn't counting down
+
+**Start the timer:**
+- Press Cmd+Shift+T to start the countdown
+- The timer starts paused by default
+
+**Check the mode:**
+- In "Deck" mode, the total time is divided by the number of cards. If the result rounds to 0 seconds, the timer won't run
+- Try increasing the total time or switching to "Per Card" mode
+
+### Timer resets unexpectedly
+
+The timer resets when you navigate to a new card. This is by design -- each card gets its own countdown.
+
+## Update Issues
+
+### "Check for Updates" is greyed out
+
+If you upgraded from v1.0.0, auto-updates weren't configured in that version. Download v1.1.0+ manually from [GitHub Releases](https://github.com/michaeltookes/prompter/releases) or via Homebrew. Once on v1.1.0+, future updates will work automatically.
+
+### Update check fails
+
+- Verify you have an internet connection
+- The update feed is hosted on GitHub -- check that github.com is reachable
+- Try again later; GitHub's CDN may have temporary delays
+
 ## Getting More Help
 
 ### Check for updates
 
-Make sure you're running the latest version of the app.
+Click the menu bar icon and select **"Check for Updates..."** to see if a newer version is available.
 
 ### Report an issue
 
@@ -218,13 +257,7 @@ If you encounter a bug:
 1. Note exactly what happened
 2. Note what you were doing when it happened
 3. Check if you can reproduce it
-4. Report at: [GitHub Issues link]
-
-### Community
-
-For tips from other users, check:
-- [Community forum link]
-- [Discussion board link]
+4. Report at: [GitHub Issues](https://github.com/michaeltookes/prompter/issues)
 
 ---
 

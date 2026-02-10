@@ -45,10 +45,21 @@ During a demo, you can't be clicking around. Everything works via keyboard short
 | `Cmd+Shift+P` | Toggle Protected Mode |
 | `Cmd+Shift+=` | Increase text size |
 | `Cmd+Shift+-` | Decrease text size |
+| `Cmd+Shift+T` | Start / Pause / Resume timer |
 
 These shortcuts work **even when other apps are focused** - you don't need to click on the overlay first.
 
-## 5. Menu Bar App
+## 5. Presentation Timer
+
+Keep your demo on track with the built-in timer:
+
+- **Per-card countdown**: See how much time you have left on each card
+- **Two modes**: Divide total deck time evenly, or set a fixed time per card
+- **Visual warnings**: The timer changes color when time is running low
+- **Pause/resume**: Use Cmd+Shift+T to control the timer without leaving your demo
+- **Selective application**: Apply the timer to all decks or only specific ones
+
+## 6. Menu Bar App
 
 The app lives in your menu bar (top-right of your screen), not the dock. This means:
 
@@ -56,13 +67,17 @@ The app lives in your menu bar (top-right of your screen), not the dock. This me
 - Quick access via the menu bar icon
 - Runs quietly in the background
 
-## 6. Protected Mode
+## 7. Protected Mode
 
 When enabled, Protected Mode tells macOS to exclude the overlay from screen capture. This is what makes the overlay "invisible" to your audience.
 
 **Note**: This is best-effort protection. We include a test feature so you can verify it works with your specific video conferencing setup before important calls.
 
-## 7. Persistent Storage
+## 8. Automatic Updates
+
+Prompter checks for updates automatically using the Sparkle framework. You can also manually check via the "Check for Updates..." option in the menu bar.
+
+## 9. Persistent Storage
 
 Your decks and settings are saved automatically:
 

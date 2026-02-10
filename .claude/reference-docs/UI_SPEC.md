@@ -10,7 +10,20 @@ Open Deck Editor…
 ✔ Protected Mode
 ☐ Click-through Overlay
 ────────────────────
+Timer                 ▸
+  ☐ Enable Timer
+  ────────────────────
+  Mode: Deck Total
+  Mode: Per Card
+  ────────────────────
+  Set Deck Time…
+  Set Per-Card Time…
+  ────────────────────
+  Apply To: All Decks
+  Apply To: Selected Decks…
+────────────────────
 Test Capture Setup…
+Check for Updates…
 Quit
 
 Menu appearance:
