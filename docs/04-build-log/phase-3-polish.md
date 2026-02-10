@@ -1,6 +1,6 @@
 # Phase 3: Persistence & Polish
 
-**Status**: Not Started
+**Status**: Complete (shipped in v1.1.0)
 **Depends on**: Phase 2 completion
 
 ## What We're Building
@@ -49,9 +49,43 @@ By the end of Phase 3, we should have:
 
 ## Build Log
 
-*This section will be updated as we build Phase 3.*
+### Entry 1: Persistence & Auto-Save
+- Implemented `PersistenceService` with JSON read/write for decks, assets, and settings
+- Added 0.5s debounced auto-save via Combine subscribers on AppState
+- Settings include overlay frame, opacity, font scale, modes, and timer configuration
+- Custom `Codable` init with backward compatibility for new timer fields
+- `Settings.validated()` clamps values to safe ranges
 
-(Phase 3 not yet started)
+### Entry 2: Presentation Timer
+- Added per-card countdown timer with two modes: deck (total time / cards) and per-card (fixed)
+- Timer state managed in AppState with `Timer.publish` Combine subscription
+- Visual warning when time runs low (20% threshold)
+- Configurable via menu bar submenu: enable/disable, mode, deck picker
+- Global hotkey Cmd+Shift+T for start/pause/resume
+- Timer resets on card navigation
+
+### Entry 3: UI Polish & Overlay Enhancements
+- Traffic light close button on overlay (top-left)
+- Drag handle with move/resize hint text
+- Frosted glass background with configurable opacity
+- Card transition animations (fade + slide)
+- Footer with card counter, timer display, and mode indicators
+- Delete deck button moved to sidebar bottom with confirmation prompt
+
+### Entry 4: Sparkle Auto-Update Integration
+- Added Sparkle 2.x via SPM for automatic update checking
+- `UpdateManager` validates configuration before starting Sparkle
+- EdDSA signing for update artifacts
+- Appcast hosted via raw GitHub URL on main branch
+- "Check for Updates..." menu item with availability state
+
+### Entry 5: Release Pipeline & Code Quality
+- Replaced 59 `print()` calls with Apple's unified `os.Logger`
+- Created build/notarize/DMG/publish release scripts
+- Added MIT License
+- Added `.gitignore` for .DS_Store, xcuserdata, dist/
+- Protocol-based `PersistenceProvider` for test isolation
+- 134 unit tests passing
 
 ## Persistence Design
 
@@ -83,6 +117,7 @@ By the end of Phase 3, we should have:
 - Click-through mode state
 - Protected mode state
 - Last opened deck ID
+- Timer settings (enabled, mode, durations, scope, selected decks)
 
 ## Edge Cases to Handle
 

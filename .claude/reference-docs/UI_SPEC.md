@@ -10,8 +10,29 @@ Open Deck Editor…
 ✔ Protected Mode
 ☐ Click-through Overlay
 ────────────────────
+Timer                 ▸
+  ☐ Enable Timer
+  ────────────────────
+  Mode: Deck Total
+  Mode: Per Card
+  ────────────────────
+  Set Deck Time…
+  Set Per-Card Time…
+  ────────────────────
+  Apply To: All Decks
+  Apply To: Selected Decks…
+────────────────────
 Test Capture Setup…
+Check for Updates…
 Quit
+
+Protected Mode disclaimer:
+- Protected Mode is best-effort. It uses `NSWindow.sharingType = .none`, which may not be honored by all capture tools.
+
+Test Capture Setup:
+- Open `Test Capture Setup…` from the menu bar.
+- Enable Protected Mode and start a screen share/recording test.
+- Expected outcome: overlay remains visible locally, but is not visible in the captured/shared output.
 
 Menu appearance:
 - Frosted dark background
@@ -82,4 +103,3 @@ Top Toolbar:
 All image slots:
 - Dashed glowing border when empty
 - Drag highlight when hovering file
-

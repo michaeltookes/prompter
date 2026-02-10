@@ -5,6 +5,8 @@
 - Soft glow around edges
 - Rounded corners
 - Minimal UI chrome
+- Traffic light close button (top-left corner)
+- Drag handle with hint text at top
 
 Opacity adjustable from subtle to solid.
 
@@ -14,8 +16,9 @@ Opacity adjustable from subtle to solid.
 
 Overlay shows ONE card at a time.
 
-Footer (small, auto-hide):
+Footer (small):
 Card 3 / 12
+Timer countdown (MM:SS) when enabled
 Protected Mode Icon
 Click-through Icon
 

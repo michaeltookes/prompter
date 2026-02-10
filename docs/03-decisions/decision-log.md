@@ -256,25 +256,95 @@ See: [Why 5 Layouts](why-5-layouts.md)
 3. Sandbox with user-granted permissions
 
 **Why This Choice**:
-- Carbon Event Manager (our hotkey solution) does not work inside a sandboxed app
+- CGEvent tap (our hotkey solution) requires Accessibility permissions which conflict with strict sandbox
 - Global hotkeys are a core feature - the app is nearly useless without them
-- Accessibility API requires explicit user permission AND still needs sandbox disabled for some hotkey scenarios
 - Many popular productivity apps (Alfred, Rectangle, Raycast) also run without sandbox for the same reason
 
 **Tradeoffs**:
 - Cannot distribute through Mac App Store (requires sandbox)
 - Reduced security isolation (app has more system access)
-- Must distribute directly or through third-party stores (Homebrew, SetApp, direct download)
-
-**Mac App Store Alternative**:
-If Mac App Store distribution becomes important, we would need to:
-1. Switch to CGEvent tap with user-granted Accessibility permission
-2. Accept that some hotkey combinations may not work reliably
-3. Add significant UI for permission management
+- Must distribute directly or through third-party stores (Homebrew, direct download)
 
 For a productivity tool aimed at technical users (sales engineers), direct distribution is acceptable.
 
 **File Reference**: `Prompter/Resources/Prompter.entitlements`
+
+---
+
+### D010: Sparkle for Auto-Updates (Not Mac App Store)
+
+**Decision**: Use Sparkle 2.x framework for automatic updates
+
+**Date**: v1.1.0 release prep
+
+**Context**: Users need a way to receive updates without manually checking GitHub.
+
+**Options Considered**:
+1. Sparkle framework (our choice)
+2. Mac App Store
+3. Manual download only
+4. Custom update mechanism
+
+**Why This Choice**:
+- Sparkle is the de facto standard for non-App Store macOS apps
+- EdDSA signing provides secure, tamper-proof updates
+- Appcast XML hosted on GitHub (no infrastructure needed)
+- Seamless user experience with background checks and one-click install
+
+**Tradeoffs**:
+- First version with Sparkle (v1.1.0) requires manual upgrade from v1.0
+- Appcast must be on the main branch for raw GitHub URL accessibility
+- EdDSA private key must be securely stored in the developer's Keychain
+
+---
+
+### D011: Presentation Timer in AppState (Not Separate Service)
+
+**Decision**: Manage timer state directly in AppState rather than a separate TimerService
+
+**Date**: v1.1.0 feature development
+
+**Context**: Adding a per-card countdown timer for presentation pacing.
+
+**Options Considered**:
+1. Timer logic in AppState (our choice)
+2. Separate TimerService class
+3. Timer in OverlayWindowController
+
+**Why This Choice**:
+- Timer state (seconds remaining, paused, running) is tightly coupled to card navigation
+- Card changes reset the timer, which is already coordinated in AppState
+- Avoids additional indirection for a feature that touches many existing AppState properties
+- Timer settings (mode, durations, scope) are part of the persisted Settings model
+
+**Tradeoffs**:
+- AppState grows larger (mitigated by clear MARK sections)
+- Timer logic is not independently testable without AppState (mitigated by comprehensive TimerTests)
+
+---
+
+### D012: os.Logger for Logging (Not print or Third-Party)
+
+**Decision**: Use Apple's unified logging (`os.Logger`) instead of `print()` statements
+
+**Date**: v1.1.0 release prep
+
+**Context**: 59 `print()` calls needed to be replaced with proper logging for a release build.
+
+**Options Considered**:
+1. Apple os.Logger (our choice)
+2. Keep print() statements
+3. Third-party logging library (CocoaLumberjack, SwiftyBeaver)
+
+**Why This Choice**:
+- Built into macOS, no dependencies
+- Debug-level messages hidden in release builds (better performance)
+- Filterable by subsystem/category in Console.app
+- Per-file Logger instances with descriptive categories
+
+**Tradeoffs**:
+- String interpolation in log messages requires `\(variable, privacy: .public)` for non-private data
+- Cannot easily redirect logs to a file without additional work
 
 ---
 

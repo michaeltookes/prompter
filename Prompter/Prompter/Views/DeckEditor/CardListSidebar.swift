@@ -155,14 +155,14 @@ struct CardListSidebar: View {
                         .foregroundColor(Theme.accent)
 
                     Text(appState.currentDeck?.title ?? "Select Deck")
-                        .font(.system(size: 13, weight: .medium))
+                        .font(Theme.footerMedium)
                         .foregroundColor(Theme.textPrimary)
                         .lineLimit(1)
 
                     Spacer()
 
                     Image(systemName: "chevron.up.chevron.down")
-                        .font(.system(size: 10))
+                        .font(Theme.footerMedium)
                         .foregroundColor(Theme.textSecondary)
                 }
                 .padding(.horizontal, 10)
@@ -344,18 +344,18 @@ struct CardListItem: View {
                     .foregroundColor(Theme.textSecondary)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Color.black.opacity(0.2))
+                    .background(Theme.secondaryAccent.opacity(0.14))
                     .clipShape(Capsule())
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Theme.accent.opacity(0.2) : (isHovered ? Color.white.opacity(0.05) : .clear))
+                    .fill(isSelected ? Theme.accent.opacity(0.2) : (isHovered ? Theme.surfaceBackground.opacity(0.25) : .clear))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(isSelected ? Theme.accent.opacity(0.5) : .clear, lineWidth: 1)
+                    .stroke(isSelected ? Theme.accent.opacity(0.5) : Theme.divider.opacity(isHovered ? 1 : 0), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -425,7 +425,7 @@ struct NewDeckSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             Text("New Deck")
-                .font(.system(size: 18, weight: .semibold))
+                .font(Theme.note.weight(.semibold))
                 .foregroundColor(Theme.textPrimary)
 
             TextField("Deck Title", text: $deckTitle)

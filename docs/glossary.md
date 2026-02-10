@@ -136,6 +136,9 @@ The floating panel that displays your notes during a presentation. It's designed
 ### Persistence
 Saving data so it's still there after you quit and reopen the app. Your decks persist in files on your Mac.
 
+### Presentation Timer
+A built-in countdown timer that tracks time per card during your demo. Supports two modes: deck mode (total time divided across cards) and per-card mode (fixed time per card). Controlled via Cmd+Shift+T.
+
 ### Protected Mode
 Our feature that attempts to hide the overlay from screen capture. It uses macOS's capture exclusion APIs.
 
@@ -149,6 +152,9 @@ A programming style where changes automatically propagate. If you change the cur
 ---
 
 ## S
+
+### Sparkle
+An open-source framework for macOS app auto-updates. Prompter uses Sparkle 2.x to check for and install updates via an appcast feed hosted on GitHub.
 
 ### Sidebar
 The panel on the left side of the deck editor that shows all your cards. Click a card to select it for editing.
