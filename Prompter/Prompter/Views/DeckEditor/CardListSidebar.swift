@@ -119,13 +119,13 @@ struct CardListSidebar: View {
             HStack {
                 Text("Deck")
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Theme.textSecondary)
 
                 Spacer()
 
                 Text("\(appState.decks.count)/\(AppState.maxDecks)")
                     .font(.system(size: 10))
-                    .foregroundColor(.secondary.opacity(0.7))
+                    .foregroundColor(Theme.textSecondary.opacity(0.7))
             }
 
             // Deck picker dropdown
@@ -155,15 +155,15 @@ struct CardListSidebar: View {
                         .foregroundColor(Theme.accent)
 
                     Text(appState.currentDeck?.title ?? "Select Deck")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(.primary)
+                        .font(Theme.footerMedium)
+                        .foregroundColor(Theme.textPrimary)
                         .lineLimit(1)
 
                     Spacer()
 
                     Image(systemName: "chevron.up.chevron.down")
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
+                        .font(Theme.footerMedium)
+                        .foregroundColor(Theme.textSecondary)
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
