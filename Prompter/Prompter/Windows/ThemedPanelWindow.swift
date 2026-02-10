@@ -22,7 +22,13 @@ final class ThemedPanelWindow: NSPanel {
         self.becomesKeyOnlyIfNeeded = false
         self.isReleasedWhenClosed = false
         self.titlebarAppearsTransparent = true
-        self.appearance = NSAppearance(named: .darkAqua)
         self.center()
+    }
+
+    /// Applies dark appearance to content without affecting window chrome (keeps close button red).
+    override var contentView: NSView? {
+        didSet {
+            contentView?.appearance = NSAppearance(named: .darkAqua)
+        }
     }
 }

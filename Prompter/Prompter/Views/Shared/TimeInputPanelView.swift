@@ -50,6 +50,7 @@ struct TimeInputPanelView: View {
                     onComplete(nil)
                 }
                 .keyboardShortcut(.cancelAction)
+                .foregroundColor(Theme.textSecondary)
 
                 Button("Set") {
                     if let seconds = parseTime(timeText) {

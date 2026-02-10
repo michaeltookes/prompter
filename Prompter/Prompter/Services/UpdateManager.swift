@@ -4,12 +4,14 @@ import Sparkle
 /// Manages application updates using the Sparkle framework.
 ///
 /// Wraps SPUStandardUpdaterController to provide a simple interface
-/// for checking and installing updates.
+/// for checking and installing updates. The controller is only created
+/// when a valid configuration is detected (prevents Sparkle from
+/// touching placeholder URLs at init time).
 @MainActor
-final class UpdateManager: ObservableObject {
+final class UpdateManager {
 
-    /// The Sparkle updater controller
-    private let updaterController: SPUStandardUpdaterController
+    /// The Sparkle updater controller (nil when unconfigured)
+    private var updaterController: SPUStandardUpdaterController?
 
     /// Whether Sparkle is configured with a valid appcast URL and public key.
     private(set) var isConfigured: Bool = false
@@ -21,31 +23,23 @@ final class UpdateManager: ObservableObject {
     private var hasStartedUpdater = false
 
     init() {
-        // Initialize with startingUpdater: false so we can start it manually
-        // after the app has fully launched
-        updaterController = SPUStandardUpdaterController(
-            startingUpdater: false,
-            updaterDelegate: nil,
-            userDriverDelegate: nil
-        )
-
         validateConfiguration()
     }
 
     /// Starts the updater. Call after app launch is complete.
     func startUpdater() {
-        guard isConfigured else {
+        guard isConfigured, let controller = updaterController else {
             print("UpdateManager: Sparkle disabled (\(unavailableReason ?? "not configured"))")
             return
         }
         guard !hasStartedUpdater else { return }
-        updaterController.startUpdater()
+        controller.startUpdater()
         hasStartedUpdater = true
     }
 
     /// Manually checks for updates (user-initiated).
     func checkForUpdates() {
-        guard isConfigured else {
+        guard isConfigured, let controller = updaterController else {
             print("UpdateManager: Check skipped (\(unavailableReason ?? "not configured"))")
             return
         }
@@ -53,12 +47,12 @@ final class UpdateManager: ObservableObject {
             print("UpdateManager: Check skipped (updater not ready)")
             return
         }
-        updaterController.checkForUpdates(nil)
+        controller.checkForUpdates(nil)
     }
 
     /// Whether the updater can currently check for updates.
     var canCheckForUpdates: Bool {
-        isConfigured && updaterController.updater.canCheckForUpdates
+        updaterController?.updater.canCheckForUpdates ?? false
     }
 
     // MARK: - Configuration
@@ -86,7 +80,16 @@ final class UpdateManager: ObservableObject {
             return
         }
 
+        // Only create the Sparkle controller when configuration is valid
+        updaterController = SPUStandardUpdaterController(
+            startingUpdater: false,
+            updaterDelegate: nil,
+            userDriverDelegate: nil
+        )
         isConfigured = true
         unavailableReason = nil
+
+        // Note: When replacing placeholders with real values, also set
+        // SUEnableAutomaticChecks to true in Info.plist.
     }
 }

@@ -144,16 +144,22 @@ final class AppState: ObservableObject {
         currentCardIndex > 0
     }
 
+    // MARK: - Persistence
+
+    /// The persistence provider (injectable for testing)
+    private let persistence: PersistenceProvider
+
     // MARK: - Initialization
 
-    init() {
+    init(persistence: PersistenceProvider = PersistenceService.shared) {
+        self.persistence = persistence
         loadSettings()
         setupAutoSave()
     }
 
     /// Loads settings from persistence
     private func loadSettings() {
-        let settings = PersistenceService.shared.loadSettings()
+        let settings = persistence.loadSettings()
         overlayOpacity = settings.overlayOpacity
         overlayFontScale = settings.overlayFontScale
         overlayFrame = settings.overlayFrame
@@ -173,10 +179,10 @@ final class AppState: ObservableObject {
     /// Loads all decks and the last opened deck from disk
     func loadLastOpenedDeck() {
         // Load all decks
-        decks = PersistenceService.shared.loadAllDecks()
+        decks = persistence.loadAllDecks()
             .sorted { $0.updatedAt > $1.updatedAt }
 
-        let settings = PersistenceService.shared.loadSettings()
+        let settings = persistence.loadSettings()
 
         // Try to load the last opened deck
         if let lastDeckId = settings.lastOpenedDeckId,
@@ -203,13 +209,13 @@ final class AppState: ObservableObject {
         decks = [defaultDeck]
         currentCardIndex = 0
         selectedCardId = defaultDeck.cards.first?.id
-        PersistenceService.shared.saveDeck(defaultDeck)
+        persistence.saveDeck(defaultDeck)
         print("AppState: Created default deck")
     }
 
     /// Reloads the deck list from persistence
     func reloadDecks() {
-        decks = PersistenceService.shared.loadAllDecks()
+        decks = persistence.loadAllDecks()
             .sorted { $0.updatedAt > $1.updatedAt }
     }
 
@@ -250,7 +256,7 @@ final class AppState: ObservableObject {
         decks.removeAll { $0.id == deck.id }
 
         // Delete from persistence
-        PersistenceService.shared.deleteDeck(id: deck.id)
+        persistence.deleteDeck(id: deck.id)
 
         // If we deleted the current deck, switch to another
         if currentDeck?.id == deck.id {
@@ -772,8 +778,8 @@ final class AppState: ObservableObject {
         }
 
         deckDebouncer.debounce { [weak self] in
-            guard self != nil else { return }
-            PersistenceService.shared.saveDeck(deck)
+            guard let self else { return }
+            self.persistence.saveDeck(deck)
         }
     }
 
@@ -781,7 +787,7 @@ final class AppState: ObservableObject {
     func saveDeckSync() {
         guard let deck = currentDeck else { return }
         deckDebouncer.cancel()
-        PersistenceService.shared.saveDeckSync(deck)
+        persistence.saveDeckSync(deck)
     }
 
     /// Saves settings to disk (debounced)
@@ -789,8 +795,8 @@ final class AppState: ObservableObject {
         let settings = buildSettings()
 
         settingsDebouncer.debounce { [weak self] in
-            guard self != nil else { return }
-            PersistenceService.shared.saveSettings(settings)
+            guard let self else { return }
+            self.persistence.saveSettings(settings)
         }
     }
 
@@ -798,7 +804,7 @@ final class AppState: ObservableObject {
     func saveSettingsSync() {
         let settings = buildSettings()
         settingsDebouncer.cancel()
-        PersistenceService.shared.saveSettingsSync(settings)
+        persistence.saveSettingsSync(settings)
     }
 
     /// Builds a Settings object from current state

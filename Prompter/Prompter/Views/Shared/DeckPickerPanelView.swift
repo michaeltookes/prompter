@@ -49,6 +49,7 @@ struct DeckPickerPanelView: View {
                     onComplete(nil)
                 }
                 .keyboardShortcut(.cancelAction)
+                .foregroundColor(Theme.textSecondary)
 
                 Button("Apply") {
                     onComplete(Array(selectedIds))
@@ -56,6 +57,7 @@ struct DeckPickerPanelView: View {
                 .keyboardShortcut(.defaultAction)
                 .buttonStyle(.borderedProminent)
                 .tint(Theme.accent)
+                .disabled(selectedIds.isEmpty)
             }
         }
         .padding(24)

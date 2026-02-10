@@ -456,11 +456,13 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             object: panel,
             queue: .main
         ) { [weak self] _ in
-            if let observer = self?.deckPickerPanelObserver {
-                NotificationCenter.default.removeObserver(observer)
-                self?.deckPickerPanelObserver = nil
+            Task { @MainActor in
+                if let observer = self?.deckPickerPanelObserver {
+                    NotificationCenter.default.removeObserver(observer)
+                    self?.deckPickerPanelObserver = nil
+                }
+                self?.deckPickerPanel = nil
             }
-            self?.deckPickerPanel = nil
         }
     }
 
@@ -501,11 +503,13 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             object: panel,
             queue: .main
         ) { [weak self] _ in
-            if let observer = self?.timeInputPanelObserver {
-                NotificationCenter.default.removeObserver(observer)
-                self?.timeInputPanelObserver = nil
+            Task { @MainActor in
+                if let observer = self?.timeInputPanelObserver {
+                    NotificationCenter.default.removeObserver(observer)
+                    self?.timeInputPanelObserver = nil
+                }
+                self?.timeInputPanel = nil
             }
-            self?.timeInputPanel = nil
         }
     }
 
