@@ -119,13 +119,13 @@ struct CardListSidebar: View {
             HStack {
                 Text("Deck")
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(.secondary)
 
                 Spacer()
 
                 Text("\(appState.decks.count)/\(AppState.maxDecks)")
                     .font(.system(size: 10))
-                    .foregroundColor(Theme.textSecondary.opacity(0.7))
+                    .foregroundColor(.secondary.opacity(0.7))
             }
 
             // Deck picker dropdown
@@ -156,14 +156,14 @@ struct CardListSidebar: View {
 
                     Text(appState.currentDeck?.title ?? "Select Deck")
                         .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(Theme.textPrimary)
+                        .foregroundColor(.primary)
                         .lineLimit(1)
 
                     Spacer()
 
                     Image(systemName: "chevron.up.chevron.down")
                         .font(.system(size: 10))
-                        .foregroundColor(Theme.textSecondary)
+                        .foregroundColor(.secondary)
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
@@ -190,7 +190,7 @@ struct CardListSidebar: View {
         HStack {
             Text("Cards")
                 .font(.system(size: Theme.captionFontSize, weight: .semibold))
-                .foregroundColor(Theme.textPrimary)
+                .foregroundColor(.primary)
 
             Spacer()
 
@@ -219,15 +219,15 @@ struct CardListSidebar: View {
 
             Image(systemName: "square.stack.3d.up.slash")
                 .font(.system(size: 40))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(.secondary)
 
             Text("No Cards")
                 .font(.system(size: Theme.captionFontSize, weight: .semibold))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(.secondary)
 
             Text("Click + to add a card")
                 .font(.system(size: Theme.footerFontSize, weight: .regular))
-                .foregroundColor(Theme.textSecondary.opacity(0.7))
+                .foregroundColor(.secondary.opacity(0.7))
 
             Spacer()
         }
@@ -321,19 +321,19 @@ struct CardListItem: View {
                 // Layout icon
                 Image(systemName: card.layout.iconName)
                     .font(.system(size: 16))
-                    .foregroundColor(isSelected ? Theme.accent : Theme.textSecondary)
+                    .foregroundColor(isSelected ? Theme.accent : .secondary)
                     .frame(width: 24)
 
                 // Card info
                 VStack(alignment: .leading, spacing: 2) {
                     Text(cardTitle)
                         .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(Theme.textPrimary)
+                        .foregroundColor(.primary)
                         .lineLimit(1)
 
                     Text(card.layout.displayName)
                         .font(.system(size: 11))
-                        .foregroundColor(Theme.textSecondary)
+                        .foregroundColor(.secondary)
                 }
 
                 Spacer()
@@ -341,17 +341,17 @@ struct CardListItem: View {
                 // Card number
                 Text("\(index + 1)")
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(.secondary)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Color.black.opacity(0.2))
+                    .background(Color.primary.opacity(0.1))
                     .clipShape(Capsule())
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Theme.accent.opacity(0.2) : (isHovered ? Color.white.opacity(0.05) : .clear))
+                    .fill(isSelected ? Theme.accent.opacity(0.2) : (isHovered ? Color.primary.opacity(0.05) : .clear))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
@@ -426,7 +426,7 @@ struct NewDeckSheet: View {
         VStack(spacing: 20) {
             Text("New Deck")
                 .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Theme.textPrimary)
+                .foregroundColor(.primary)
 
             TextField("Deck Title", text: $deckTitle)
                 .textFieldStyle(.roundedBorder)
