@@ -79,18 +79,18 @@ struct TimeInputPanelView: View {
         return String(format: "%d:%02d", minutes, seconds)
     }
 
-    /// Parses MM:SS or plain minutes to total seconds
+    /// Parses MM:SS or plain minutes to total seconds (max 999 minutes)
     private func parseTime(_ input: String) -> Int? {
-        let trimmed = input.trimmingCharacters(in: .whitespaces)
+        let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
         let parts = trimmed.split(separator: ":")
         if parts.count == 2,
            let minutes = Int(parts[0]),
            let seconds = Int(parts[1]),
-           minutes >= 0, seconds >= 0, seconds < 60 {
+           minutes >= 0, minutes <= 999, seconds >= 0, seconds < 60 {
             let totalSeconds = minutes * 60 + seconds
             return totalSeconds > 0 ? totalSeconds : nil
         }
-        if let minutes = Int(trimmed), minutes > 0 {
+        if let minutes = Int(trimmed), minutes > 0, minutes <= 999 {
             return minutes * 60
         }
         return nil

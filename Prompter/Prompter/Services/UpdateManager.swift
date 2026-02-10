@@ -80,9 +80,9 @@ final class UpdateManager: ObservableObject {
             return
         }
 
-        guard let parsedURL = URL(string: feedURL), parsedURL.scheme?.isEmpty == false else {
+        guard let parsedURL = URL(string: feedURL), parsedURL.scheme == "https" else {
             isConfigured = false
-            unavailableReason = "Update feed URL is invalid."
+            unavailableReason = "Update feed URL must be a valid HTTPS URL."
             return
         }
 

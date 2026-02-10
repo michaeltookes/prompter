@@ -421,8 +421,13 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     }
 
     @objc private func showDeckPicker() {
-        // Close existing panel if open
+        // Clean up existing panel and observer before creating new ones
+        if let observer = deckPickerPanelObserver {
+            NotificationCenter.default.removeObserver(observer)
+            deckPickerPanelObserver = nil
+        }
         deckPickerPanel?.close()
+        deckPickerPanel = nil
 
         let panel = ThemedPanelWindow(
             contentRect: NSRect(x: 0, y: 0, width: 320, height: 400),
@@ -451,20 +456,23 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             object: panel,
             queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in
-                if let observer = self?.deckPickerPanelObserver {
-                    NotificationCenter.default.removeObserver(observer)
-                    self?.deckPickerPanelObserver = nil
-                }
-                self?.deckPickerPanel = nil
+            if let observer = self?.deckPickerPanelObserver {
+                NotificationCenter.default.removeObserver(observer)
+                self?.deckPickerPanelObserver = nil
             }
+            self?.deckPickerPanel = nil
         }
     }
 
     /// Shows a themed time input panel
     private func showTimeInputDialog(title: String, message: String, currentSeconds: Int, completion: @escaping (Int) -> Void) {
-        // Close existing panel if open
+        // Clean up existing panel and observer before creating new ones
+        if let observer = timeInputPanelObserver {
+            NotificationCenter.default.removeObserver(observer)
+            timeInputPanelObserver = nil
+        }
         timeInputPanel?.close()
+        timeInputPanel = nil
 
         let panel = ThemedPanelWindow(
             contentRect: NSRect(x: 0, y: 0, width: 280, height: 220),
@@ -475,12 +483,11 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             title: title,
             message: message,
             currentSeconds: currentSeconds
-        ) { [weak self, weak panel] result in
+        ) { [weak panel] result in
             panel?.close()
             if let seconds = result {
                 completion(seconds)
             }
-            _ = self // prevent unused capture warning
         }
 
         panel.contentView = NSHostingView(rootView: view)
@@ -494,13 +501,11 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             object: panel,
             queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in
-                if let observer = self?.timeInputPanelObserver {
-                    NotificationCenter.default.removeObserver(observer)
-                    self?.timeInputPanelObserver = nil
-                }
-                self?.timeInputPanel = nil
+            if let observer = self?.timeInputPanelObserver {
+                NotificationCenter.default.removeObserver(observer)
+                self?.timeInputPanelObserver = nil
             }
+            self?.timeInputPanel = nil
         }
     }
 

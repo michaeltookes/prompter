@@ -22,6 +22,7 @@ final class ThemedPanelWindow: NSPanel {
         self.becomesKeyOnlyIfNeeded = false
         self.isReleasedWhenClosed = false
         self.titlebarAppearsTransparent = true
+        self.appearance = NSAppearance(named: .darkAqua)
         self.center()
     }
 }
