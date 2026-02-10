@@ -5,3 +5,8 @@ DerivedData/
 *.xcarchive
 *.dSYM/
 *.dSYM
+.DS_Store
+xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcworkspace/xcshareddata/swiftpm/Package.resolved
+dist/

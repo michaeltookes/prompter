@@ -1,6 +1,9 @@
 import Carbon.HIToolbox
 import AppKit
 import Combine
+import os
+
+private let logger = Logger(subsystem: "com.tookes.Prompter", category: "Hotkeys")
 
 /// Manages system-wide global hotkeys using a CGEvent tap.
 ///
@@ -120,7 +123,7 @@ final class HotkeyManager: ObservableObject {
     ///   Retries should typically pass `false` to avoid repeatedly opening Settings.
     func registerAllHotkeys(promptIfNeeded: Bool = false) {
         guard !isRegistered else {
-            print("Hotkeys already registered")
+            logger.debug("Hotkeys already registered")
             return
         }
 
@@ -131,7 +134,7 @@ final class HotkeyManager: ObservableObject {
             if shouldPrompt {
                 recordAccessibilityPrompt()
             }
-            print("Accessibility permission not granted — hotkeys not registered")
+            logger.info("Accessibility permission not granted — hotkeys not registered")
             return
         }
 
@@ -146,7 +149,7 @@ final class HotkeyManager: ObservableObject {
             callback: HotkeyManager.eventTapCallback,
             userInfo: Unmanaged.passUnretained(self).toOpaque()
         ) else {
-            print("Failed to create CGEvent tap — verify Accessibility and Input Monitoring permissions")
+            logger.error("Failed to create CGEvent tap — verify Accessibility and Input Monitoring permissions")
             return
         }
 
@@ -161,7 +164,7 @@ final class HotkeyManager: ObservableObject {
         CGEvent.tapEnable(tap: tap, enable: true)
 
         isRegistered = true
-        print("Global hotkeys registered successfully (CGEvent tap)")
+        logger.info("Global hotkeys registered successfully (CGEvent tap)")
     }
 
     // MARK: - Permission Prompt Management
@@ -196,7 +199,7 @@ final class HotkeyManager: ObservableObject {
 
         eventTap = nil
         isRegistered = false
-        print("Global hotkeys unregistered")
+        logger.info("Global hotkeys unregistered")
     }
 
     // MARK: - Callbacks
@@ -281,7 +284,7 @@ final class HotkeyManager: ObservableObject {
             }
         }
 
-        print("Hotkey callbacks bound to AppState")
+        logger.debug("Hotkey callbacks bound to AppState")
     }
 
     // MARK: - Event Handling
@@ -328,7 +331,7 @@ final class HotkeyManager: ObservableObject {
         // Execute the callback on the main thread
         DispatchQueue.main.async { [weak self] in
             self?.actionCallbacks[action]?()
-            print("Hotkey triggered: \(action.rawValue)")
+            logger.debug("Hotkey triggered: \(action.rawValue)")
         }
 
         // Consume the event so it doesn't propagate to other apps
@@ -339,7 +342,7 @@ final class HotkeyManager: ObservableObject {
     private func reEnableTap() {
         guard let tap = eventTap else { return }
         CGEvent.tapEnable(tap: tap, enable: true)
-        print("CGEvent tap re-enabled")
+        logger.info("CGEvent tap re-enabled")
     }
 
     // MARK: - Cleanup

@@ -1,5 +1,8 @@
 import AppKit
+import os
 import Sparkle
+
+private let logger = Logger(subsystem: "com.tookes.Prompter", category: "Updates")
 
 /// Manages application updates using the Sparkle framework.
 ///
@@ -29,7 +32,7 @@ final class UpdateManager {
     /// Starts the updater. Call after app launch is complete.
     func startUpdater() {
         guard isConfigured, let controller = updaterController else {
-            print("UpdateManager: Sparkle disabled (\(unavailableReason ?? "not configured"))")
+            logger.info("Sparkle disabled (\(self.unavailableReason ?? "not configured"))")
             return
         }
         guard !hasStartedUpdater else { return }
@@ -40,11 +43,11 @@ final class UpdateManager {
     /// Manually checks for updates (user-initiated).
     func checkForUpdates() {
         guard isConfigured, let controller = updaterController else {
-            print("UpdateManager: Check skipped (\(unavailableReason ?? "not configured"))")
+            logger.info("Check skipped (\(self.unavailableReason ?? "not configured"))")
             return
         }
         guard canCheckForUpdates else {
-            print("UpdateManager: Check skipped (updater not ready)")
+            logger.info("Check skipped (updater not ready)")
             return
         }
         controller.checkForUpdates(nil)

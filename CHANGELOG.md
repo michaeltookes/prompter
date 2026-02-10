@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-02-10
+
 ### Added
 - Sparkle auto-update framework (code integration with placeholder appcast URL and EdDSA key)
 - "Check for Updates..." menu item in the menu bar dropdown

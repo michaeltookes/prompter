@@ -118,6 +118,6 @@ struct DeckPickerPanelView: View {
         ],
         initialSelection: []
     ) { result in
-        print("Selected: \(String(describing: result))")
+        // preview callback
     }
 }

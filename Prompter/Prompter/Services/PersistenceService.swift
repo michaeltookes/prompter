@@ -1,4 +1,7 @@
 import Foundation
+import os
+
+private let logger = Logger(subsystem: "com.tookes.Prompter", category: "Persistence")
 
 /// Protocol defining persistence operations used by AppState.
 ///
@@ -110,10 +113,10 @@ final class PersistenceService: PersistenceProvider {
         if !newHasSettings && legacyHasSettings {
             do {
                 try fileManager.copyItem(at: legacySettingsURL, to: settingsURL)
-                print("PersistenceService: Migrated legacy settings")
+                logger.info("Migrated legacy settings")
             } catch {
                 migrationSucceeded = false
-                print("PersistenceService: Failed to migrate legacy settings: \(error)")
+                logger.error("Failed to migrate legacy settings: \(error.localizedDescription)")
             }
         }
 
@@ -129,13 +132,13 @@ final class PersistenceService: PersistenceProvider {
                         try fileManager.copyItem(at: fileURL, to: destinationURL)
                     } catch {
                         migrationSucceeded = false
-                        print("PersistenceService: Failed to migrate deck \(fileURL.lastPathComponent): \(error)")
+                        logger.error("Failed to migrate deck \(fileURL.lastPathComponent): \(error.localizedDescription)")
                     }
                 }
-                print("PersistenceService: Migrated legacy decks")
+                logger.info("Migrated legacy decks")
             } catch {
                 migrationSucceeded = false
-                print("PersistenceService: Failed to read legacy decks: \(error)")
+                logger.error("Failed to read legacy decks: \(error.localizedDescription)")
             }
         }
 
@@ -150,17 +153,17 @@ final class PersistenceService: PersistenceProvider {
     /// - Returns: The saved settings, or default settings if none exist
     func loadSettings() -> Settings {
         guard FileManager.default.fileExists(atPath: settingsURL.path) else {
-            print("PersistenceService: No settings file, using defaults")
+            logger.debug("No settings file, using defaults")
             return .default
         }
 
         do {
             let data = try Data(contentsOf: settingsURL)
             let settings = try decoder.decode(Settings.self, from: data)
-            print("PersistenceService: Loaded settings")
+            logger.debug("Loaded settings")
             return settings.validated()
         } catch {
-            print("PersistenceService: Failed to load settings: \(error)")
+            logger.error("Failed to load settings: \(error.localizedDescription)")
             return .default
         }
     }
@@ -176,9 +179,9 @@ final class PersistenceService: PersistenceProvider {
             do {
                 let data = try self.encoder.encode(validatedSettings)
                 try data.write(to: self.settingsURL, options: .atomic)
-                print("PersistenceService: Saved settings")
+                logger.debug("Saved settings")
             } catch {
-                print("PersistenceService: Failed to save settings: \(error)")
+                logger.error("Failed to save settings: \(error.localizedDescription)")
             }
         }
     }
@@ -190,9 +193,9 @@ final class PersistenceService: PersistenceProvider {
         do {
             let data = try encoder.encode(validatedSettings)
             try data.write(to: settingsURL, options: .atomic)
-            print("PersistenceService: Saved settings (sync)")
+            logger.debug("Saved settings (sync)")
         } catch {
-            print("PersistenceService: Failed to save settings: \(error)")
+            logger.error("Failed to save settings: \(error.localizedDescription)")
         }
     }
 
@@ -205,17 +208,17 @@ final class PersistenceService: PersistenceProvider {
         let deckURL = decksURL.appendingPathComponent("\(id.uuidString).json")
 
         guard FileManager.default.fileExists(atPath: deckURL.path) else {
-            print("PersistenceService: Deck \(id) not found")
+            logger.debug("Deck \(id) not found")
             return nil
         }
 
         do {
             let data = try Data(contentsOf: deckURL)
             let deck = try decoder.decode(Deck.self, from: data)
-            print("PersistenceService: Loaded deck '\(deck.title)'")
+            logger.debug("Loaded deck '\(deck.title)'")
             return deck
         } catch {
-            print("PersistenceService: Failed to load deck \(id): \(error)")
+            logger.error("Failed to load deck \(id): \(error.localizedDescription)")
             return nil
         }
     }
@@ -231,9 +234,9 @@ final class PersistenceService: PersistenceProvider {
             do {
                 let data = try self.encoder.encode(deck)
                 try data.write(to: deckURL, options: .atomic)
-                print("PersistenceService: Saved deck '\(deck.title)'")
+                logger.debug("Saved deck '\(deck.title)'")
             } catch {
-                print("PersistenceService: Failed to save deck: \(error)")
+                logger.error("Failed to save deck: \(error.localizedDescription)")
             }
         }
     }
@@ -245,9 +248,9 @@ final class PersistenceService: PersistenceProvider {
         do {
             let data = try encoder.encode(deck)
             try data.write(to: deckURL, options: .atomic)
-            print("PersistenceService: Saved deck '\(deck.title)' (sync)")
+            logger.debug("Saved deck '\(deck.title)' (sync)")
         } catch {
-            print("PersistenceService: Failed to save deck: \(error)")
+            logger.error("Failed to save deck: \(error.localizedDescription)")
         }
     }
 
@@ -258,9 +261,9 @@ final class PersistenceService: PersistenceProvider {
 
         do {
             try FileManager.default.removeItem(at: deckURL)
-            print("PersistenceService: Deleted deck \(id)")
+            logger.info("Deleted deck \(id)")
         } catch {
-            print("PersistenceService: Failed to delete deck \(id): \(error)")
+            logger.error("Failed to delete deck \(id): \(error.localizedDescription)")
         }
     }
 
@@ -274,7 +277,7 @@ final class PersistenceService: PersistenceProvider {
                 return UUID(uuidString: filename)
             }
         } catch {
-            print("PersistenceService: Failed to list decks: \(error)")
+            logger.error("Failed to list decks: \(error.localizedDescription)")
             return []
         }
     }
@@ -323,9 +326,9 @@ final class PersistenceService: PersistenceProvider {
             try FileManager.default.removeItem(at: appSupportURL)
             try FileManager.default.createDirectory(at: appSupportURL, withIntermediateDirectories: true)
             try FileManager.default.createDirectory(at: decksURL, withIntermediateDirectories: true)
-            print("PersistenceService: Cleared all data")
+            logger.info("Cleared all data")
         } catch {
-            print("PersistenceService: Failed to clear data: \(error)")
+            logger.error("Failed to clear data: \(error.localizedDescription)")
         }
     }
 }

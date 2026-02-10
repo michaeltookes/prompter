@@ -104,6 +104,6 @@ struct TimeInputPanelView: View {
         message: "Enter the total time for the entire deck (MM:SS):",
         currentSeconds: 300
     ) { result in
-        print("Result: \(String(describing: result))")
+        // preview callback
     }
 }
