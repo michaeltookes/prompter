@@ -287,7 +287,7 @@ struct TrafficLightButton: View {
                 Group {
                     if isHovered && !disabled {
                         Image(systemName: "xmark")
-                            .font(.system(size: Theme.footerFontSize, weight: .bold))
+                            .font(.system(size: 7, weight: .bold))
                             .foregroundColor(Theme.trafficLightIcon)
                     }
                 }

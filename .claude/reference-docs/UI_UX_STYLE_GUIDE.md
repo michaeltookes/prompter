@@ -32,6 +32,7 @@ Text: Soft white with hierarchy contrast
 | Text Secondary | #B8C1CC |
 | Divider lines | rgba(255,255,255,0.08) |
 | Glow shadow | rgba(93,169,255,0.35) |
+| Traffic light close | #FF5F56 |
 
 ---
 
@@ -91,4 +92,3 @@ Common icons:
 - Cursor (Click-through)
 - Chevron arrows (Next/Prev card)
 - Image icon (media slot)
-
