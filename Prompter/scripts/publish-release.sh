@@ -139,13 +139,23 @@ update_appcast() {
       />
     </item>"
 
-    # Insert the new item before the closing </channel> tag
-    # Use a temp file for cross-platform sed compatibility
+    # Write the new item to a temp file, then insert before </channel>
+    local item_file
+    item_file="$(mktemp)"
+    echo "$new_item" > "$item_file"
+
     local temp_file
     temp_file="$(mktemp)"
 
-    awk -v item="$new_item" '/<\/channel>/ { print item }; { print }' "$APPCAST_FILE" > "$temp_file"
+    while IFS= read -r line; do
+        if [[ "$line" == *"</channel>"* ]]; then
+            cat "$item_file"
+        fi
+        echo "$line"
+    done < "$APPCAST_FILE" > "$temp_file"
+
     mv "$temp_file" "$APPCAST_FILE"
+    rm -f "$item_file"
 
     echo "  ✓ Appcast updated for v${VERSION}"
 }
