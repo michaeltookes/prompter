@@ -12,7 +12,7 @@ final class MockPersistenceProvider: PersistenceProvider {
     var decks: [UUID: Deck] = [:]
 
     func loadSettings() -> Settings {
-        settings
+        settings.validated()
     }
 
     func saveSettings(_ settings: Settings) {
