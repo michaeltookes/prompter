@@ -43,14 +43,14 @@ enum Theme {
     /// Error text color (mapped to approved palette token)
     static let errorColor = secondaryAccent
 
-    /// Traffic light close button color (mapped to approved palette token)
-    static let trafficLightRed = secondaryAccent
+    /// Traffic light close button color (macOS traffic red)
+    static let trafficLightRed = Color(red: 255/255, green: 95/255, blue: 86/255)
 
     /// Traffic light disabled fill color (mapped to approved palette token)
     static let trafficLightDisabled = textSecondary.opacity(0.35)
 
-    /// Traffic light icon color (mapped to approved palette token)
-    static let trafficLightIcon = textPrimary.opacity(0.7)
+    /// Traffic light icon color (macOS close glyph)
+    static let trafficLightIcon = Color.black.opacity(0.7)
 
     /// Background for drop zones
     static let dropZoneBackground = Color.gray.opacity(0.1)

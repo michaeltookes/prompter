@@ -9,6 +9,7 @@ import SwiftUI
 /// - Register global hotkeys
 /// - Load persisted data on launch
 /// - Save data on termination
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: - Properties

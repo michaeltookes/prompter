@@ -16,8 +16,7 @@ final class TimerTests: XCTestCase {
     }
 
     override func setUp() async throws {
-        PersistenceService.shared.saveSettingsSync(.default)
-        appState = AppState()
+        appState = AppState(persistence: MockPersistenceProvider())
     }
 
     override func tearDown() async throws {

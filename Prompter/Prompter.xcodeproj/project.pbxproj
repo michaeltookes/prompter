@@ -57,6 +57,7 @@
 		B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000007 /* DebouncerTests.swift */; };
 		B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */; };
 		B1000001CCCCCCCC00000009 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000009 /* TimerTests.swift */; };
+		B1000001CCCCCCCC0000000A /* MockPersistenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC0000000A /* MockPersistenceProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +123,7 @@
 		B2000001CCCCCCCC00000007 /* DebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncerTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceServiceTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000009 /* TimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC0000000A /* MockPersistenceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPersistenceProvider.swift; sourceTree = "<group>"; };
 		B3000001CCCCCCCC00000001 /* PrompterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrompterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -343,6 +345,7 @@
 				B2000001CCCCCCCC00000007 /* DebouncerTests.swift */,
 				B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */,
 				B2000001CCCCCCCC00000009 /* TimerTests.swift */,
+				B2000001CCCCCCCC0000000A /* MockPersistenceProvider.swift */,
 			);
 			path = PrompterTests;
 			sourceTree = "<group>";
@@ -507,6 +510,7 @@
 				B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */,
 				B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */,
 				B1000001CCCCCCCC00000009 /* TimerTests.swift in Sources */,
+				B1000001CCCCCCCC0000000A /* MockPersistenceProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

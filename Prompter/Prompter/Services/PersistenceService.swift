@@ -1,5 +1,21 @@
 import Foundation
 
+/// Protocol defining persistence operations used by AppState.
+///
+/// Allows substituting an in-memory implementation for tests
+/// so they don't write to the real disk.
+@MainActor
+protocol PersistenceProvider {
+    func loadSettings() -> Settings
+    func saveSettings(_ settings: Settings)
+    func saveSettingsSync(_ settings: Settings)
+    func loadAllDecks() -> [Deck]
+    func loadDeck(id: UUID) -> Deck?
+    func saveDeck(_ deck: Deck)
+    func saveDeckSync(_ deck: Deck)
+    func deleteDeck(id: UUID)
+}
+
 /// Handles all file-based persistence for the application.
 ///
 /// Data is stored in ~/Library/Application Support/Prompter/:
@@ -8,7 +24,7 @@ import Foundation
 ///
 /// This service is thread-safe and performs I/O on a background queue.
 @MainActor
-final class PersistenceService {
+final class PersistenceService: PersistenceProvider {
 
     // MARK: - Singleton
 
