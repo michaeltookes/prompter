@@ -304,10 +304,12 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         // Start/Stop Timer
         let startStopTitle: String
-        if appState.timerShowPauseButton {
-            startStopTitle = appState.isTimerRunning && !appState.isTimerPaused ? "Pause Timer" : "Resume Timer"
+        if !appState.isTimerRunning {
+            startStopTitle = "Start Timer"
+        } else if appState.timerShowPauseButton {
+            startStopTitle = appState.isTimerPaused ? "Resume Timer" : "Pause Timer"
         } else {
-            startStopTitle = appState.isTimerRunning ? "Stop Timer" : "Start Timer"
+            startStopTitle = "Stop Timer"
         }
         let startStopItem = NSMenuItem(title: startStopTitle, action: #selector(toggleTimer), keyEquivalent: "")
         startStopItem.target = self
