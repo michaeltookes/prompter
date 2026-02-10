@@ -4,5 +4,21 @@
     <title>Prompter Updates</title>
     <description>Most recent Prompter releases.</description>
     <language>en</language>
+    <item>
+      <title>Version 1.1.0</title>
+      <description><![CDATA[
+        <h2>What's New in 1.1.0</h2>
+      ]]></description>
+      <pubDate>Tue, 10 Feb 2026 14:29:57 -0600</pubDate>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <enclosure
+        url="https://github.com/michaeltookes/prompter/releases/download/v1.1.0/Prompter.zip"
+        type="application/octet-stream"
+        sparkle:version="2"
+        sparkle:shortVersionString="1.1.0"
+        sparkle:edSignature="Hn+i6wNGquF0/k+MH2Q1P0hUhtEVfyWKWSv7rdxp/nHm/1zcyVPwHYm9nCr3vr+ifjSjjMXRQaAthPTWf1R7DQ=="
+        length="2618333"
+      />
+    </item>
   </channel>
 </rss>
