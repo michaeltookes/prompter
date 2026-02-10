@@ -118,7 +118,7 @@ update_appcast() {
     pub_date="$(date -R)"
     local download_url="https://github.com/michaeltookes/prompter/releases/download/v${VERSION}/${APP_NAME}.zip"
 
-    # Read the CHANGELOG for release notes
+    # Prepare a release notes header (CHANGELOG.md is not parsed here)
     local release_notes="<h2>What's New in ${VERSION}</h2>"
 
     # Build the new item XML
@@ -168,6 +168,11 @@ push_appcast() {
     fi
 
     git add appcast.xml
+    if git diff --cached --quiet; then
+        echo "  ✓ No appcast changes to commit"
+        return
+    fi
+
     git commit -m "Update appcast for v${VERSION}"
     git push origin main
 
@@ -179,6 +184,11 @@ create_release() {
     echo_step "Creating GitHub Release v${VERSION}..."
 
     cd "$REPO_ROOT"
+
+    if gh release view "v${VERSION}" >/dev/null 2>&1; then
+        echo_warning "Release v${VERSION} already exists. Deleting it before recreate..."
+        gh release delete "v${VERSION}" --yes
+    fi
 
     gh release create "v${VERSION}" \
         --title "Prompter v${VERSION}" \
@@ -219,7 +229,7 @@ summary() {
     echo "Appcast: $APPCAST_FILE"
     echo "GitHub Release: https://github.com/michaeltookes/prompter/releases/tag/v${VERSION}"
     echo ""
-    echo "Important: Move your private key backup to a secure location!"
+    echo "Important: If you generated Sparkle keys with generate_keys, ensure your private key is stored securely."
     echo ""
 }
 
