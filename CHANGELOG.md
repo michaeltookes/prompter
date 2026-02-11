@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 - Deck settings gear icon now shows a dropdown menu (Rename, Clone Deck) instead of opening the rename sheet directly
 - Editor dividers use explicit `editorBorder` rectangles for better visibility on external screens
-- Hidden dropdown caret on the add-card "+" button in the sidebar
+- Removed the dropdown caret from the sidebar add-card "+" button
 
 ### Fixed
 - Editor text invisible in Light Mode — replaced hardcoded overlay colors with adaptive system colors across all editor views
