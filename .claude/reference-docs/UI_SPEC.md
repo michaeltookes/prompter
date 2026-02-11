@@ -94,8 +94,8 @@ Top Toolbar:
 [ Notes Field ]
 
 ### 5) 2x2 Image Grid + Caption
-[ Img ][ Img ]
-[ Img ][ Img ]
+`[ Img ]` `[ Img ]`
+`[ Img ]` `[ Img ]`
 [ Caption Field ]
 
 ### 6) Full Image + 3 Bullets
