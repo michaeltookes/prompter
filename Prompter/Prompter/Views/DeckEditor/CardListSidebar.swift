@@ -28,6 +28,12 @@ struct CardListSidebar: View {
     /// Whether the deck list is expanded
     @State private var isDeckListExpanded = false
 
+    /// Whether the deck title is being edited inline
+    @State private var isEditingDeckTitle = false
+
+    /// Inline deck title edit value
+    @State private var editingDeckTitle = ""
+
     var body: some View {
         VStack(spacing: 0) {
             // Deck picker section
@@ -134,41 +140,64 @@ struct CardListSidebar: View {
 
             // Current deck row with add button
             HStack(spacing: 0) {
-                // Deck selector (toggles collapsible list)
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isDeckListExpanded.toggle()
-                    }
-                }) {
+                // Deck row: tappable title + chevron toggle
+                HStack(spacing: 0) {
+                    // Icon + title area (click to rename)
                     HStack {
                         Image(systemName: "square.stack.3d.up")
                             .font(.system(size: 12))
                             .foregroundColor(Theme.accent)
 
-                        Text(appState.currentDeck?.title ?? "Select Deck")
+                        if isEditingDeckTitle {
+                            TextField("Deck name", text: $editingDeckTitle, onCommit: {
+                                commitDeckTitleEdit()
+                            })
                             .font(Theme.footerMedium)
-                            .foregroundColor(Theme.editorTextPrimary)
-                            .lineLimit(1)
+                            .textFieldStyle(.plain)
+                            .onExitCommand {
+                                isEditingDeckTitle = false
+                            }
+                        } else {
+                            Text(appState.currentDeck?.title ?? "Select Deck")
+                                .font(Theme.footerMedium)
+                                .foregroundColor(Theme.editorTextPrimary)
+                                .lineLimit(1)
+                                .onTapGesture {
+                                    editingDeckTitle = appState.currentDeck?.title ?? ""
+                                    isEditingDeckTitle = true
+                                }
+                        }
+                    }
 
-                        Spacer()
+                    Spacer()
 
+                    // Chevron (click to expand/collapse deck list)
+                    Button(action: {
+                        if isEditingDeckTitle {
+                            commitDeckTitleEdit()
+                        }
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isDeckListExpanded.toggle()
+                        }
+                    }) {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .semibold))
                             .foregroundColor(Theme.editorTextSecondary)
                             .rotationEffect(.degrees(isDeckListExpanded ? 90 : 0))
+                            .frame(width: 24, height: 24)
                     }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 6)
-                            .fill(Theme.cardBackground)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Theme.editorBorder, lineWidth: 1)
-                    )
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Theme.cardBackground)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Theme.editorBorder, lineWidth: 1)
+                )
                 .frame(maxWidth: .infinity)
 
                 Spacer()
@@ -283,6 +312,17 @@ struct CardListSidebar: View {
     }
 
     // MARK: - Actions
+
+    private func commitDeckTitleEdit() {
+        let trimmed = editingDeckTitle.trimmingCharacters(in: .whitespaces)
+        if !trimmed.isEmpty, var deck = appState.currentDeck {
+            deck.title = trimmed
+            deck.updatedAt = Date()
+            appState.currentDeck = deck
+            appState.saveDeck()
+        }
+        isEditingDeckTitle = false
+    }
 
     private func addCard(layout: LayoutType) {
         let newCard = Card(layout: layout)
