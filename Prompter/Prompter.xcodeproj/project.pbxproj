@@ -47,6 +47,8 @@
 		A1000001BBBBBBBB00000205 /* TimeInputPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000205 /* TimeInputPanelView.swift */; };
 		A1000001BBBBBBBB00000206 /* DeckPickerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000206 /* DeckPickerPanelView.swift */; };
 		A1000001BBBBBBBB00000207 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000207 /* UpdateManager.swift */; };
+		A1000001BBBBBBBB00000208 /* TitleNotesEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000208 /* TitleNotesEditorView.swift */; };
+		A1000001BBBBBBBB00000209 /* TitleNotesRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000209 /* TitleNotesRenderer.swift */; };
 		C1000001DDDDDDDD00000001 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = C3000001DDDDDDDD00000001 /* Sparkle */; };
 		B1000001CCCCCCCC00000001 /* CardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000001 /* CardTests.swift */; };
 		B1000001CCCCCCCC00000002 /* DeckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000002 /* DeckTests.swift */; };
@@ -113,6 +115,8 @@
 		A2000001BBBBBBBB00000205 /* TimeInputPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInputPanelView.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000206 /* DeckPickerPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckPickerPanelView.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000207 /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000208 /* TitleNotesEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleNotesEditorView.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000209 /* TitleNotesRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleNotesRenderer.swift; sourceTree = "<group>"; };
 		A3000001BBBBBBBB00000001 /* Prompter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prompter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2000001CCCCCCCC00000001 /* CardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000002 /* DeckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckTests.swift; sourceTree = "<group>"; };
@@ -295,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000001BBBBBBBB00000106 /* TitleBulletsEditorView.swift */,
+				A2000001BBBBBBBB00000208 /* TitleNotesEditorView.swift */,
 				A2000001BBBBBBBB00000107 /* ImageTopNotesEditorView.swift */,
 				A2000001BBBBBBBB00000108 /* TwoImagesNotesEditorView.swift */,
 				A2000001BBBBBBBB00000109 /* Grid2x2CaptionEditorView.swift */,
@@ -317,6 +322,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000001BBBBBBBB00000111 /* TitleBulletsRenderer.swift */,
+				A2000001BBBBBBBB00000209 /* TitleNotesRenderer.swift */,
 				A2000001BBBBBBBB00000112 /* ImageTopNotesRenderer.swift */,
 				A2000001BBBBBBBB00000113 /* TwoImagesNotesRenderer.swift */,
 				A2000001BBBBBBBB00000114 /* Grid2x2CaptionRenderer.swift */,
@@ -494,6 +500,8 @@
 				A1000001BBBBBBBB00000205 /* TimeInputPanelView.swift in Sources */,
 				A1000001BBBBBBBB00000206 /* DeckPickerPanelView.swift in Sources */,
 				A1000001BBBBBBBB00000207 /* UpdateManager.swift in Sources */,
+				A1000001BBBBBBBB00000208 /* TitleNotesEditorView.swift in Sources */,
+				A1000001BBBBBBBB00000209 /* TitleNotesRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

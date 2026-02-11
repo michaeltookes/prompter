@@ -141,6 +141,8 @@ struct CardCanvasView: View {
         switch card.layout {
         case .titleBullets:
             TitleBulletsEditorView(card: cardBinding(for: card))
+        case .titleNotes:
+            TitleNotesEditorView(card: cardBinding(for: card))
         case .imageTopNotes:
             ImageTopNotesEditorView(card: cardBinding(for: card))
         case .twoImagesNotes:

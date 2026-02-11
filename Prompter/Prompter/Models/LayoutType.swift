@@ -1,6 +1,6 @@
 import Foundation
 
-/// Defines the 5 available card layout templates.
+/// Defines the 6 available card layout templates.
 ///
 /// Each layout provides a pre-designed arrangement of text and images
 /// optimized for quick glancing during presentations.
@@ -9,6 +9,11 @@ enum LayoutType: String, Codable, CaseIterable, Identifiable, Equatable {
     /// - Image slots: 0
     /// - Best for: Talking points, key messages
     case titleBullets = "TITLE_BULLETS"
+
+    /// Title at top with free-form notes below
+    /// - Image slots: 0
+    /// - Best for: Detailed talking points, context notes
+    case titleNotes = "TITLE_NOTES"
 
     /// Single image at top with notes below
     /// - Image slots: 1
@@ -40,6 +45,7 @@ enum LayoutType: String, Codable, CaseIterable, Identifiable, Equatable {
     var displayName: String {
         switch self {
         case .titleBullets:     return "Title + Bullets"
+        case .titleNotes:       return "Title + Notes"
         case .imageTopNotes:    return "Image + Notes"
         case .twoImagesNotes:   return "Two Images + Notes"
         case .grid2x2Caption:   return "2×2 Grid + Caption"
@@ -51,6 +57,7 @@ enum LayoutType: String, Codable, CaseIterable, Identifiable, Equatable {
     var iconName: String {
         switch self {
         case .titleBullets:     return "text.alignleft"
+        case .titleNotes:       return "text.justifyleft"
         case .imageTopNotes:    return "photo.on.rectangle"
         case .twoImagesNotes:   return "rectangle.split.2x1"
         case .grid2x2Caption:   return "square.grid.2x2"
@@ -64,6 +71,7 @@ enum LayoutType: String, Codable, CaseIterable, Identifiable, Equatable {
     var imageSlotCount: Int {
         switch self {
         case .titleBullets:     return 0
+        case .titleNotes:       return 0
         case .imageTopNotes:    return 1
         case .twoImagesNotes:   return 2
         case .grid2x2Caption:   return 4
@@ -85,6 +93,7 @@ enum LayoutType: String, Codable, CaseIterable, Identifiable, Equatable {
     var hasTitle: Bool {
         switch self {
         case .titleBullets: return true
+        case .titleNotes:   return true
         default:            return false
         }
     }
@@ -92,6 +101,7 @@ enum LayoutType: String, Codable, CaseIterable, Identifiable, Equatable {
     /// Whether this layout has a notes field
     var hasNotes: Bool {
         switch self {
+        case .titleNotes:       return true
         case .imageTopNotes:    return true
         case .twoImagesNotes:   return true
         default:                return false

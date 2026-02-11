@@ -207,6 +207,7 @@ struct CardListSidebar: View {
                     .foregroundColor(Theme.accent)
             }
             .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
             .frame(width: 24, height: 24)
         }
         .padding(.horizontal, 16)
