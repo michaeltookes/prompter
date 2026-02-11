@@ -37,7 +37,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/michaeltookes/prompter/main/appcast.xml</string>
+	<string>https://michaeltookes.github.io/prompter/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>juNano3Eeq4XsPnbiSyqQ0mk48luI+lIyureRMZmJnI=</string>
 	<key>SUEnableAutomaticChecks</key>

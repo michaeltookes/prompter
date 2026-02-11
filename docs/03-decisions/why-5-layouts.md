@@ -1,14 +1,15 @@
-# Why 5 Layout Templates?
+# Why 6 Layout Templates?
 
 ## The Decision
 
-Instead of allowing freeform card design, we offer exactly **5 pre-designed layout templates**:
+Instead of allowing freeform card design, we offer exactly **6 pre-designed layout templates**:
 
 1. **Title + Bullets** - For talking points
-2. **Image + Notes** - For screenshots with context
-3. **Two Images + Notes** - For comparisons
-4. **2x2 Image Grid + Caption** - For multiple screenshots
-5. **Full Image + 3 Bullets** - For hero images with key points
+2. **Title + Notes** - For free-form notes with a heading
+3. **Image + Notes** - For screenshots with context
+4. **Two Images + Notes** - For comparisons
+5. **2x2 Image Grid + Caption** - For multiple screenshots
+6. **Full Image + 3 Bullets** - For hero images with key points
 
 ## Why Fixed Templates?
 
@@ -52,7 +53,7 @@ During a demo, you need to:
 
 Complex, customized layouts would be overkill. Simple templates are actually *better* for this use case.
 
-## Why These Specific 5?
+## Why These Specific 6?
 
 We analyzed common presenter note patterns:
 
@@ -72,7 +73,23 @@ Most common need. "When I'm on this part of the demo, remember to mention X, Y, 
 └─────────────────────┘
 ```
 
-### Layout 2: Image + Notes
+### Layout 2: Title + Notes
+**Use case**: Free-form notes with a heading
+
+When you need more context than bullet points allow. "Here's the narrative for this section of the demo."
+
+```
+┌─────────────────────┐
+│ Section Title       │
+├─────────────────────┤
+│ Free-form notes go  │
+│ here. Write as much │
+│ or as little as you │
+│ need...             │
+└─────────────────────┘
+```
+
+### Layout 3: Image + Notes
 **Use case**: Screenshot with context
 
 "Show this screen, and while showing it, say these things."
@@ -88,7 +105,7 @@ Most common need. "When I'm on this part of the demo, remember to mention X, Y, 
 └─────────────────────┘
 ```
 
-### Layout 3: Two Images + Notes
+### Layout 4: Two Images + Notes
 **Use case**: Before/after, comparison
 
 "Show how it was, then how it is now."
@@ -104,7 +121,7 @@ Most common need. "When I'm on this part of the demo, remember to mention X, Y, 
 └─────────────────────┘
 ```
 
-### Layout 4: 2x2 Grid + Caption
+### Layout 5: 2x2 Grid + Caption
 **Use case**: Process flow, multiple screens
 
 "Here's how the four steps work together."
@@ -122,7 +139,7 @@ Most common need. "When I'm on this part of the demo, remember to mention X, Y, 
 └─────────────────────┘
 ```
 
-### Layout 5: Full Image + 3 Bullets
+### Layout 6: Full Image + 3 Bullets
 **Use case**: Hero image with key takeaways
 
 "This is the main screen. Call out these three things."
@@ -166,7 +183,7 @@ Most common need. "When I'm on this part of the demo, remember to mention X, Y, 
 - More development/maintenance work
 - Diminishing returns
 
-**Why we didn't choose it**: 5 covers the common cases. We can add more based on user feedback.
+**Why we didn't choose it**: 6 covers the common cases. We can add more based on user feedback.
 
 ### Fewer Templates (1-2)
 
@@ -222,4 +239,4 @@ Based on user feedback, we might add:
 - Custom bullet counts
 - User-defined templates
 
-For now, these 5 templates cover the most common presenter note patterns.
+For now, these 6 templates cover the most common presenter note patterns.

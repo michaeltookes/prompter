@@ -191,7 +191,7 @@ The Homebrew tap lives at `~/Desktop/homebrew-prompter/` (repo: `michaeltookes/h
 #### 5.2 Verify Sparkle Appcast
 
 ```bash
-curl -s https://raw.githubusercontent.com/michaeltookes/prompter/main/appcast.xml | head -30
+curl -s https://michaeltookes.github.io/prompter/appcast.xml | head -30
 ```
 
 Confirm the latest `<item>` entry has the correct version, signature, and download URL.

@@ -18,7 +18,7 @@ Currently, the app works with one deck at a time. This keeps things simple - you
 
 ## Understanding Layouts
 
-Each card uses one of **5 layout templates**:
+Each card uses one of **6 layout templates**:
 
 ### 1. Title + Bullets
 Best for: Talking points, key messages
@@ -35,7 +35,23 @@ Best for: Talking points, key messages
 
 **When to use:** Most of your cards will probably use this layout. It's perfect for remembering what to say during each part of your demo.
 
-### 2. Image + Notes
+### 2. Title + Notes
+Best for: Free-form notes with a heading
+
+```
+┌─────────────────────┐
+│ Section Title       │
+├─────────────────────┤
+│ Free-form notes go  │
+│ here. Write as much │
+│ or as little as you │
+│ need...             │
+└─────────────────────┘
+```
+
+**When to use:** When you need a heading plus longer-form notes without bullet points. Great for narrative talking points, context paragraphs, or detailed instructions.
+
+### 3. Image + Notes
 Best for: Screenshots with context
 
 ```
@@ -49,7 +65,7 @@ Best for: Screenshots with context
 
 **When to use:** When you want to remind yourself which screen you're on and what to highlight.
 
-### 3. Two Images + Notes
+### 4. Two Images + Notes
 Best for: Before/after, comparisons
 
 ```
@@ -62,7 +78,7 @@ Best for: Before/after, comparisons
 
 **When to use:** When showing how something changed, or comparing two options.
 
-### 4. 2x2 Image Grid + Caption
+### 5. 2x2 Image Grid + Caption
 Best for: Process flows, multiple screens
 
 ```
@@ -76,7 +92,7 @@ Best for: Process flows, multiple screens
 
 **When to use:** When explaining a multi-step process or showing related screens.
 
-### 5. Full Image + 3 Bullets
+### 6. Full Image + 3 Bullets
 Best for: Hero images with key takeaways
 
 ```

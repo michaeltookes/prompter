@@ -71,13 +71,14 @@ When click-through is enabled, you cannot move or resize the overlay. Disable it
 
 ### Card Layouts
 
-Choose from 5 layout templates:
+Choose from 6 layout templates:
 
 1. **Title + Bullets** - A title with bullet points below
-2. **Image Top + Notes** - One image with notes underneath
-3. **Two Images + Notes** - Two images side by side with notes
-4. **2x2 Grid + Caption** - Four images in a grid with a caption
-5. **Full Bleed + 3 Bullets** - Large background image with 3 bullet points
+2. **Title + Notes** - A title heading with free-form notes
+3. **Image Top + Notes** - One image with notes underneath
+4. **Two Images + Notes** - Two images side by side with notes
+5. **2x2 Grid + Caption** - Four images in a grid with a caption
+6. **Full Bleed + 3 Bullets** - Large background image with 3 bullet points
 
 ### Managing Cards
 

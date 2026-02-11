@@ -87,6 +87,17 @@ By the end of Phase 3, we should have:
 - Protocol-based `PersistenceProvider` for test isolation
 - 134 unit tests passing
 
+### Entry 6: v1.1.1 — New Layout, Editor UX, Light Mode Fix
+- Added 6th layout template: **Title + Notes** (title heading + free-form notes, no images)
+- Collapsible deck list in sidebar replaces popup dropdown menu
+- "+" button in deck header row for creating new decks
+- Inline deck title editing — click the deck name to rename in place
+- Clone Deck option in gear menu (deep-copies all cards with new UUIDs)
+- Gear icon now shows a dropdown menu (Rename, Clone Deck) instead of opening the rename sheet directly
+- Fixed Light Mode visibility: replaced hardcoded overlay colors (`Theme.textPrimary`, `Theme.textSecondary`) with adaptive system colors (`Theme.editorTextPrimary`, `Theme.editorTextSecondary`) across all editor views
+- Replaced `Theme.divider` and `Divider()` in editor with explicit `Theme.editorBorder` rectangles for better visibility on external screens
+- Documented Light Mode / Dark Mode color rules in CLAUDE.md to prevent regressions
+
 ## Persistence Design
 
 ### Auto-Save

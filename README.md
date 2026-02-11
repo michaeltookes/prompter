@@ -1,4 +1,4 @@
-# Prompter (macOS) — Deck Mode MVP (5 Layouts)
+# Prompter (macOS) — Deck Mode MVP (6 Layouts)
 
 A macOS menu bar app that shows a **presenter-only overlay** (teleprompter + slide-notes deck).
 Designed for presenters using **Google Meet** and sometimes **Microsoft Teams**, typically sharing **entire screen**.
@@ -25,7 +25,7 @@ The app is signed and notarized by Apple for Gatekeeper approval.
 ## Key Features
 - Menu bar app (NSStatusItem)
 - Deck editor (cards)
-- 5 layout templates per card (PowerPoint-like)
+- 6 layout templates per card (PowerPoint-like)
 - Drag & drop images into template slots
 - Optional image callouts (per-card)
 - Always-on-top overlay window
@@ -36,12 +36,13 @@ The app is signed and notarized by Apple for Gatekeeper approval.
 - Automatic updates via Sparkle
 - Persistence (deck, assets, settings)
 
-## Layout Templates (5)
+## Layout Templates (6)
 1. Title + Bullets
-2. Image Top + Notes Bottom
-3. Two Images Side-by-Side + Notes
-4. 2x2 Image Grid + Caption
-5. Full-Bleed Image + 3 Key Bullets (overlay-friendly)
+2. Title + Notes
+3. Image Top + Notes Bottom
+4. Two Images Side-by-Side + Notes
+5. 2x2 Image Grid + Caption
+6. Full-Bleed Image + 3 Key Bullets (overlay-friendly)
 
 ## Hotkeys
 - Cmd+Shift+O: Toggle Overlay

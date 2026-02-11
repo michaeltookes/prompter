@@ -7,8 +7,8 @@
 
 The deck editor - where users create and organize their presenter cards:
 - Split-view editor (sidebar + main canvas)
-- All 5 layout templates for editing
-- All 5 layout templates for overlay rendering
+- All 6 layout templates for editing
+- All 6 layout templates for overlay rendering
 - Image drag-and-drop support
 - Card management (add, delete, duplicate, reorder)
 
@@ -113,29 +113,31 @@ Key features:
 
 ---
 
-### Entry 4: Layout Editors (5 Views)
+### Entry 4: Layout Editors (6 Views)
 **Date**: January 2026
 
-Created editing interfaces for all 5 layouts:
+Created editing interfaces for all 6 layouts:
 1. **TitleBulletsEditorView**: Title field + dynamic bullet list (add/remove)
-2. **ImageTopNotesEditorView**: Single image drop zone + text editor
-3. **TwoImagesNotesEditorView**: Side-by-side image zones + notes
-4. **Grid2x2CaptionEditorView**: 2x2 grid of drop zones + caption
-5. **FullBleedBulletsEditorView**: Hero image + exactly 3 numbered bullets
+2. **TitleNotesEditorView**: Title field + multi-line notes editor
+3. **ImageTopNotesEditorView**: Single image drop zone + text editor
+4. **TwoImagesNotesEditorView**: Side-by-side image zones + notes
+5. **Grid2x2CaptionEditorView**: 2x2 grid of drop zones + caption
+6. **FullBleedBulletsEditorView**: Hero image + exactly 3 numbered bullets
 
 Each editor uses bindings to update the Card model in real-time.
 
 ---
 
-### Entry 5: Layout Renderers (5 Views)
+### Entry 5: Layout Renderers (6 Views)
 **Date**: January 2026
 
-Created overlay renderers for all 5 layouts:
+Created overlay renderers for all 6 layouts:
 1. **TitleBulletsRenderer**: Title + bullet list with accent dots
-2. **ImageTopNotesRenderer**: Image display + notes text
-3. **TwoImagesNotesRenderer**: Side-by-side images + notes
-4. **Grid2x2CaptionRenderer**: 2x2 image grid + centered caption
-5. **FullBleedBulletsRenderer**: Large hero image + numbered bullets
+2. **TitleNotesRenderer**: Title heading + free-form notes text
+3. **ImageTopNotesRenderer**: Image display + notes text
+4. **TwoImagesNotesRenderer**: Side-by-side images + notes
+5. **Grid2x2CaptionRenderer**: 2x2 image grid + centered caption
+6. **FullBleedBulletsRenderer**: Large hero image + numbered bullets
 
 Each renderer respects the fontScale setting for accessibility.
 
