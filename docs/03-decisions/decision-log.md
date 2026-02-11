@@ -132,9 +132,9 @@ See: [Hotkey Implementation History](why-carbon-hotkeys.md)
 
 ---
 
-### D005: Five Fixed Layouts (Not Freeform Canvas)
+### D005: Six Fixed Layouts (Not Freeform Canvas)
 
-**Decision**: Offer 5 pre-designed card layouts, not freeform editing
+**Decision**: Offer 6 pre-designed card layouts, not freeform editing
 
 **Date**: MVP scoping
 
@@ -157,7 +157,7 @@ See: [Hotkey Implementation History](why-carbon-hotkeys.md)
 - Users can't customize layouts
 - May feel limiting to some users
 
-See: [Why 5 Layouts](why-5-layouts.md)
+See: [Why 6 Layouts](why-5-layouts.md)
 
 ---
 
@@ -345,6 +345,58 @@ For a productivity tool aimed at technical users (sales engineers), direct distr
 **Tradeoffs**:
 - String interpolation in log messages requires `\(variable, privacy: .public)` for non-private data
 - Cannot easily redirect logs to a file without additional work
+
+---
+
+### D013: Adaptive Editor Color Tokens (Not Hardcoded Overlay Colors)
+
+**Decision**: Use `NSColor.labelColor` / `NSColor.secondaryLabelColor` / `NSColor.separatorColor` for editor views instead of hardcoded overlay colors
+
+**Date**: v1.1.1 development
+
+**Context**: Text and borders in the deck editor became invisible in Light Mode because they shared the same hardcoded light-on-dark colors (`#F5F7FA`, `#B8C1CC`) designed for the overlay's frosted dark glass surface.
+
+**Options Considered**:
+1. Adaptive system colors for editor (our choice)
+2. Hardcode separate light/dark color sets
+3. Force dark mode on the editor window
+
+**Why This Choice**:
+- `NSColor.labelColor` adapts automatically to Light/Dark Mode — black in Light, white in Dark
+- Zero maintenance: no manual color switching or appearance observers
+- Keeps overlay colors untouched (they render on a forced-dark surface and must stay hardcoded)
+- Three new tokens (`editorTextPrimary`, `editorTextSecondary`, `editorBorder`) in Theme.swift
+
+**Tradeoffs**:
+- Two parallel color systems to keep track of (overlay vs editor)
+- Must be careful to use the right token set in the right context
+
+**File References**: `Theme.swift` (lines 58-64), `CLAUDE.md` (Light Mode / Dark Mode Color Rules)
+
+---
+
+### D014: Clone Deck Feature
+
+**Decision**: Add a "Clone Deck" option to the gear menu that deep-copies all cards with new UUIDs
+
+**Date**: v1.1.1 development
+
+**Context**: Users needed a way to duplicate an existing deck as a starting point for a new presentation without manually recreating cards.
+
+**Options Considered**:
+1. Deep copy with new UUIDs (our choice)
+2. Shallow copy with shared asset references
+3. Export/import workflow
+
+**Why This Choice**:
+- Deep copy ensures cloned decks are fully independent
+- New UUIDs prevent any cross-deck identity conflicts
+- Simple one-click operation from the deck settings gear menu
+- Asset references are preserved (images shared by reference, not duplicated on disk)
+
+**Tradeoffs**:
+- Slightly increases storage (new deck JSON file, but images not duplicated)
+- No undo for clone operation (user can delete the cloned deck)
 
 ---
 

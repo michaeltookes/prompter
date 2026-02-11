@@ -54,7 +54,7 @@ By the end of Phase 1, we should have:
 |------|---------|
 | Deck.swift | Collection of cards |
 | Card.swift | Single presenter note |
-| LayoutType.swift | The 5 layout templates |
+| LayoutType.swift | The 6 layout templates |
 | Settings.swift | User preferences |
 
 ## Build Log
@@ -92,7 +92,7 @@ Created the Prompter Xcode project with:
 **Date**: January 2026
 
 Implemented all core data models:
-- **LayoutType**: Enum with 5 layout types, includes helper properties for image slots, bullet counts, etc.
+- **LayoutType**: Enum with 6 layout types, includes helper properties for image slots, bullet counts, etc.
 - **AssetRef**: Simple struct for image references with UUID-based filenames
 - **Card**: Core presenter note with layout-specific optional fields
 - **Deck**: Collection of cards with navigation state
@@ -187,5 +187,5 @@ Once Phase 1 is complete, we'll verify:
 
 After Phase 1, we'll move to [Phase 2: Deck Editor](phase-2-editor.md), which adds:
 - Full deck editing interface
-- All 5 layout templates
+- All 6 layout templates
 - Image drag-and-drop support

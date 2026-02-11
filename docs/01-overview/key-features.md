@@ -18,13 +18,14 @@ Instead of one long document, your notes are organized as **cards** in a **deck*
 - No scrolling during your presentation - just flip to the next card
 - Think of it like digital index cards
 
-## 3. Five Layout Templates
+## 3. Six Layout Templates
 
-Each card can use one of five pre-designed layouts:
+Each card can use one of six pre-designed layouts:
 
 | Layout | Best For |
 |--------|----------|
 | **Title + Bullets** | Talking points, key messages |
+| **Title + Notes** | Free-form notes with a heading |
 | **Image + Notes** | Screenshots with context |
 | **Two Images + Notes** | Before/after, comparisons |
 | **2x2 Image Grid** | Multiple screenshots, workflows |

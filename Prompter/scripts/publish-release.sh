@@ -214,7 +214,7 @@ verify() {
     echo_step "Verifying appcast accessibility..."
 
     local status_code
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" "https://raw.githubusercontent.com/michaeltookes/prompter/main/appcast.xml")
+    status_code=$(curl -s -o /dev/null -w "%{http_code}" "https://michaeltookes.github.io/prompter/appcast.xml")
 
     if [ "$status_code" = "200" ]; then
         echo "  ✓ Appcast is accessible (HTTP $status_code)"

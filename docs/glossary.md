@@ -97,7 +97,7 @@ A text-based format for storing data. It's human-readable (you can open it in a 
 ## L
 
 ### Layout Template
-A pre-designed arrangement of text and images for a card. We offer 5 layouts so you can quickly create cards without designing from scratch.
+A pre-designed arrangement of text and images for a card. We offer 6 layouts so you can quickly create cards without designing from scratch.
 
 ### LSUIElement
 A setting in Info.plist that makes an app run without a dock icon. This is how we make Prompter a menu bar-only app.

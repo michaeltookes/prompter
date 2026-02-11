@@ -213,7 +213,7 @@ All reference specs live in `.claude/reference-docs/`.
 
 2. **CGEvent Tap Hotkeys**: Global hotkeys use a CGEvent tap (migrated from deprecated Carbon Event Manager). Requires Accessibility permissions — the app prompts automatically on first launch via `AXIsProcessTrustedWithOptions` with a 5-second retry.
 
-3. **Sparkle Auto-Update**: Sparkle 2.x is integrated via SPM. `Info.plist` contains placeholder values for `SUFeedURL` and `SUPublicEDKey` that must be replaced before shipping. When replacing these placeholders, also set `SUEnableAutomaticChecks` to `true` in Info.plist (it is `false` while placeholders are active to prevent background requests to invalid URLs). Generate an EdDSA keypair with Sparkle's `generate_keys` tool and host an `appcast.xml` alongside GitHub Releases.
+3. **Sparkle Auto-Update**: Sparkle 2.x is integrated via SPM. The appcast is hosted via GitHub Pages at `https://michaeltookes.github.io/prompter/appcast.xml`. The `SUFeedURL` and `SUPublicEDKey` in `Info.plist` are configured for production. Generate an EdDSA keypair with Sparkle's `generate_keys` tool. The appcast XML lives in the repo root on `main` and is served by GitHub Pages.
 
 4. **LSUIElement**: Must be set to YES in Info.plist for menu bar-only behavior.
 

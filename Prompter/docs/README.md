@@ -22,7 +22,7 @@ Prompter lets you see your notes while sharing your screen in Google Meet, Micro
 ## Key Features
 
 - **Protected Mode** - Hides overlay from screen recordings and shares
-- **5 Layout Templates** - Title/bullets, images with notes, 2x2 grid, and more
+- **6 Layout Templates** - Title/bullets, title/notes, images with notes, 2x2 grid, and more
 - **Global Hotkeys** - Control the overlay even when other apps are focused
 - **Click-through Mode** - Mouse passes through to windows underneath
 - **Persistent Storage** - Your decks and settings are saved automatically

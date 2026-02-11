@@ -17,7 +17,7 @@ Presenters need a teleprompter / speaker-notes overlay that remains visible to t
 - Wants quick "Presenter Notes" that behave like slide notes (not long scrolling)
 
 ## Key MVP Outcomes
-1. Create / edit a deck with 5 layouts
+1. Create / edit a deck with 6 layouts
 2. Drag & drop images into layout zones
 3. Show deck in always-on-top overlay window
 4. Navigate cards with hotkeys

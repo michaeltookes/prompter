@@ -75,26 +75,30 @@ Top Toolbar:
 
 ---
 
-## 5 Layout Templates (Editor View)
+## 6 Layout Templates (Editor View)
 
-### 1) Title + Notes
+### 1) Title + Bullets
+[ Title Field ]
+[ Bullet List (add/remove) ]
+
+### 2) Title + Notes
 [ Title Field ]
 [ Notes Field (multi-line) ]
 
-### 2) Image Top + Notes Bottom
+### 3) Image Top + Notes Bottom
 [ Image Drop Zone ]
 [ Notes Field ]
 
-### 3) Two Images + Notes
+### 4) Two Images + Notes
 [ Image Slot ] [ Image Slot ]
 [ Notes Field ]
 
-### 4) 2x2 Image Grid + Caption
+### 5) 2x2 Image Grid + Caption
 [ Img ][ Img ]
 [ Img ][ Img ]
 [ Caption Field ]
 
-### 5) Full Image + 3 Bullets
+### 6) Full Image + 3 Bullets
 [ Large Image Slot ]
 • Bullet 1
 • Bullet 2
