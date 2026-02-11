@@ -1,26 +1,24 @@
 import SwiftUI
 
-/// Editor for the Image + Notes layout.
+/// Editor for the Title + Notes layout.
 ///
 /// Fields:
-/// - Image: Single drop zone for one image
+/// - Title: Single line text field
 /// - Notes: Multi-line text field
-struct ImageTopNotesEditorView: View {
+struct TitleNotesEditorView: View {
     @Binding var card: Card
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            // Image section
+            // Title field
             VStack(alignment: .leading, spacing: 8) {
-                Text("Image")
+                Text("Title")
                     .font(.headline)
                     .foregroundColor(Theme.editorTextSecondary)
 
-                ImageDropZone(
-                    assetRef: imageBinding(at: 0),
-                    placeholder: "Drop image here"
-                )
-                .frame(height: 200)
+                TextField("Enter title...", text: titleBinding)
+                    .textFieldStyle(.roundedBorder)
+                    .font(.title2)
             }
 
             // Notes section
@@ -48,23 +46,10 @@ struct ImageTopNotesEditorView: View {
 
     // MARK: - Bindings
 
-    private func imageBinding(at index: Int) -> Binding<AssetRef?> {
+    private var titleBinding: Binding<String> {
         Binding(
-            get: {
-                guard index < card.images.count else { return nil }
-                return card.images[index]
-            },
-            set: { newValue in
-                var images = card.images
-
-                // Ensure array is large enough
-                while images.count <= index {
-                    images.append(nil)
-                }
-
-                images[index] = newValue
-                card.images = images
-            }
+            get: { card.title ?? "" },
+            set: { card.title = $0.isEmpty ? nil : $0 }
         )
     }
 
@@ -77,10 +62,11 @@ struct ImageTopNotesEditorView: View {
 }
 
 #Preview {
-    ImageTopNotesEditorView(card: .constant(Card(
-        layout: .imageTopNotes,
-        notes: "These are my notes about the image above."
+    TitleNotesEditorView(card: .constant(Card(
+        layout: .titleNotes,
+        title: "Key Points",
+        notes: "These are detailed notes about the topic being discussed."
     )))
     .padding()
-    .frame(width: 500, height: 500)
+    .frame(width: 500, height: 400)
 }

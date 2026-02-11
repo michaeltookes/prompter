@@ -33,8 +33,16 @@ struct DeckEditorView: View {
                     )
                 }
 
-                // Deck settings
-                Button(action: { showDeckSettings = true }) {
+                // Deck settings menu
+                Menu {
+                    Button(action: { showDeckSettings = true }) {
+                        Label("Rename", systemImage: "pencil")
+                    }
+                    Button(action: cloneDeck) {
+                        Label("Clone Deck", systemImage: "doc.on.doc")
+                    }
+                    .disabled(!appState.canCreateNewDeck)
+                } label: {
                     Label("Deck Settings", systemImage: "gearshape")
                 }
             }
@@ -68,6 +76,13 @@ struct DeckEditorView: View {
         selectedCardIndex = appState.currentCardIndex
     }
 
+    private func cloneDeck() {
+        if let deck = appState.currentDeck {
+            appState.cloneDeck(deck)
+            selectedCardIndex = 0
+        }
+    }
+
     private func toggleOverlayPreview() {
         appState.toggleOverlay()
     }
@@ -93,7 +108,7 @@ struct CardCanvasView: View {
                     // Card header with layout picker
                     cardHeader(for: card)
 
-                    Divider()
+                    Rectangle().fill(Theme.editorBorder).frame(height: 1)
 
                     // Layout-specific editor
                     ScrollView {
@@ -128,7 +143,7 @@ struct CardCanvasView: View {
             if let deck = appState.currentDeck {
                 Text("Card \(selectedIndex + 1) of \(deck.cards.count)")
                     .font(.system(size: Theme.footerFontSize, weight: .medium))
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
             }
         }
         .padding(.horizontal, 20)
@@ -141,6 +156,8 @@ struct CardCanvasView: View {
         switch card.layout {
         case .titleBullets:
             TitleBulletsEditorView(card: cardBinding(for: card))
+        case .titleNotes:
+            TitleNotesEditorView(card: cardBinding(for: card))
         case .imageTopNotes:
             ImageTopNotesEditorView(card: cardBinding(for: card))
         case .twoImagesNotes:
@@ -156,15 +173,15 @@ struct CardCanvasView: View {
         VStack(spacing: 16) {
             Image(systemName: "square.dashed")
                 .font(.system(size: 48))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(Theme.editorTextSecondary)
 
             Text("No Card Selected")
                 .font(.system(size: Theme.titleFontSize, weight: .semibold))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(Theme.editorTextSecondary)
 
             Text("Select a card from the sidebar or create a new one")
                 .font(.system(size: Theme.notesFontSize, weight: .regular))
-                .foregroundColor(Theme.textSecondary.opacity(0.7))
+                .foregroundColor(Theme.editorTextSecondary.opacity(0.7))
         }
     }
 
@@ -209,7 +226,7 @@ struct DeckSettingsSheet: View {
         VStack(spacing: 20) {
             Text("Deck Settings")
                 .font(.system(size: Theme.titleFontSize, weight: .semibold))
-                .foregroundColor(Theme.textPrimary)
+                .foregroundColor(Theme.editorTextPrimary)
 
             Form {
                 TextField("Deck Title", text: $deckTitle)

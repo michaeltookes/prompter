@@ -11,6 +11,8 @@ struct OverlayCardRenderer: View {
         switch card.layout {
         case .titleBullets:
             TitleBulletsRenderer(card: card, fontScale: fontScale)
+        case .titleNotes:
+            TitleNotesRenderer(card: card, fontScale: fontScale)
         case .imageTopNotes:
             ImageTopNotesRenderer(card: card, fontScale: fontScale)
         case .twoImagesNotes:

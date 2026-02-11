@@ -104,13 +104,13 @@ enum LayoutType: String, Codable {
 ## UI Theme (from .claude/reference-docs/UI_UX_STYLE_GUIDE.md)
 
 ```swift
-// Color Palette
+// Color Palette — OVERLAY ONLY (dark frosted glass surface)
 let surfaceBackground = Color(rgba: 25, 27, 32, 0.85)  // Frosted dark glass
 let accent = Color(hex: "5DA9FF")                       // Soft electric blue
 let secondaryAccent = Color(hex: "7A86FF")              // Muted indigo
-let textPrimary = Color(hex: "F5F7FA")
-let textSecondary = Color(hex: "B8C1CC")
-let divider = Color.white.opacity(0.08)
+let textPrimary = Color(hex: "F5F7FA")                  // ⚠️ OVERLAY ONLY
+let textSecondary = Color(hex: "B8C1CC")                // ⚠️ OVERLAY ONLY
+let divider = Color.white.opacity(0.08)                 // ⚠️ OVERLAY ONLY
 let accentGlow = Color(hex: "5DA9FF").opacity(0.35)
 
 // Typography (SF Pro)
@@ -125,6 +125,19 @@ let cards = 16px
 let imageSlots = 14px
 let buttons = 10px
 ```
+
+### Light Mode / Dark Mode Color Rules
+
+The app has **two color contexts** that must not be mixed:
+
+| Context | Text Color | Secondary Text | Border | Used In |
+|---------|-----------|---------------|--------|---------|
+| **Overlay** (dark glass) | `Theme.textPrimary` (#F5F7FA) | `Theme.textSecondary` (#B8C1CC) | `Theme.divider` | `Views/Overlay/`, `ThemedPanelWindow` panels |
+| **Editor** (system bg) | `Theme.editorTextPrimary` | `Theme.editorTextSecondary` | `Theme.editorBorder` | `Views/DeckEditor/`, sidebar, canvas |
+
+The editor tokens use `NSColor.labelColor`, `NSColor.secondaryLabelColor`, and `NSColor.separatorColor` which automatically adapt to Light/Dark Mode (black text in Light Mode, white text in Dark Mode).
+
+**Never use `Theme.textPrimary`, `Theme.textSecondary`, or `Theme.divider` in editor views** — they are hardcoded white-on-dark values that become invisible on light backgrounds.
 
 ## File Storage (from .claude/reference-docs/PERSISTENCE_SPEC.md)
 

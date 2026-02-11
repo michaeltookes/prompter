@@ -7,6 +7,7 @@ final class LayoutTypeTests: XCTestCase {
 
     func testDisplayNames() {
         XCTAssertEqual(LayoutType.titleBullets.displayName, "Title + Bullets")
+        XCTAssertEqual(LayoutType.titleNotes.displayName, "Title + Notes")
         XCTAssertEqual(LayoutType.imageTopNotes.displayName, "Image + Notes")
         XCTAssertEqual(LayoutType.twoImagesNotes.displayName, "Two Images + Notes")
         XCTAssertEqual(LayoutType.grid2x2Caption.displayName, "2×2 Grid + Caption")
@@ -17,6 +18,7 @@ final class LayoutTypeTests: XCTestCase {
 
     func testImageSlotCounts() {
         XCTAssertEqual(LayoutType.titleBullets.imageSlotCount, 0)
+        XCTAssertEqual(LayoutType.titleNotes.imageSlotCount, 0)
         XCTAssertEqual(LayoutType.imageTopNotes.imageSlotCount, 1)
         XCTAssertEqual(LayoutType.twoImagesNotes.imageSlotCount, 2)
         XCTAssertEqual(LayoutType.grid2x2Caption.imageSlotCount, 4)
@@ -27,6 +29,7 @@ final class LayoutTypeTests: XCTestCase {
 
     func testMaxBulletCounts() {
         XCTAssertNil(LayoutType.titleBullets.maxBulletCount) // Variable
+        XCTAssertNil(LayoutType.titleNotes.maxBulletCount)
         XCTAssertNil(LayoutType.imageTopNotes.maxBulletCount)
         XCTAssertNil(LayoutType.twoImagesNotes.maxBulletCount)
         XCTAssertNil(LayoutType.grid2x2Caption.maxBulletCount)
@@ -37,6 +40,7 @@ final class LayoutTypeTests: XCTestCase {
 
     func testHasTitle() {
         XCTAssertTrue(LayoutType.titleBullets.hasTitle)
+        XCTAssertTrue(LayoutType.titleNotes.hasTitle)
         XCTAssertFalse(LayoutType.imageTopNotes.hasTitle)
         XCTAssertFalse(LayoutType.twoImagesNotes.hasTitle)
         XCTAssertFalse(LayoutType.grid2x2Caption.hasTitle)
@@ -45,6 +49,7 @@ final class LayoutTypeTests: XCTestCase {
 
     func testHasNotes() {
         XCTAssertFalse(LayoutType.titleBullets.hasNotes)
+        XCTAssertTrue(LayoutType.titleNotes.hasNotes)
         XCTAssertTrue(LayoutType.imageTopNotes.hasNotes)
         XCTAssertTrue(LayoutType.twoImagesNotes.hasNotes)
         XCTAssertFalse(LayoutType.grid2x2Caption.hasNotes)
@@ -53,6 +58,7 @@ final class LayoutTypeTests: XCTestCase {
 
     func testHasCaption() {
         XCTAssertFalse(LayoutType.titleBullets.hasCaption)
+        XCTAssertFalse(LayoutType.titleNotes.hasCaption)
         XCTAssertFalse(LayoutType.imageTopNotes.hasCaption)
         XCTAssertFalse(LayoutType.twoImagesNotes.hasCaption)
         XCTAssertTrue(LayoutType.grid2x2Caption.hasCaption)
@@ -61,6 +67,7 @@ final class LayoutTypeTests: XCTestCase {
 
     func testHasBullets() {
         XCTAssertTrue(LayoutType.titleBullets.hasBullets)
+        XCTAssertFalse(LayoutType.titleNotes.hasBullets)
         XCTAssertFalse(LayoutType.imageTopNotes.hasBullets)
         XCTAssertFalse(LayoutType.twoImagesNotes.hasBullets)
         XCTAssertFalse(LayoutType.grid2x2Caption.hasBullets)
@@ -71,6 +78,7 @@ final class LayoutTypeTests: XCTestCase {
 
     func testIconNames() {
         XCTAssertEqual(LayoutType.titleBullets.iconName, "text.alignleft")
+        XCTAssertEqual(LayoutType.titleNotes.iconName, "text.justifyleft")
         XCTAssertEqual(LayoutType.imageTopNotes.iconName, "photo.on.rectangle")
         XCTAssertEqual(LayoutType.twoImagesNotes.iconName, "rectangle.split.2x1")
         XCTAssertEqual(LayoutType.grid2x2Caption.iconName, "square.grid.2x2")
@@ -87,7 +95,7 @@ final class LayoutTypeTests: XCTestCase {
     // MARK: - All Cases Tests
 
     func testAllCases() {
-        XCTAssertEqual(LayoutType.allCases.count, 5)
+        XCTAssertEqual(LayoutType.allCases.count, 6)
     }
 
     // MARK: - Codable Tests

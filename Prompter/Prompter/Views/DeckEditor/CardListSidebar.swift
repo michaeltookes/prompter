@@ -25,17 +25,26 @@ struct CardListSidebar: View {
     /// New deck title input
     @State private var newDeckTitle = ""
 
+    /// Whether the deck list is expanded
+    @State private var isDeckListExpanded = false
+
+    /// Whether the deck title is being edited inline
+    @State private var isEditingDeckTitle = false
+
+    /// Inline deck title edit value
+    @State private var editingDeckTitle = ""
+
     var body: some View {
         VStack(spacing: 0) {
             // Deck picker section
             deckPickerSection
 
-            Divider()
+            Rectangle().fill(Theme.editorBorder).frame(height: 1)
 
             // Header
             sidebarHeader
 
-            Divider()
+            Rectangle().fill(Theme.editorBorder).frame(height: 1)
 
             // Card list
             if let deck = appState.currentDeck, !deck.cards.isEmpty {
@@ -84,7 +93,7 @@ struct CardListSidebar: View {
 
             // Delete deck button pinned to bottom
             if appState.decks.count > 1 {
-                Divider()
+                Rectangle().fill(Theme.editorBorder).frame(height: 1)
 
                 Button(action: { showDeleteConfirmation = true }) {
                     HStack {
@@ -116,68 +125,135 @@ struct CardListSidebar: View {
 
     private var deckPickerSection: some View {
         VStack(spacing: 8) {
+            // Header row
             HStack {
                 Text("Deck")
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 Spacer()
 
                 Text("\(appState.decks.count)/\(AppState.maxDecks)")
                     .font(.system(size: 10))
-                    .foregroundColor(Theme.textSecondary.opacity(0.7))
+                    .foregroundColor(Theme.editorTextSecondary.opacity(0.7))
             }
 
-            // Deck picker dropdown
-            Menu {
-                ForEach(appState.decks) { deck in
-                    Button(action: { switchToDeck(deck) }) {
-                        HStack {
-                            Text(deck.title)
-                            if deck.id == appState.currentDeck?.id {
-                                Image(systemName: "checkmark")
+            // Current deck row with add button
+            HStack(spacing: 0) {
+                // Deck row: tappable title + chevron toggle
+                HStack(spacing: 0) {
+                    // Icon + title area (click to rename)
+                    HStack {
+                        Image(systemName: "square.stack.3d.up")
+                            .font(.system(size: 12))
+                            .foregroundColor(Theme.accent)
+
+                        if isEditingDeckTitle {
+                            TextField("Deck name", text: $editingDeckTitle, onCommit: {
+                                commitDeckTitleEdit()
+                            })
+                            .font(Theme.footerMedium)
+                            .textFieldStyle(.plain)
+                            .onExitCommand {
+                                isEditingDeckTitle = false
                             }
+                        } else {
+                            Text(appState.currentDeck?.title ?? "Select Deck")
+                                .font(Theme.footerMedium)
+                                .foregroundColor(Theme.editorTextPrimary)
+                                .lineLimit(1)
+                                .onTapGesture {
+                                    editingDeckTitle = appState.currentDeck?.title ?? ""
+                                    isEditingDeckTitle = true
+                                }
                         }
                     }
-                }
-
-                Divider()
-
-                Button(action: { showNewDeckDialog = true }) {
-                    Label("New Deck", systemImage: "plus")
-                }
-                .disabled(!appState.canCreateNewDeck)
-
-            } label: {
-                HStack {
-                    Image(systemName: "square.stack.3d.up")
-                        .font(.system(size: 12))
-                        .foregroundColor(Theme.accent)
-
-                    Text(appState.currentDeck?.title ?? "Select Deck")
-                        .font(Theme.footerMedium)
-                        .foregroundColor(Theme.textPrimary)
-                        .lineLimit(1)
 
                     Spacer()
 
-                    Image(systemName: "chevron.up.chevron.down")
-                        .font(Theme.footerMedium)
-                        .foregroundColor(Theme.textSecondary)
+                    // Chevron (click to expand/collapse deck list)
+                    Button(action: {
+                        if isEditingDeckTitle {
+                            commitDeckTitleEdit()
+                        }
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isDeckListExpanded.toggle()
+                        }
+                    }) {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundColor(Theme.editorTextSecondary)
+                            .rotationEffect(.degrees(isDeckListExpanded ? 90 : 0))
+                            .frame(width: 24, height: 24)
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.horizontal, 10)
-                .padding(.vertical, 8)
+                .padding(.vertical, 4)
                 .background(
                     RoundedRectangle(cornerRadius: 6)
                         .fill(Theme.cardBackground)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
-                        .stroke(Theme.divider, lineWidth: 1)
+                        .stroke(Theme.editorBorder, lineWidth: 1)
                 )
-            }
-            .menuStyle(.borderlessButton)
+                .frame(maxWidth: .infinity)
 
+                Spacer()
+
+                // Add deck button
+                Button(action: { showNewDeckDialog = true }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: Theme.footerFontSize, weight: .medium))
+                        .foregroundColor(appState.canCreateNewDeck ? Theme.editorTextPrimary : Theme.editorTextSecondary.opacity(0.4))
+                }
+                .buttonStyle(.plain)
+                .disabled(!appState.canCreateNewDeck)
+                .frame(width: 24, height: 24)
+            }
+
+            // Collapsible deck list
+            if isDeckListExpanded {
+                VStack(spacing: 2) {
+                    ForEach(appState.decks) { deck in
+                        Button(action: {
+                            switchToDeck(deck)
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isDeckListExpanded = false
+                            }
+                        }) {
+                            HStack(spacing: 8) {
+                                if deck.id == appState.currentDeck?.id {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 10, weight: .bold))
+                                        .foregroundColor(Theme.accent)
+                                        .frame(width: 14)
+                                } else {
+                                    Spacer()
+                                        .frame(width: 14)
+                                }
+
+                                Text(deck.title)
+                                    .font(Theme.footerMedium)
+                                    .foregroundColor(deck.id == appState.currentDeck?.id ? Theme.accent : Theme.editorTextPrimary)
+                                    .lineLimit(1)
+
+                                Spacer()
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(deck.id == appState.currentDeck?.id ? Theme.accent.opacity(0.1) : .clear)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.leading, 4)
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -190,7 +266,7 @@ struct CardListSidebar: View {
         HStack {
             Text("Cards")
                 .font(.system(size: Theme.captionFontSize, weight: .semibold))
-                .foregroundColor(Theme.textPrimary)
+                .foregroundColor(Theme.editorTextPrimary)
 
             Spacer()
 
@@ -207,6 +283,7 @@ struct CardListSidebar: View {
                     .foregroundColor(Theme.accent)
             }
             .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
             .frame(width: 24, height: 24)
         }
         .padding(.horizontal, 16)
@@ -219,15 +296,15 @@ struct CardListSidebar: View {
 
             Image(systemName: "square.stack.3d.up.slash")
                 .font(.system(size: 40))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(Theme.editorTextSecondary)
 
             Text("No Cards")
                 .font(.system(size: Theme.captionFontSize, weight: .semibold))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(Theme.editorTextSecondary)
 
             Text("Click + to add a card")
                 .font(.system(size: Theme.footerFontSize, weight: .regular))
-                .foregroundColor(Theme.textSecondary.opacity(0.7))
+                .foregroundColor(Theme.editorTextSecondary.opacity(0.7))
 
             Spacer()
         }
@@ -235,6 +312,17 @@ struct CardListSidebar: View {
     }
 
     // MARK: - Actions
+
+    private func commitDeckTitleEdit() {
+        let trimmed = editingDeckTitle.trimmingCharacters(in: .whitespaces)
+        if !trimmed.isEmpty, var deck = appState.currentDeck {
+            deck.title = trimmed
+            deck.updatedAt = Date()
+            appState.currentDeck = deck
+            appState.saveDeck()
+        }
+        isEditingDeckTitle = false
+    }
 
     private func addCard(layout: LayoutType) {
         let newCard = Card(layout: layout)
@@ -321,19 +409,19 @@ struct CardListItem: View {
                 // Layout icon
                 Image(systemName: card.layout.iconName)
                     .font(.system(size: 16))
-                    .foregroundColor(isSelected ? Theme.accent : Theme.textSecondary)
+                    .foregroundColor(isSelected ? Theme.accent : Theme.editorTextSecondary)
                     .frame(width: 24)
 
                 // Card info
                 VStack(alignment: .leading, spacing: 2) {
                     Text(cardTitle)
                         .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(Theme.textPrimary)
+                        .foregroundColor(Theme.editorTextPrimary)
                         .lineLimit(1)
 
                     Text(card.layout.displayName)
                         .font(.system(size: 11))
-                        .foregroundColor(Theme.textSecondary)
+                        .foregroundColor(Theme.editorTextSecondary)
                 }
 
                 Spacer()
@@ -341,7 +429,7 @@ struct CardListItem: View {
                 // Card number
                 Text("\(index + 1)")
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
                     .background(Theme.secondaryAccent.opacity(0.14))
@@ -355,7 +443,7 @@ struct CardListItem: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(isSelected ? Theme.accent.opacity(0.5) : Theme.divider.opacity(isHovered ? 1 : 0), lineWidth: 1)
+                    .stroke(isSelected ? Theme.accent.opacity(0.5) : Theme.editorBorder.opacity(isHovered ? 1 : 0), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -364,7 +452,7 @@ struct CardListItem: View {
             Button(action: onDuplicate) {
                 Label("Duplicate", systemImage: "square.on.square")
             }
-            Divider()
+            Rectangle().fill(Theme.editorBorder).frame(height: 1)
             Button(role: .destructive, action: onDelete) {
                 Label("Delete", systemImage: "trash")
             }
@@ -426,7 +514,7 @@ struct NewDeckSheet: View {
         VStack(spacing: 20) {
             Text("New Deck")
                 .font(Theme.note.weight(.semibold))
-                .foregroundColor(Theme.textPrimary)
+                .foregroundColor(Theme.editorTextPrimary)
 
             TextField("Deck Title", text: $deckTitle)
                 .textFieldStyle(.roundedBorder)
