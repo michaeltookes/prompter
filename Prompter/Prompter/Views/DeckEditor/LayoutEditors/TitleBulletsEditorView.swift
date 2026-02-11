@@ -7,6 +7,7 @@ import SwiftUI
 /// - Bullets: Dynamic list of bullet points (add/remove/reorder)
 struct TitleBulletsEditorView: View {
     @Binding var card: Card
+    @FocusState private var focusedBulletIndex: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -41,13 +42,31 @@ struct TitleBulletsEditorView: View {
                 if let bullets = card.bullets, !bullets.isEmpty {
                     ForEach(Array(bullets.enumerated()), id: \.offset) { index, bullet in
                         HStack(spacing: 12) {
-                            Image(systemName: "line.3.horizontal")
-                                .foregroundColor(Theme.editorTextSecondary)
-                                .font(.system(size: 12))
-                                .accessibilityHidden(true)
+                            VStack(spacing: 2) {
+                                if index > 0 {
+                                    Button(action: { moveBullet(from: index, to: index - 1) }) {
+                                        Image(systemName: "arrow.up")
+                                            .font(.system(size: 10))
+                                            .foregroundColor(Theme.editorTextSecondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Move bullet \(index + 1) up")
+                                }
+                                if index < bullets.count - 1 {
+                                    Button(action: { moveBullet(from: index, to: index + 1) }) {
+                                        Image(systemName: "arrow.down")
+                                            .font(.system(size: 10))
+                                            .foregroundColor(Theme.editorTextSecondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Move bullet \(index + 1) down")
+                                }
+                            }
+                            .frame(width: 16)
 
                             TextField("Bullet point...", text: bulletBinding(at: index))
                                 .textFieldStyle(.roundedBorder)
+                                .focused($focusedBulletIndex, equals: index)
 
                             Button(action: { removeBullet(at: index) }) {
                                 Image(systemName: "minus.circle")
@@ -101,6 +120,7 @@ struct TitleBulletsEditorView: View {
         var bullets = card.bullets ?? []
         bullets.append("")
         card.bullets = bullets
+        focusedBulletIndex = bullets.count - 1
     }
 
     private func removeBullet(at index: Int) {
@@ -108,6 +128,16 @@ struct TitleBulletsEditorView: View {
         guard index < bullets.count else { return }
         bullets.remove(at: index)
         card.bullets = bullets.isEmpty ? nil : bullets
+    }
+
+    private func moveBullet(from source: Int, to destination: Int) {
+        var bullets = card.bullets ?? []
+        guard source >= 0, source < bullets.count,
+              destination >= 0, destination < bullets.count else { return }
+        let item = bullets.remove(at: source)
+        bullets.insert(item, at: destination)
+        card.bullets = bullets
+        focusedBulletIndex = destination
     }
 }
 

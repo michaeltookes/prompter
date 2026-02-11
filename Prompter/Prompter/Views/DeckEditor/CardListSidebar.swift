@@ -58,7 +58,9 @@ struct CardListSidebar: View {
                                     isSelected: index == selectedIndex,
                                     onSelect: { selectedIndex = index },
                                     onDelete: { deleteCard(at: index) },
-                                    onDuplicate: { duplicateCard(at: index) }
+                                    onDuplicate: { duplicateCard(at: index) },
+                                    onMoveUp: index > 0 ? { reorderCard(from: index, to: index - 1) } : nil,
+                                    onMoveDown: index < deck.cards.count - 1 ? { reorderCard(from: index, to: index + 2) } : nil
                                 )
                                 .id(card.id)
                                 .onDrag {
@@ -415,6 +417,8 @@ struct CardListItem: View {
     let onSelect: () -> Void
     let onDelete: () -> Void
     let onDuplicate: () -> Void
+    var onMoveUp: (() -> Void)?
+    var onMoveDown: (() -> Void)?
 
     @State private var isHovered = false
 
@@ -468,10 +472,21 @@ struct CardListItem: View {
         .accessibilityValue(isSelected ? "Selected, card \(index + 1)" : "Card \(index + 1)")
         .accessibilityHint("Double-click to select")
         .contextMenu {
+            if let onMoveUp = onMoveUp {
+                Button(action: onMoveUp) {
+                    Label("Move Up", systemImage: "arrow.up")
+                }
+            }
+            if let onMoveDown = onMoveDown {
+                Button(action: onMoveDown) {
+                    Label("Move Down", systemImage: "arrow.down")
+                }
+            }
+            Divider()
             Button(action: onDuplicate) {
                 Label("Duplicate", systemImage: "square.on.square")
             }
-            Rectangle().fill(Theme.editorBorder).frame(height: 1)
+            Divider()
             Button(role: .destructive, action: onDelete) {
                 Label("Delete", systemImage: "trash")
             }

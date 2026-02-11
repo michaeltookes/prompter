@@ -19,6 +19,9 @@ struct ImageDropZone: View {
     /// Whether the zone is currently being hovered over
     @State private var isTargeted = false
 
+    /// Whether the file picker is shown
+    @State private var showFilePicker = false
+
     var body: some View {
         ZStack {
             // Background
@@ -61,6 +64,19 @@ struct ImageDropZone: View {
                     Text(placeholder)
                         .font(.system(size: Theme.captionFontSize))
                         .foregroundColor(Theme.textSecondary)
+
+                    Button(action: { showFilePicker = true }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "folder")
+                                .font(.system(size: 12))
+                            Text("Browse")
+                                .font(.system(size: Theme.captionFontSize))
+                        }
+                        .foregroundColor(Theme.accent)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Browse for image")
+                    .accessibilityHint("Opens a file picker to select an image")
                 }
             }
         }
@@ -68,8 +84,24 @@ struct ImageDropZone: View {
             handleDrop(providers: providers)
         }
         .animation(.easeInOut(duration: 0.15), value: isTargeted)
+        .fileImporter(
+            isPresented: $showFilePicker,
+            allowedContentTypes: [.image],
+            allowsMultipleSelection: false
+        ) { result in
+            if case .success(let urls) = result, let url = urls.first {
+                Task.detached(priority: .userInitiated) {
+                    let ref = await AssetManager.shared.importImageAsync(from: url)
+                    await MainActor.run {
+                        if let ref = ref {
+                            self.assetRef = ref
+                        }
+                    }
+                }
+            }
+        }
         .accessibilityLabel(assetRef != nil ? "Image slot with image" : placeholder)
-        .accessibilityHint("Drag and drop an image file to add it")
+        .accessibilityHint("Drag and drop an image or click Browse to add one")
     }
 
     /// Handles dropped items
