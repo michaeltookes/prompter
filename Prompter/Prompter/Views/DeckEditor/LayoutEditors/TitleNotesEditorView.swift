@@ -14,7 +14,7 @@ struct TitleNotesEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Title")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 TextField("Enter title...", text: titleBinding)
                     .textFieldStyle(.roundedBorder)
@@ -25,7 +25,7 @@ struct TitleNotesEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Notes")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 TextEditor(text: notesBinding)
                     .font(.body)
@@ -35,7 +35,7 @@ struct TitleNotesEditorView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 6))
                     .overlay(
                         RoundedRectangle(cornerRadius: 6)
-                            .stroke(Theme.divider, lineWidth: 1)
+                            .stroke(Theme.editorBorder, lineWidth: 1)
                     )
             }
 

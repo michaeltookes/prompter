@@ -15,7 +15,7 @@ struct TwoImagesNotesEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Images")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 HStack(spacing: 16) {
                     VStack(spacing: 4) {
@@ -27,7 +27,7 @@ struct TwoImagesNotesEditorView: View {
 
                         Text("Left")
                             .font(.caption)
-                            .foregroundColor(Theme.textSecondary)
+                            .foregroundColor(Theme.editorTextSecondary)
                     }
 
                     VStack(spacing: 4) {
@@ -39,7 +39,7 @@ struct TwoImagesNotesEditorView: View {
 
                         Text("Right")
                             .font(.caption)
-                            .foregroundColor(Theme.textSecondary)
+                            .foregroundColor(Theme.editorTextSecondary)
                     }
                 }
             }
@@ -48,7 +48,7 @@ struct TwoImagesNotesEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Notes")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 TextEditor(text: notesBinding)
                     .font(.body)
@@ -58,7 +58,7 @@ struct TwoImagesNotesEditorView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 6))
                     .overlay(
                         RoundedRectangle(cornerRadius: 6)
-                            .stroke(Theme.divider, lineWidth: 1)
+                            .stroke(Theme.editorBorder, lineWidth: 1)
                     )
             }
 

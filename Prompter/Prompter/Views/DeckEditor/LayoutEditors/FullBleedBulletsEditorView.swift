@@ -14,7 +14,7 @@ struct FullBleedBulletsEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Hero Image")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 ImageDropZone(
                     assetRef: imageBinding(at: 0),
@@ -27,7 +27,7 @@ struct FullBleedBulletsEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Key Points (3 bullets)")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 ForEach(0..<3, id: \.self) { index in
                     HStack(spacing: 12) {
@@ -45,7 +45,7 @@ struct FullBleedBulletsEditorView: View {
 
                 Text("This layout always shows exactly 3 bullet points.")
                     .font(.caption)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
                     .padding(.top, 4)
             }
 

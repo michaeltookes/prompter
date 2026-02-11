@@ -14,7 +14,7 @@ struct Grid2x2CaptionEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Images (2×2 Grid)")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 LazyVGrid(columns: [
                     GridItem(.flexible(), spacing: 12),
@@ -30,7 +30,7 @@ struct Grid2x2CaptionEditorView: View {
 
                             Text(gridPosition(for: index))
                                 .font(.caption)
-                                .foregroundColor(Theme.textSecondary)
+                                .foregroundColor(Theme.editorTextSecondary)
                         }
                     }
                 }
@@ -40,7 +40,7 @@ struct Grid2x2CaptionEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Caption")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 TextField("Enter caption...", text: captionBinding)
                     .textFieldStyle(.roundedBorder)

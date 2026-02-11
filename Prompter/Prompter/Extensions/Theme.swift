@@ -52,6 +52,15 @@ enum Theme {
     /// Traffic light icon color (macOS close glyph)
     static let trafficLightIcon = Color.black.opacity(0.7)
 
+    /// Adaptive primary text color for editor UI (black in light mode, white in dark mode)
+    static let editorTextPrimary = Color(nsColor: .labelColor)
+
+    /// Adaptive secondary text color for editor UI
+    static let editorTextSecondary = Color(nsColor: .secondaryLabelColor)
+
+    /// Adaptive border color for editor fields
+    static let editorBorder = Color(nsColor: .separatorColor)
+
     /// Background for drop zones
     static let dropZoneBackground = Color.gray.opacity(0.1)
 

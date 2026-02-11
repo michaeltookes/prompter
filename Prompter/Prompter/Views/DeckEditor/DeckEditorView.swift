@@ -108,7 +108,7 @@ struct CardCanvasView: View {
                     // Card header with layout picker
                     cardHeader(for: card)
 
-                    Divider()
+                    Rectangle().fill(Theme.editorBorder).frame(height: 1)
 
                     // Layout-specific editor
                     ScrollView {
@@ -143,7 +143,7 @@ struct CardCanvasView: View {
             if let deck = appState.currentDeck {
                 Text("Card \(selectedIndex + 1) of \(deck.cards.count)")
                     .font(.system(size: Theme.footerFontSize, weight: .medium))
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
             }
         }
         .padding(.horizontal, 20)
@@ -173,15 +173,15 @@ struct CardCanvasView: View {
         VStack(spacing: 16) {
             Image(systemName: "square.dashed")
                 .font(.system(size: 48))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(Theme.editorTextSecondary)
 
             Text("No Card Selected")
                 .font(.system(size: Theme.titleFontSize, weight: .semibold))
-                .foregroundColor(Theme.textSecondary)
+                .foregroundColor(Theme.editorTextSecondary)
 
             Text("Select a card from the sidebar or create a new one")
                 .font(.system(size: Theme.notesFontSize, weight: .regular))
-                .foregroundColor(Theme.textSecondary.opacity(0.7))
+                .foregroundColor(Theme.editorTextSecondary.opacity(0.7))
         }
     }
 
@@ -226,7 +226,7 @@ struct DeckSettingsSheet: View {
         VStack(spacing: 20) {
             Text("Deck Settings")
                 .font(.system(size: Theme.titleFontSize, weight: .semibold))
-                .foregroundColor(Theme.textPrimary)
+                .foregroundColor(Theme.editorTextPrimary)
 
             Form {
                 TextField("Deck Title", text: $deckTitle)

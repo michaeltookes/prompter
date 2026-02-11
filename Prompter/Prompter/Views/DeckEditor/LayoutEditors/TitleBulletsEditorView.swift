@@ -14,7 +14,7 @@ struct TitleBulletsEditorView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Title")
                     .font(.headline)
-                    .foregroundColor(Theme.textSecondary)
+                    .foregroundColor(Theme.editorTextSecondary)
 
                 TextField("Enter title...", text: titleBinding)
                     .textFieldStyle(.roundedBorder)
@@ -26,7 +26,7 @@ struct TitleBulletsEditorView: View {
                 HStack {
                     Text("Bullet Points")
                         .font(.headline)
-                        .foregroundColor(Theme.textSecondary)
+                        .foregroundColor(Theme.editorTextSecondary)
 
                     Spacer()
 
@@ -41,7 +41,7 @@ struct TitleBulletsEditorView: View {
                     ForEach(Array(bullets.enumerated()), id: \.offset) { index, bullet in
                         HStack(spacing: 12) {
                             Image(systemName: "line.3.horizontal")
-                                .foregroundColor(Theme.textSecondary)
+                                .foregroundColor(Theme.editorTextSecondary)
                                 .font(.system(size: 12))
 
                             TextField("Bullet point...", text: bulletBinding(at: index))
@@ -56,7 +56,7 @@ struct TitleBulletsEditorView: View {
                     }
                 } else {
                     Text("No bullet points. Click + to add one.")
-                        .foregroundColor(Theme.textSecondary)
+                        .foregroundColor(Theme.editorTextSecondary)
                         .italic()
                         .padding(.vertical, 8)
                 }
