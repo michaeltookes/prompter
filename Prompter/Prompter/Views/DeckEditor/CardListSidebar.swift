@@ -25,6 +25,9 @@ struct CardListSidebar: View {
     /// New deck title input
     @State private var newDeckTitle = ""
 
+    /// Whether the deck list is expanded
+    @State private var isDeckListExpanded = false
+
     var body: some View {
         VStack(spacing: 0) {
             // Deck picker section
@@ -116,6 +119,7 @@ struct CardListSidebar: View {
 
     private var deckPickerSection: some View {
         VStack(spacing: 8) {
+            // Header row
             HStack {
                 Text("Deck")
                     .font(.system(size: 11, weight: .medium))
@@ -128,56 +132,99 @@ struct CardListSidebar: View {
                     .foregroundColor(Theme.textSecondary.opacity(0.7))
             }
 
-            // Deck picker dropdown
-            Menu {
-                ForEach(appState.decks) { deck in
-                    Button(action: { switchToDeck(deck) }) {
-                        HStack {
-                            Text(deck.title)
-                            if deck.id == appState.currentDeck?.id {
-                                Image(systemName: "checkmark")
+            // Current deck row with add button
+            HStack(spacing: 0) {
+                // Deck selector (toggles collapsible list)
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isDeckListExpanded.toggle()
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "square.stack.3d.up")
+                            .font(.system(size: 12))
+                            .foregroundColor(Theme.accent)
+
+                        Text(appState.currentDeck?.title ?? "Select Deck")
+                            .font(Theme.footerMedium)
+                            .foregroundColor(Theme.textPrimary)
+                            .lineLimit(1)
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundColor(Theme.textSecondary)
+                            .rotationEffect(.degrees(isDeckListExpanded ? 90 : 0))
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(Theme.cardBackground)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(Theme.divider, lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
+                .frame(maxWidth: .infinity)
+
+                Spacer()
+
+                // Add deck button
+                Button(action: { showNewDeckDialog = true }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: Theme.footerFontSize, weight: .medium))
+                        .foregroundColor(appState.canCreateNewDeck ? Theme.textPrimary : Theme.textSecondary.opacity(0.4))
+                }
+                .buttonStyle(.plain)
+                .disabled(!appState.canCreateNewDeck)
+                .frame(width: 24, height: 24)
+            }
+
+            // Collapsible deck list
+            if isDeckListExpanded {
+                VStack(spacing: 2) {
+                    ForEach(appState.decks) { deck in
+                        Button(action: {
+                            switchToDeck(deck)
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isDeckListExpanded = false
                             }
+                        }) {
+                            HStack(spacing: 8) {
+                                if deck.id == appState.currentDeck?.id {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 10, weight: .bold))
+                                        .foregroundColor(Theme.accent)
+                                        .frame(width: 14)
+                                } else {
+                                    Spacer()
+                                        .frame(width: 14)
+                                }
+
+                                Text(deck.title)
+                                    .font(Theme.footerMedium)
+                                    .foregroundColor(deck.id == appState.currentDeck?.id ? Theme.accent : Theme.textPrimary)
+                                    .lineLimit(1)
+
+                                Spacer()
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(deck.id == appState.currentDeck?.id ? Theme.accent.opacity(0.1) : .clear)
+                            )
                         }
+                        .buttonStyle(.plain)
                     }
                 }
-
-                Divider()
-
-                Button(action: { showNewDeckDialog = true }) {
-                    Label("New Deck", systemImage: "plus")
-                }
-                .disabled(!appState.canCreateNewDeck)
-
-            } label: {
-                HStack {
-                    Image(systemName: "square.stack.3d.up")
-                        .font(.system(size: 12))
-                        .foregroundColor(Theme.accent)
-
-                    Text(appState.currentDeck?.title ?? "Select Deck")
-                        .font(Theme.footerMedium)
-                        .foregroundColor(Theme.textPrimary)
-                        .lineLimit(1)
-
-                    Spacer()
-
-                    Image(systemName: "chevron.up.chevron.down")
-                        .font(Theme.footerMedium)
-                        .foregroundColor(Theme.textSecondary)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 8)
-                .background(
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Theme.cardBackground)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(Theme.divider, lineWidth: 1)
-                )
+                .padding(.leading, 4)
+                .transition(.opacity.combined(with: .move(edge: .top)))
             }
-            .menuStyle(.borderlessButton)
-
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
