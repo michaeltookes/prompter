@@ -53,7 +53,7 @@ struct Deck: Identifiable, Codable, Equatable {
     static func createDefault() -> Deck {
         let sampleCard = Card(
             layout: .titleBullets,
-            title: "Welcome to Presenter Overlay",
+            title: "Welcome to Prompter",
             bullets: [
                 "Press Cmd+Shift+O to toggle this overlay",
                 "Use Cmd+Shift+Arrow keys to navigate cards",

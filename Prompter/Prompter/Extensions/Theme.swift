@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Theme constants for Presenter Overlay.
+/// Theme constants for Prompter.
 ///
 /// These values come from the UI/UX Style Guide and should be used
 /// throughout the app for consistent styling. Never hardcode colors

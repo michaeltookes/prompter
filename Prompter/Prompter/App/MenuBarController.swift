@@ -81,7 +81,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             // Use SF Symbol for the menu bar icon
             button.image = NSImage(
                 systemSymbolName: "text.bubble",
-                accessibilityDescription: "Presenter Overlay"
+                accessibilityDescription: "Prompter"
             )
             button.image?.isTemplate = true  // Adapts to light/dark menu bar
         }
@@ -180,7 +180,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         // Quit
         let quitItem = NSMenuItem(
-            title: "Quit Presenter Overlay",
+            title: "Quit Prompter",
             action: #selector(quitApp),
             keyEquivalent: "q"
         )

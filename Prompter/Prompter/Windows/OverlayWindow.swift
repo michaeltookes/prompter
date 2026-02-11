@@ -60,7 +60,7 @@ final class OverlayWindow: NSWindow {
 
         // Accessibility
         self.setAccessibilityRole(.popover)
-        self.setAccessibilityLabel("Presenter Overlay")
+        self.setAccessibilityLabel("Prompter overlay")
         self.setAccessibilityHelp("Floating presenter notes window. Use Cmd+Shift+O to toggle visibility.")
     }
 
