@@ -33,8 +33,16 @@ struct DeckEditorView: View {
                     )
                 }
 
-                // Deck settings
-                Button(action: { showDeckSettings = true }) {
+                // Deck settings menu
+                Menu {
+                    Button(action: { showDeckSettings = true }) {
+                        Label("Rename", systemImage: "pencil")
+                    }
+                    Button(action: cloneDeck) {
+                        Label("Clone Deck", systemImage: "doc.on.doc")
+                    }
+                    .disabled(!appState.canCreateNewDeck)
+                } label: {
                     Label("Deck Settings", systemImage: "gearshape")
                 }
             }
@@ -66,6 +74,13 @@ struct DeckEditorView: View {
 
     private func syncSelectionWithAppState() {
         selectedCardIndex = appState.currentCardIndex
+    }
+
+    private func cloneDeck() {
+        if let deck = appState.currentDeck {
+            appState.cloneDeck(deck)
+            selectedCardIndex = 0
+        }
     }
 
     private func toggleOverlayPreview() {

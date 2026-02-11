@@ -244,6 +244,34 @@ final class AppState: ObservableObject {
         return true
     }
 
+    /// Clones the given deck with a new title and switches to it
+    @discardableResult
+    func cloneDeck(_ deck: Deck) -> Bool {
+        guard canCreateNewDeck else {
+            logger.info("Cannot clone deck - limit of \(Self.maxDecks) reached")
+            return false
+        }
+
+        var clone = Deck(title: "\(deck.title) Copy", cards: deck.cards.map { card in
+            Card(
+                layout: card.layout,
+                title: card.title,
+                notes: card.notes,
+                bullets: card.bullets,
+                caption: card.caption,
+                imageSlots: card.imageSlots
+            )
+        })
+        clone.currentCardIndex = 0
+        currentDeck = clone
+        decks.insert(clone, at: 0)
+        currentCardIndex = 0
+        selectedCardId = clone.cards.first?.id
+        overlayScrollOffset = .zero
+        saveDeck()
+        return true
+    }
+
     /// Switches to a different deck
     func switchToDeck(_ deck: Deck) {
         currentDeck = deck
