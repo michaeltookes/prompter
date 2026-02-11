@@ -44,7 +44,7 @@ Prompter/
 ### Deck & Card System
 - **Deck**: Collection of presenter cards with metadata
 - **Card**: Single presenter content unit with a specific layout
-- **LayoutType**: One of 5 templates (TITLE_BULLETS, IMAGE_TOP_NOTES, TWO_IMAGES_NOTES, GRID_2X2_CAPTION, FULL_BLEED_IMAGE_3_BULLETS)
+- **LayoutType**: One of 6 templates (TITLE_BULLETS, TITLE_NOTES, IMAGE_TOP_NOTES, TWO_IMAGES_NOTES, GRID_2X2_CAPTION, FULL_BLEED_IMAGE_3_BULLETS)
 - **AssetRef**: Reference to image file stored in Assets folder
 
 ### Overlay Window
@@ -84,16 +84,17 @@ struct Deck: Identifiable, Codable {
 struct Card: Identifiable, Codable {
     var id: UUID
     var layout: LayoutType
-    var title: String?        // For TITLE_BULLETS
+    var title: String?        // For TITLE_BULLETS and TITLE_NOTES
     var notes: String?        // For notes layouts
     var bullets: [String]?    // For bullet layouts
     var caption: String?      // For GRID_2X2_CAPTION
     var imageSlots: [AssetRef?]  // Size depends on layout
 }
 
-// 5 Layout Types with image slot counts
+// 6 Layout Types with image slot counts
 enum LayoutType: String, Codable {
     case titleBullets = "TITLE_BULLETS"           // 0 images
+    case titleNotes = "TITLE_NOTES"               // 0 images
     case imageTopNotes = "IMAGE_TOP_NOTES"        // 1 image
     case twoImagesNotes = "TWO_IMAGES_NOTES"      // 2 images
     case grid2x2Caption = "GRID_2X2_CAPTION"      // 4 images
@@ -163,8 +164,8 @@ The editor tokens use `NSColor.labelColor`, `NSColor.secondaryLabelColor`, and `
 ### Phase 2: Deck Editor & Layouts
 - Deck editor window (split view)
 - Card list sidebar with thumbnails
-- All 5 layout editor views
-- All 5 layout overlay renderers
+- All 6 layout editor views
+- All 6 layout overlay renderers
 - Image drag-and-drop handling
 - Asset management service
 

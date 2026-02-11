@@ -6,10 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-## [1.1.1] - 2026-02-10
+## [1.1.1] - 2026-02-11
+
+### Added
+- "Title + Notes" layout — 6th card template with title heading and free-form notes (no images)
+- Clone Deck option in deck settings gear menu (deep-copies all cards)
+- Inline deck title editing — click the deck name in the sidebar to rename in place
+- Collapsible deck list in sidebar replaces the popup dropdown menu
+- "+" button for creating new decks, aligned with the Cards row add button
+- Adaptive editor color tokens: `editorTextPrimary`, `editorTextSecondary`, `editorBorder`
+- Light Mode / Dark Mode color rules documented in CLAUDE.md
+
+### Changed
+- Deck settings gear icon now shows a dropdown menu (Rename, Clone Deck) instead of opening the rename sheet directly
+- Editor dividers use explicit `editorBorder` rectangles for better visibility on external screens
+- Removed the dropdown caret from the sidebar add-card "+" button
 
 ### Fixed
-- Sidebar text not visible in light mode in the Deck Editor
+- Editor text invisible in Light Mode — replaced hardcoded overlay colors with adaptive system colors across all editor views
+- Field borders invisible in Light Mode — replaced `Theme.divider` (white at 8% opacity) with `Theme.editorBorder` (`NSColor.separatorColor`)
 
 ## [1.1.0] - 2026-02-10
 
