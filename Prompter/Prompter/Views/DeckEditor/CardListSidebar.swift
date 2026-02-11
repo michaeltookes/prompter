@@ -99,6 +99,7 @@ struct CardListSidebar: View {
                     HStack {
                         Image(systemName: "trash")
                             .font(.system(size: 11))
+                            .accessibilityHidden(true)
                         Text("Delete Deck")
                             .font(.system(size: 11))
                     }
@@ -107,6 +108,8 @@ struct CardListSidebar: View {
                     .padding(.vertical, 10)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Delete deck")
+                .accessibilityHint("Deletes \(appState.currentDeck?.title ?? "the current deck") permanently")
                 .alert("Delete Deck", isPresented: $showDeleteConfirmation) {
                     Button("Cancel", role: .cancel) {}
                     Button("Delete", role: .destructive) {
@@ -147,6 +150,7 @@ struct CardListSidebar: View {
                         Image(systemName: "square.stack.3d.up")
                             .font(.system(size: 12))
                             .foregroundColor(Theme.accent)
+                            .accessibilityHidden(true)
 
                         if isEditingDeckTitle {
                             TextField("Deck name", text: $editingDeckTitle, onCommit: {
@@ -187,6 +191,7 @@ struct CardListSidebar: View {
                             .frame(width: 24, height: 24)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(isDeckListExpanded ? "Collapse deck list" : "Expand deck list")
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
@@ -211,6 +216,8 @@ struct CardListSidebar: View {
                 .buttonStyle(.plain)
                 .disabled(!appState.canCreateNewDeck)
                 .frame(width: 24, height: 24)
+                .accessibilityLabel("Add deck")
+                .accessibilityHint(appState.canCreateNewDeck ? "Creates a new deck" : "Maximum deck limit reached")
             }
 
             // Collapsible deck list
@@ -229,6 +236,7 @@ struct CardListSidebar: View {
                                         .font(.system(size: 10, weight: .bold))
                                         .foregroundColor(Theme.accent)
                                         .frame(width: 14)
+                                        .accessibilityHidden(true)
                                 } else {
                                     Spacer()
                                         .frame(width: 14)
@@ -249,6 +257,8 @@ struct CardListSidebar: View {
                             )
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel(deck.title)
+                        .accessibilityValue(deck.id == appState.currentDeck?.id ? "Selected" : "")
                     }
                 }
                 .padding(.leading, 4)
@@ -285,6 +295,8 @@ struct CardListSidebar: View {
             .menuStyle(.borderlessButton)
             .menuIndicator(.hidden)
             .frame(width: 24, height: 24)
+            .accessibilityLabel("Add card")
+            .accessibilityHint("Choose a layout type for the new card")
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -297,6 +309,7 @@ struct CardListSidebar: View {
             Image(systemName: "square.stack.3d.up.slash")
                 .font(.system(size: 40))
                 .foregroundColor(Theme.editorTextSecondary)
+                .accessibilityHidden(true)
 
             Text("No Cards")
                 .font(.system(size: Theme.captionFontSize, weight: .semibold))
@@ -309,6 +322,8 @@ struct CardListSidebar: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("No cards. Click the add button to add a card.")
     }
 
     // MARK: - Actions
@@ -411,6 +426,7 @@ struct CardListItem: View {
                     .font(.system(size: 16))
                     .foregroundColor(isSelected ? Theme.accent : Theme.editorTextSecondary)
                     .frame(width: 24)
+                    .accessibilityHidden(true)
 
                 // Card info
                 VStack(alignment: .leading, spacing: 2) {
@@ -448,6 +464,9 @@ struct CardListItem: View {
         }
         .buttonStyle(.plain)
         .onHover { isHovered = $0 }
+        .accessibilityLabel("\(cardTitle), \(card.layout.displayName)")
+        .accessibilityValue(isSelected ? "Selected, card \(index + 1)" : "Card \(index + 1)")
+        .accessibilityHint("Double-click to select")
         .contextMenu {
             Button(action: onDuplicate) {
                 Label("Duplicate", systemImage: "square.on.square")

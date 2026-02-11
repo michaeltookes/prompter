@@ -144,6 +144,7 @@ struct CardCanvasView: View {
                 Text("Card \(selectedIndex + 1) of \(deck.cards.count)")
                     .font(.system(size: Theme.footerFontSize, weight: .medium))
                     .foregroundColor(Theme.editorTextSecondary)
+                    .accessibilityLabel("Card \(selectedIndex + 1) of \(deck.cards.count)")
             }
         }
         .padding(.horizontal, 20)
@@ -174,6 +175,7 @@ struct CardCanvasView: View {
             Image(systemName: "square.dashed")
                 .font(.system(size: 48))
                 .foregroundColor(Theme.editorTextSecondary)
+                .accessibilityHidden(true)
 
             Text("No Card Selected")
                 .font(.system(size: Theme.titleFontSize, weight: .semibold))
@@ -183,6 +185,8 @@ struct CardCanvasView: View {
                 .font(.system(size: Theme.notesFontSize, weight: .regular))
                 .foregroundColor(Theme.editorTextSecondary.opacity(0.7))
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("No card selected. Select a card from the sidebar or create a new one.")
     }
 
     // MARK: - Bindings

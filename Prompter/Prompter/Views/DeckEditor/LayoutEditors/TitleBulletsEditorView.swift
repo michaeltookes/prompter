@@ -35,6 +35,7 @@ struct TitleBulletsEditorView: View {
                             .foregroundColor(Theme.accent)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Add bullet point")
                 }
 
                 if let bullets = card.bullets, !bullets.isEmpty {
@@ -43,6 +44,7 @@ struct TitleBulletsEditorView: View {
                             Image(systemName: "line.3.horizontal")
                                 .foregroundColor(Theme.editorTextSecondary)
                                 .font(.system(size: 12))
+                                .accessibilityHidden(true)
 
                             TextField("Bullet point...", text: bulletBinding(at: index))
                                 .textFieldStyle(.roundedBorder)
@@ -52,6 +54,7 @@ struct TitleBulletsEditorView: View {
                                     .foregroundColor(.red.opacity(0.7))
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("Remove bullet point \(index + 1)")
                         }
                     }
                 } else {

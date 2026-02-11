@@ -37,6 +37,7 @@ struct FullBleedBulletsEditorView: View {
                             .frame(width: 24, height: 24)
                             .background(Theme.accent.opacity(0.2))
                             .clipShape(Circle())
+                            .accessibilityHidden(true)
 
                         TextField("Bullet point \(index + 1)...", text: bulletBinding(at: index))
                             .textFieldStyle(.roundedBorder)

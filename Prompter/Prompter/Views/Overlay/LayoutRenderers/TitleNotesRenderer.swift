@@ -12,6 +12,7 @@ struct TitleNotesRenderer: View {
                 Text(title)
                     .font(.system(size: Theme.titleFontSize * fontScale, weight: .semibold))
                     .foregroundColor(Theme.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
             }
 
             // Notes

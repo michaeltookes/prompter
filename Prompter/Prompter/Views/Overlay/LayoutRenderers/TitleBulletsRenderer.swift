@@ -12,6 +12,7 @@ struct TitleBulletsRenderer: View {
                 Text(title)
                     .font(.system(size: Theme.titleFontSize * fontScale, weight: .semibold))
                     .foregroundColor(Theme.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
             }
 
             // Bullets
@@ -22,6 +23,7 @@ struct TitleBulletsRenderer: View {
                             Text("•")
                                 .font(.system(size: Theme.notesFontSize * fontScale, weight: .bold))
                                 .foregroundColor(Theme.accent)
+                                .accessibilityHidden(true)
 
                             Text(bullet)
                                 .font(.system(size: Theme.notesFontSize * fontScale))

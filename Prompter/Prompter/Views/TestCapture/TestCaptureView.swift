@@ -14,6 +14,7 @@ struct TestCaptureView: View {
                 Image(systemName: "eye.slash.circle.fill")
                     .font(.system(size: 48))
                     .foregroundColor(Theme.accent)
+                    .accessibilityHidden(true)
 
                 Text("Test Protected Mode")
                     .font(.system(size: Theme.titleFontSize, weight: .semibold))
@@ -28,16 +29,20 @@ struct TestCaptureView: View {
                 HStack {
                     Image(systemName: appState.isProtectedModeEnabled ? "checkmark.circle.fill" : "xmark.circle.fill")
                         .foregroundColor(appState.isProtectedModeEnabled ? .green : .red)
+                        .accessibilityHidden(true)
                     Text("Protected Mode: \(appState.isProtectedModeEnabled ? "Enabled" : "Disabled")")
                         .font(.system(size: Theme.notesFontSize, weight: .medium))
                 }
+                .accessibilityElement(children: .combine)
 
                 HStack {
                     Image(systemName: appState.isOverlayVisible ? "checkmark.circle.fill" : "minus.circle.fill")
                         .foregroundColor(appState.isOverlayVisible ? .green : .orange)
+                        .accessibilityHidden(true)
                     Text("Overlay: \(appState.isOverlayVisible ? "Visible" : "Hidden")")
                         .font(.system(size: Theme.notesFontSize, weight: .medium))
                 }
+                .accessibilityElement(children: .combine)
             }
             .foregroundColor(Theme.textPrimary)
 
@@ -109,6 +114,7 @@ struct TestCaptureView: View {
                 .frame(width: 20, height: 20)
                 .background(Theme.accent.opacity(0.2))
                 .clipShape(Circle())
+                .accessibilityLabel("Step \(number)")
 
             Text(text)
                 .font(.system(size: Theme.captionFontSize))

@@ -3,7 +3,7 @@ import Foundation
 /// A single presenter card with layout-specific content.
 ///
 /// Cards are the atomic unit of presenter notes. Each card:
-/// - Uses one of 5 layout templates
+/// - Uses one of 6 layout templates
 /// - Contains text and/or images appropriate to that layout
 /// - Is displayed one at a time in the overlay
 struct Card: Identifiable, Codable, Equatable {
@@ -45,6 +45,22 @@ struct Card: Identifiable, Codable, Equatable {
             imageSlots = newValue
             updatedAt = Date()
         }
+    }
+
+    /// Summary description for screen readers
+    var accessibilitySummary: String {
+        var parts: [String] = [layout.accessibilityDescription]
+        if let title = title, !title.isEmpty {
+            parts.append("titled \(title)")
+        }
+        if let bullets = bullets, !bullets.isEmpty {
+            parts.append("\(bullets.count) bullet\(bullets.count == 1 ? "" : "s")")
+        }
+        let imageCount = imageSlots.compactMap { $0 }.count
+        if imageCount > 0 {
+            parts.append("\(imageCount) image\(imageCount == 1 ? "" : "s")")
+        }
+        return parts.joined(separator: ", ")
     }
 
     // MARK: - Initialization

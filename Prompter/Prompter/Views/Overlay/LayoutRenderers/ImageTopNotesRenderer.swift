@@ -39,6 +39,7 @@ struct OverlayImageView: View {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
+                    .accessibilityLabel("Slide image")
             } else {
                 Rectangle()
                     .fill(Theme.dropZoneBackground)
@@ -46,6 +47,7 @@ struct OverlayImageView: View {
                         ProgressView()
                             .scaleEffect(0.8)
                     )
+                    .accessibilityLabel("Loading image")
             }
         }
         .onAppear { loadImage() }

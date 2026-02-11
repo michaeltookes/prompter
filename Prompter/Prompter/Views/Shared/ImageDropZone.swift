@@ -47,6 +47,8 @@ struct ImageDropZone: View {
                         }
                         .buttonStyle(.plain)
                         .padding(8)
+                        .accessibilityLabel("Remove image")
+                        .accessibilityHint("Removes this image from the card")
                     }
             } else {
                 // Empty state
@@ -54,6 +56,7 @@ struct ImageDropZone: View {
                     Image(systemName: "photo.badge.plus")
                         .font(.system(size: 32))
                         .foregroundColor(isTargeted ? Theme.accent : Theme.textSecondary)
+                        .accessibilityHidden(true)
 
                     Text(placeholder)
                         .font(.system(size: Theme.captionFontSize))
@@ -65,6 +68,8 @@ struct ImageDropZone: View {
             handleDrop(providers: providers)
         }
         .animation(.easeInOut(duration: 0.15), value: isTargeted)
+        .accessibilityLabel(assetRef != nil ? "Image slot with image" : placeholder)
+        .accessibilityHint("Drag and drop an image file to add it")
     }
 
     /// Handles dropped items
@@ -129,12 +134,14 @@ struct AssetImageView: View {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+                    .accessibilityLabel("Card image")
             } else if loadFailed {
                 // Show error state with retry option
                 VStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.system(size: 24))
                         .foregroundColor(Theme.textSecondary)
+                        .accessibilityHidden(true)
                     Text("Failed to load")
                         .font(.system(size: Theme.captionFontSize))
                         .foregroundColor(Theme.textSecondary)
@@ -144,6 +151,7 @@ struct AssetImageView: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(Theme.accent)
+                    .accessibilityLabel("Retry loading image")
                 }
             } else {
                 ProgressView()
