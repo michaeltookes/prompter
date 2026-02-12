@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-02-11
+
+### Added
+- Full accessibility support across all four phases:
+  - VoiceOver announcements for all hotkey-driven state changes (overlay, timer, cards, font size, opacity)
+  - VoiceOver labels and hints on all interactive controls (~40+ elements)
+  - Keyboard navigation: "Browse" button on image drop zones, "Move Up/Down" context menu for card reordering, bullet reorder buttons, auto-focus on new bullet fields
+  - Dynamic Type in editor sidebar and overlay footer for scalable text
+- Window accessibility roles and titles for OverlayWindow, EditorWindow, and panel windows
+
+### Changed
+- Renamed "Presenter Overlay" to "Prompter" throughout the UI (window titles, menu items, VoiceOver labels)
+- Replaced decorative drag handle icons on bullet points with functional move up/down buttons
+- Editor sidebar and overlay footer fonts now use Dynamic Type text styles instead of hardcoded sizes
+
+### Removed
+- Unused `Theme.smallSemibold` constant
+
 ## [1.1.1] - 2026-02-11
 
 ### Added
