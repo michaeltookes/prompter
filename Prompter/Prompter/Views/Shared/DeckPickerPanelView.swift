@@ -100,7 +100,7 @@ struct DeckPickerPanelView: View {
         .buttonStyle(.plain)
         .accessibilityLabel("\(deck.title), \(deck.cards.count) card\(deck.cards.count == 1 ? "" : "s")")
         .accessibilityValue(selectedIds.contains(deck.id) ? "Selected" : "Not selected")
-        .accessibilityHint("Double-click to toggle selection")
+        .accessibilityHint("Click to toggle selection")
     }
 
     // MARK: - Actions
