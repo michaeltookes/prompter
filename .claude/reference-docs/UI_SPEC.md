@@ -61,6 +61,12 @@ Controls at bottom:
 Duplicate
 Delete
 
+Context menu (right-click card):
+- Move Up (disabled at top)
+- Move Down (disabled at bottom)
+- Duplicate
+- Delete
+
 ---
 
 ### Main Editor Canvas
@@ -79,7 +85,7 @@ Top Toolbar:
 
 ### 1) Title + Bullets
 [ Title Field ]
-[ Bullet List (add/remove) ]
+[ Bullet List (add/remove/reorder via up/down buttons) ]
 
 ### 2) Title + Notes
 [ Title Field ]
@@ -107,3 +113,5 @@ Top Toolbar:
 All image slots:
 - Dashed glowing border when empty
 - Drag highlight when hovering file
+- "Browse" button in empty state opens file picker (fileImporter)
+- Remove button (x) overlay on existing images

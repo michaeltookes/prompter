@@ -2,6 +2,7 @@
 
 ## User Actions
 - Drag & drop images into card slots
+- Click "Browse" button in empty drop zone to select image via file picker
 - Paste image from clipboard into selected slot
 - Replace/remove image per slot
 

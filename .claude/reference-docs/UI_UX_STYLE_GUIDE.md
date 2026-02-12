@@ -41,12 +41,15 @@ Text: Soft white with hierarchy contrast
 Primary Font: SF Pro (system)
 Fallback: Helvetica Neue
 
-| Usage | Style |
-|------|------|
-| Card Title | 26–32pt Semibold |
-| Notes Text | 18–22pt Regular |
-| Caption | 16pt Regular |
-| Overlay Footer | 13pt Medium |
+| Usage | Style | Dynamic Type? |
+|------|------|--------------|
+| Card Title | 26–32pt Semibold | No (uses fontScale) |
+| Notes Text | 18–22pt Regular | No (uses fontScale) |
+| Caption | 16pt Regular | No (uses fontScale) |
+| Overlay Footer | 13pt Medium | Yes (`.footnote`) |
+| Editor Sidebar | 11–16pt varies | Yes (`.caption2`, `.footnote`, `.callout`) |
+
+**Dynamic Type**: Editor sidebar and overlay footer use SwiftUI text styles that scale with system accessibility settings. Overlay renderers keep hardcoded sizes with the `fontScale` multiplier for presenter-controlled scaling.
 
 Line spacing should be generous for readability at a distance.
 
