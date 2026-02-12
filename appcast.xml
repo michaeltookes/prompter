@@ -36,5 +36,21 @@
         length="2656798"
       />
     </item>
+    <item>
+      <title>Version 1.2.0</title>
+      <description><![CDATA[
+        <h2>What's New in 1.2.0</h2>
+      ]]></description>
+      <pubDate>Thu, 12 Feb 2026 14:53:51 -0600</pubDate>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <enclosure
+        url="https://github.com/michaeltookes/prompter/releases/download/v1.2.0/Prompter.zip"
+        type="application/octet-stream"
+        sparkle:version="4"
+        sparkle:shortVersionString="1.2.0"
+        sparkle:edSignature="bG/qb17O7/9eJLd7Huzmx1gOYeiUwirk55m3SUKnKDjx9MVSv+LgGHsAr03Xn0iz9m8g0IUi/ZS+jBp9PaQtBA=="
+        length="2707125"
+      />
+    </item>
   </channel>
 </rss>
