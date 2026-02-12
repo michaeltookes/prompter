@@ -48,6 +48,7 @@ The app is signed and notarized by Apple for Gatekeeper approval.
 - Cmd+Shift+O: Toggle Overlay
 - Cmd+Shift+← / Cmd+Shift+→: Previous / Next Card
 - Cmd+Shift+= / Cmd+Shift+-: Font Size Up / Down
+- Cmd+Shift+] / Cmd+Shift+[: Overlay Opacity Up / Down
 - Cmd+Shift+Up / Cmd+Shift+Down: Scroll within card notes (if overflow)
 - Cmd+Shift+C: Toggle Click-through Overlay
 - Cmd+Shift+P: Toggle Protected Mode
@@ -74,4 +75,3 @@ This project is licensed under the [MIT License](LICENSE).
 ## Disclaimer
 Capture protection is best-effort. Some capture tools or capture methods may still display the overlay.
 Always verify with the built-in "Test Capture Setup" screen before a live presentation.
-

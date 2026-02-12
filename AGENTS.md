@@ -7,7 +7,7 @@ Read this before making changes.
 ## Quick Start
 1. Read the relevant spec in `.claude/reference-docs/` before implementing.
 2. Follow the SwiftUI + AppKit hybrid architecture.
-3. Use Theme constants for styling; avoid hardcoded colors/sizes.
+3. Use Theme constants and dynamic values/tokens where available; avoid hardcoded literals (colors, sizes, timings, limits) when values can be derived from app state, system APIs, or shared config.
 4. Validate global hotkeys work system-wide (not just app-focused).
 5. Verify overlay behavior in fullscreen and across Spaces.
 6. Check the **backlog** document (maintained separately, not in repo) for prioritized planned work — ask the user for the file path when needed.
@@ -32,7 +32,7 @@ Prompter/
 ## Key Concepts
 - Deck: collection of cards with metadata.
 - Card: single presenter content unit with layout.
-- LayoutType: five templates (TITLE_BULLETS, IMAGE_TOP_NOTES, TWO_IMAGES_NOTES,
+- LayoutType: six templates (TITLE_BULLETS, TITLE_NOTES, IMAGE_TOP_NOTES, TWO_IMAGES_NOTES,
   GRID_2X2_CAPTION, FULL_BLEED_IMAGE_3_BULLETS).
 - AssetRef: reference to images stored in Assets folder.
 - Overlay window: borderless, floating, all Spaces, click-through, Protected Mode.
@@ -44,6 +44,8 @@ Prompter/
 - Up/Down: scroll overlay content
 - C: toggle click-through
 - P: toggle Protected Mode
+- ] / [: increase/decrease overlay opacity
+- T: start/pause/resume timer
 
 ## Storage Layout
 ~/Library/Application Support/Prompter/
@@ -82,4 +84,5 @@ All reference docs live in `.claude/reference-docs/`:
 3. LSUIElement must remain YES in Info.plist.
 4. Accessibility permissions are required for hotkeys. The app auto-prompts and retries after 5 seconds.
 5. Auto-save uses a 0.5s debouncer.
-6. Sparkle auto-update is integrated (Info.plist has placeholder keys — replace before shipping).
+6. Sparkle auto-update is configured. Keep SUEnableAutomaticChecks aligned with valid SUFeedURL/SUPublicEDKey values (disable only when placeholders are used).
+7. Prefer dynamic values over hardcoded constants whenever possible (theme tokens, system colors, derived counts, and centralized config values).

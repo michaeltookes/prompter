@@ -9,7 +9,7 @@
 When working on this project:
 1. Read the relevant spec file in `.claude/reference-docs/` before implementing a feature
 2. Follow the SwiftUI/AppKit hybrid architecture pattern
-3. Use the established Theme constants for all UI styling
+3. Use established Theme constants and dynamic values/tokens where possible; avoid hardcoded literals when values can be derived from state, system APIs, or shared config
 4. Test hotkeys work system-wide (not just when app is focused)
 5. Verify overlay behavior in fullscreen and across Spaces
 6. Check the **backlog** document (maintained separately, not in repo) for prioritized planned work — ask the user for the file path if you don't already have it in context.
@@ -115,10 +115,15 @@ let divider = Color.white.opacity(0.08)                 // ⚠️ OVERLAY ONLY
 let accentGlow = Color(hex: "5DA9FF").opacity(0.35)
 
 // Typography (SF Pro)
+// Overlay renderers use hardcoded sizes with fontScale multiplier — keep as-is
 let titleSize = 26-32pt Semibold
 let notesSize = 18-22pt Regular
 let captionSize = 16pt Regular
 let footerSize = 13pt Medium
+
+// Editor sidebar & overlay footer use Dynamic Type (v1.2.0+)
+// .caption2 (11pt), .footnote (13pt), .callout (16pt), etc.
+// These scale with user accessibility settings
 
 // Corner Radii
 let overlayWindow = 18px
@@ -197,6 +202,15 @@ All reference specs live in `.claude/reference-docs/`.
 | .claude/reference-docs/IMAGE_HANDLING.md | Asset import workflow |
 | .claude/reference-docs/ENGINEERING_NOTES.md | Tech stack and strategies |
 
+## Accessibility (v1.2.0+)
+
+The app has full accessibility support across four areas:
+
+1. **VoiceOver Announcements**: All hotkey-driven state changes (overlay toggle, card navigation, timer, font size, opacity, click-through, Protected Mode) are announced via `postAccessibilityAnnouncement()` in AppState.
+2. **VoiceOver Labels**: All interactive controls have `.accessibilityLabel()` and `.accessibilityHint()`. `LayoutType` has `accessibilityDescription`, `Card` has `accessibilitySummary`.
+3. **Keyboard Navigation**: Image drop zones have a "Browse" button (fileImporter). Cards have "Move Up/Down" context menu items. Bullets have reorder buttons. New bullets auto-focus via `@FocusState`.
+4. **Dynamic Type**: Editor sidebar (`CardListSidebar`) and overlay footer (`OverlayFooterView`) use SwiftUI Dynamic Type text styles (`.caption2`, `.footnote`, `.callout`). Overlay renderers keep hardcoded sizes with `fontScale` multiplier.
+
 ## Testing Checklist
 
 - [ ] App launches as menu bar only (no dock icon)
@@ -206,6 +220,9 @@ All reference specs live in `.claude/reference-docs/`.
 - [ ] Protected Mode excludes overlay from screen capture
 - [ ] Decks persist across app restarts
 - [ ] Images render correctly in all layouts
+- [ ] VoiceOver reads all controls correctly
+- [ ] Browse button opens file picker in empty image drop zones
+- [ ] Move Up/Down works in card context menu and bullet reorder buttons
 
 ## Release Configuration
 
@@ -248,3 +265,5 @@ Referenced by the `/release-prep` skill:
 5. **Accessibility Permissions**: Required for global hotkeys (CGEvent tap). The app prompts the user on first launch and retries registration after 5 seconds.
 
 6. **Auto-Save**: Use 0.5s debouncer to avoid excessive disk writes during editing.
+
+7. **No Hardcoded Values**: Never hardcode values when a dynamic or system-provided alternative exists. Use Dynamic Type text styles (`.footnote`, `.caption2`, etc.) instead of `.system(size: N)` in editor and footer views. Use `NSColor.labelColor` / `NSColor.secondaryLabelColor` instead of hardcoded color hex values for system-context views. Use system-provided constants, enum cases, and configuration values rather than magic numbers or string literals. The only exception is overlay renderers, which intentionally use hardcoded sizes scaled by the `fontScale` multiplier.

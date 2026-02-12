@@ -46,6 +46,8 @@ During a demo, you can't be clicking around. Everything works via keyboard short
 | `Cmd+Shift+P` | Toggle Protected Mode |
 | `Cmd+Shift+=` | Increase text size |
 | `Cmd+Shift+-` | Decrease text size |
+| `Cmd+Shift+]` | Increase overlay opacity |
+| `Cmd+Shift+[` | Decrease overlay opacity |
 | `Cmd+Shift+T` | Start / Pause / Resume timer |
 
 These shortcuts work **even when other apps are focused** - you don't need to click on the overlay first.

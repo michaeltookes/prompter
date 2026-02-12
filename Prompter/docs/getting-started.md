@@ -34,7 +34,7 @@ When you first launch Prompter:
 
 1. **Verify Protected Mode**: Look for the blue shield icon in the overlay footer
    - If you see a yellow warning triangle, press `Cmd+Shift+P` to enable it
-2. **Test**: Menu → "Test Protected Mode..." to verify it's working
+2. **Test**: Menu → "Test Capture Setup..." to verify it's working
 3. **Position**: Place the overlay where it won't distract you but is easy to read
 
 ## During Your Presentation

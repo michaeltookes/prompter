@@ -103,6 +103,8 @@ All shortcuts use **Cmd+Shift** plus another key:
 | Cmd+Shift+← | Previous card |
 | Cmd+Shift+= | Increase font size |
 | Cmd+Shift+- | Decrease font size |
+| Cmd+Shift+] | Increase overlay opacity |
+| Cmd+Shift+[ | Decrease overlay opacity |
 | Cmd+Shift+↑ | Scroll up (if content overflows) |
 | Cmd+Shift+↓ | Scroll down |
 | Cmd+Shift+C | Toggle click-through mode |
@@ -115,7 +117,7 @@ All shortcuts use **Cmd+Shift** plus another key:
 
 ## Before Your First Demo
 
-### Test Protected Mode
+### Test Capture Setup
 
 1. Open the menu and click **"Test Capture Setup..."**
 2. Follow the instructions to start a test call
@@ -156,7 +158,7 @@ All shortcuts use **Cmd+Shift** plus another key:
 
 ### Always Test First
 - Every screen sharing setup is slightly different
-- Test Protected Mode before important calls
+- Run Test Capture Setup before important calls
 - Have a backup plan (share window instead of screen)
 
 ---
