@@ -35,6 +35,7 @@ struct Grid2x2CaptionRenderer: View {
         if card.images.count > index,
            let assetRef = card.images[index] {
             OverlayImageView(assetRef: assetRef)
+                .accessibilityLabel("Grid image \(index + 1)")
         } else {
             RoundedRectangle(cornerRadius: Theme.imageCornerRadius - 4)
                 .fill(Theme.dropZoneBackground)
@@ -42,7 +43,9 @@ struct Grid2x2CaptionRenderer: View {
                     Text("\(index + 1)")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(Theme.textSecondary.opacity(0.5))
+                        .accessibilityHidden(true)
                 )
+                .accessibilityLabel("Empty image slot \(index + 1)")
         }
     }
 }

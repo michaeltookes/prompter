@@ -19,6 +19,9 @@ struct ImageDropZone: View {
     /// Whether the zone is currently being hovered over
     @State private var isTargeted = false
 
+    /// Whether the file picker is shown
+    @State private var showFilePicker = false
+
     var body: some View {
         ZStack {
             // Background
@@ -47,6 +50,8 @@ struct ImageDropZone: View {
                         }
                         .buttonStyle(.plain)
                         .padding(8)
+                        .accessibilityLabel("Remove image")
+                        .accessibilityHint("Removes this image from the card")
                     }
             } else {
                 // Empty state
@@ -54,10 +59,24 @@ struct ImageDropZone: View {
                     Image(systemName: "photo.badge.plus")
                         .font(.system(size: 32))
                         .foregroundColor(isTargeted ? Theme.accent : Theme.textSecondary)
+                        .accessibilityHidden(true)
 
                     Text(placeholder)
                         .font(.system(size: Theme.captionFontSize))
                         .foregroundColor(Theme.textSecondary)
+
+                    Button(action: { showFilePicker = true }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "folder")
+                                .font(.system(size: 12))
+                            Text("Browse")
+                                .font(.system(size: Theme.captionFontSize))
+                        }
+                        .foregroundColor(Theme.accent)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Browse for image")
+                    .accessibilityHint("Opens a file picker to select an image")
                 }
             }
         }
@@ -65,6 +84,24 @@ struct ImageDropZone: View {
             handleDrop(providers: providers)
         }
         .animation(.easeInOut(duration: 0.15), value: isTargeted)
+        .fileImporter(
+            isPresented: $showFilePicker,
+            allowedContentTypes: [.image],
+            allowsMultipleSelection: false
+        ) { result in
+            if case .success(let urls) = result, let url = urls.first {
+                Task.detached(priority: .userInitiated) {
+                    let ref = await AssetManager.shared.importImageAsync(from: url)
+                    await MainActor.run {
+                        if let ref = ref {
+                            self.assetRef = ref
+                        }
+                    }
+                }
+            }
+        }
+        .accessibilityLabel(assetRef != nil ? "Image slot with image" : placeholder)
+        .accessibilityHint("Drag and drop an image or click Browse to add one")
     }
 
     /// Handles dropped items
@@ -129,12 +166,14 @@ struct AssetImageView: View {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+                    .accessibilityLabel("Card image")
             } else if loadFailed {
                 // Show error state with retry option
                 VStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.system(size: 24))
                         .foregroundColor(Theme.textSecondary)
+                        .accessibilityHidden(true)
                     Text("Failed to load")
                         .font(.system(size: Theme.captionFontSize))
                         .foregroundColor(Theme.textSecondary)
@@ -144,6 +183,7 @@ struct AssetImageView: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(Theme.accent)
+                    .accessibilityLabel("Retry loading image")
                 }
             } else {
                 ProgressView()

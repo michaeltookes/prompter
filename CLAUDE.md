@@ -207,6 +207,34 @@ All reference specs live in `.claude/reference-docs/`.
 - [ ] Decks persist across app restarts
 - [ ] Images render correctly in all layouts
 
+## Release Configuration
+
+Referenced by the `/release-prep` skill:
+
+| Key | Value |
+|-----|-------|
+| Release branch | `main` |
+| Version file | `Prompter/Prompter/Resources/Info.plist` |
+| Version keys | `CFBundleShortVersionString`, `CFBundleVersion` |
+| Additional version file | `Prompter/Prompter.xcodeproj/project.pbxproj` — update `MARKETING_VERSION` (4 occurrences) and `CURRENT_PROJECT_VERSION` (4 occurrences) to match Info.plist |
+| Changelog | `CHANGELOG.md` (Keep a Changelog format) |
+| Build script | `cd Prompter && ./scripts/build-release.sh` |
+| Notarize script | `cd Prompter && ./scripts/notarize.sh` |
+| DMG script | `cd Prompter && ./scripts/create-dmg.sh` |
+| Publish script | `cd Prompter && ./scripts/publish-release.sh` (signs zip with EdDSA, updates appcast, commits/pushes, creates GitHub Release) |
+| Release artifacts | `Prompter/dist/Prompter.zip`, `Prompter/dist/Prompter.dmg` |
+| Tag format | `v{VERSION}` |
+| Asset naming | `Prompter.zip`, `Prompter.dmg` (no version in filename) |
+| GitHub repo | `michaeltookes/prompter` |
+| Sparkle appcast script | Handled by `publish-release.sh` |
+| Sparkle appcast URL | `https://michaeltookes.github.io/prompter/appcast.xml` |
+| Sparkle appcast file | `appcast.xml` (repo root, served by GitHub Pages from `main`) |
+| Homebrew tap location | `~/Desktop/homebrew-prompter/` |
+| Homebrew cask file | `Casks/prompter.rb` |
+| Homebrew cask URL template | `https://github.com/michaeltookes/prompter/releases/download/v{VERSION}/Prompter.dmg` |
+| Notarization keychain profile | `Prompter-Notarize` (hardcoded in `notarize.sh`) |
+| Validation script | *Not yet implemented* |
+
 ## Important Notes
 
 1. **Protected Mode is Best-Effort**: `NSWindow.sharingType = .none` may not work with all capture tools. Always include a disclaimer and test instructions.

@@ -23,6 +23,10 @@ final class ThemedPanelWindow: NSPanel {
         self.isReleasedWhenClosed = false
         self.titlebarAppearsTransparent = true
         self.center()
+
+        // Accessibility
+        self.setAccessibilityRole(.sheet)
+        self.setAccessibilityLabel(title)
     }
 
     /// Applies dark appearance to content without affecting window chrome (keeps close button red).

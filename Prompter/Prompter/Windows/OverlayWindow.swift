@@ -57,6 +57,11 @@ final class OverlayWindow: NSWindow {
 
         // Default Protected Mode (attempt to hide from capture)
         self.sharingType = .none
+
+        // Accessibility
+        self.setAccessibilityRole(.popover)
+        self.setAccessibilityLabel("Prompter overlay")
+        self.setAccessibilityHelp("Floating presenter notes window. Use Cmd+Shift+O to toggle visibility.")
     }
 
     // MARK: - Public API

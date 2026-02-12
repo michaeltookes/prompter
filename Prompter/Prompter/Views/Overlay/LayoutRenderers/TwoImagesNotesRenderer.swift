@@ -46,7 +46,9 @@ struct TwoImagesNotesRenderer: View {
                 Image(systemName: "photo")
                     .font(.system(size: 24))
                     .foregroundColor(Theme.textSecondary)
+                    .accessibilityHidden(true)
             )
+            .accessibilityLabel("Empty image slot")
     }
 }
 

@@ -36,6 +36,8 @@ struct TimeInputPanelView: View {
                     .onChange(of: timeText) { _, _ in
                         isInvalid = false
                     }
+                    .accessibilityLabel("Time duration")
+                    .accessibilityHint("Enter time in minutes and seconds, like 5:00")
 
                 if isInvalid {
                     Text("Enter a valid time (e.g. 5:00)")

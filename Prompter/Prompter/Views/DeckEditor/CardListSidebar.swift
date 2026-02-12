@@ -58,7 +58,9 @@ struct CardListSidebar: View {
                                     isSelected: index == selectedIndex,
                                     onSelect: { selectedIndex = index },
                                     onDelete: { deleteCard(at: index) },
-                                    onDuplicate: { duplicateCard(at: index) }
+                                    onDuplicate: { duplicateCard(at: index) },
+                                    onMoveUp: index > 0 ? { reorderCard(from: index, to: index - 1) } : nil,
+                                    onMoveDown: index < deck.cards.count - 1 ? { reorderCard(from: index, to: index + 2) } : nil
                                 )
                                 .id(card.id)
                                 .onDrag {
@@ -98,15 +100,18 @@ struct CardListSidebar: View {
                 Button(action: { showDeleteConfirmation = true }) {
                     HStack {
                         Image(systemName: "trash")
-                            .font(.system(size: 11))
+                            .font(.caption2)
+                            .accessibilityHidden(true)
                         Text("Delete Deck")
-                            .font(.system(size: 11))
+                            .font(.caption2)
                     }
                     .foregroundColor(.red.opacity(0.8))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Delete deck")
+                .accessibilityHint("Deletes \(appState.currentDeck?.title ?? "the current deck") permanently")
                 .alert("Delete Deck", isPresented: $showDeleteConfirmation) {
                     Button("Cancel", role: .cancel) {}
                     Button("Delete", role: .destructive) {
@@ -128,13 +133,13 @@ struct CardListSidebar: View {
             // Header row
             HStack {
                 Text("Deck")
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.caption2.weight(.medium))
                     .foregroundColor(Theme.editorTextSecondary)
 
                 Spacer()
 
                 Text("\(appState.decks.count)/\(AppState.maxDecks)")
-                    .font(.system(size: 10))
+                    .font(.caption2)
                     .foregroundColor(Theme.editorTextSecondary.opacity(0.7))
             }
 
@@ -145,21 +150,22 @@ struct CardListSidebar: View {
                     // Icon + title area (click to rename)
                     HStack {
                         Image(systemName: "square.stack.3d.up")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(Theme.accent)
+                            .accessibilityHidden(true)
 
                         if isEditingDeckTitle {
                             TextField("Deck name", text: $editingDeckTitle, onCommit: {
                                 commitDeckTitleEdit()
                             })
-                            .font(Theme.footerMedium)
+                            .font(.footnote.weight(.medium))
                             .textFieldStyle(.plain)
                             .onExitCommand {
                                 isEditingDeckTitle = false
                             }
                         } else {
                             Text(appState.currentDeck?.title ?? "Select Deck")
-                                .font(Theme.footerMedium)
+                                .font(.footnote.weight(.medium))
                                 .foregroundColor(Theme.editorTextPrimary)
                                 .lineLimit(1)
                                 .onTapGesture {
@@ -181,12 +187,13 @@ struct CardListSidebar: View {
                         }
                     }) {
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 10, weight: .semibold))
+                            .font(.caption2.weight(.semibold))
                             .foregroundColor(Theme.editorTextSecondary)
                             .rotationEffect(.degrees(isDeckListExpanded ? 90 : 0))
                             .frame(width: 24, height: 24)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(isDeckListExpanded ? "Collapse deck list" : "Expand deck list")
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
@@ -205,12 +212,14 @@ struct CardListSidebar: View {
                 // Add deck button
                 Button(action: { showNewDeckDialog = true }) {
                     Image(systemName: "plus")
-                        .font(.system(size: Theme.footerFontSize, weight: .medium))
+                        .font(.footnote.weight(.medium))
                         .foregroundColor(appState.canCreateNewDeck ? Theme.editorTextPrimary : Theme.editorTextSecondary.opacity(0.4))
                 }
                 .buttonStyle(.plain)
                 .disabled(!appState.canCreateNewDeck)
                 .frame(width: 24, height: 24)
+                .accessibilityLabel("Add deck")
+                .accessibilityHint(appState.canCreateNewDeck ? "Creates a new deck" : "Maximum deck limit reached")
             }
 
             // Collapsible deck list
@@ -226,16 +235,17 @@ struct CardListSidebar: View {
                             HStack(spacing: 8) {
                                 if deck.id == appState.currentDeck?.id {
                                     Image(systemName: "checkmark")
-                                        .font(.system(size: 10, weight: .bold))
+                                        .font(.caption2.weight(.bold))
                                         .foregroundColor(Theme.accent)
                                         .frame(width: 14)
+                                        .accessibilityHidden(true)
                                 } else {
                                     Spacer()
                                         .frame(width: 14)
                                 }
 
                                 Text(deck.title)
-                                    .font(Theme.footerMedium)
+                                    .font(.footnote.weight(.medium))
                                     .foregroundColor(deck.id == appState.currentDeck?.id ? Theme.accent : Theme.editorTextPrimary)
                                     .lineLimit(1)
 
@@ -249,6 +259,8 @@ struct CardListSidebar: View {
                             )
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel(deck.title)
+                        .accessibilityValue(deck.id == appState.currentDeck?.id ? "Selected" : "")
                     }
                 }
                 .padding(.leading, 4)
@@ -265,7 +277,7 @@ struct CardListSidebar: View {
     private var sidebarHeader: some View {
         HStack {
             Text("Cards")
-                .font(.system(size: Theme.captionFontSize, weight: .semibold))
+                .font(.callout.weight(.semibold))
                 .foregroundColor(Theme.editorTextPrimary)
 
             Spacer()
@@ -279,12 +291,14 @@ struct CardListSidebar: View {
                 }
             } label: {
                 Image(systemName: "plus")
-                    .font(.system(size: Theme.footerFontSize, weight: .medium))
+                    .font(.footnote.weight(.medium))
                     .foregroundColor(Theme.accent)
             }
             .menuStyle(.borderlessButton)
             .menuIndicator(.hidden)
             .frame(width: 24, height: 24)
+            .accessibilityLabel("Add card")
+            .accessibilityHint("Choose a layout type for the new card")
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -297,18 +311,21 @@ struct CardListSidebar: View {
             Image(systemName: "square.stack.3d.up.slash")
                 .font(.system(size: 40))
                 .foregroundColor(Theme.editorTextSecondary)
+                .accessibilityHidden(true)
 
             Text("No Cards")
-                .font(.system(size: Theme.captionFontSize, weight: .semibold))
+                .font(.callout.weight(.semibold))
                 .foregroundColor(Theme.editorTextSecondary)
 
             Text("Click + to add a card")
-                .font(.system(size: Theme.footerFontSize, weight: .regular))
+                .font(.footnote)
                 .foregroundColor(Theme.editorTextSecondary.opacity(0.7))
 
             Spacer()
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("No cards. Click the add button to add a card.")
     }
 
     // MARK: - Actions
@@ -400,6 +417,8 @@ struct CardListItem: View {
     let onSelect: () -> Void
     let onDelete: () -> Void
     let onDuplicate: () -> Void
+    var onMoveUp: (() -> Void)?
+    var onMoveDown: (() -> Void)?
 
     @State private var isHovered = false
 
@@ -408,19 +427,20 @@ struct CardListItem: View {
             HStack(spacing: 10) {
                 // Layout icon
                 Image(systemName: card.layout.iconName)
-                    .font(.system(size: 16))
+                    .font(.callout)
                     .foregroundColor(isSelected ? Theme.accent : Theme.editorTextSecondary)
                     .frame(width: 24)
+                    .accessibilityHidden(true)
 
                 // Card info
                 VStack(alignment: .leading, spacing: 2) {
                     Text(cardTitle)
-                        .font(.system(size: 13, weight: .medium))
+                        .font(.footnote.weight(.medium))
                         .foregroundColor(Theme.editorTextPrimary)
                         .lineLimit(1)
 
                     Text(card.layout.displayName)
-                        .font(.system(size: 11))
+                        .font(.caption2)
                         .foregroundColor(Theme.editorTextSecondary)
                 }
 
@@ -428,7 +448,7 @@ struct CardListItem: View {
 
                 // Card number
                 Text("\(index + 1)")
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.caption2.weight(.medium))
                     .foregroundColor(Theme.editorTextSecondary)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
@@ -448,11 +468,25 @@ struct CardListItem: View {
         }
         .buttonStyle(.plain)
         .onHover { isHovered = $0 }
+        .accessibilityLabel("\(cardTitle), \(card.layout.displayName)")
+        .accessibilityValue(isSelected ? "Selected, card \(index + 1)" : "Card \(index + 1)")
+        .accessibilityHint("Double-click to select")
         .contextMenu {
+            if let onMoveUp = onMoveUp {
+                Button(action: onMoveUp) {
+                    Label("Move Up", systemImage: "arrow.up")
+                }
+            }
+            if let onMoveDown = onMoveDown {
+                Button(action: onMoveDown) {
+                    Label("Move Down", systemImage: "arrow.down")
+                }
+            }
+            Divider()
             Button(action: onDuplicate) {
                 Label("Duplicate", systemImage: "square.on.square")
             }
-            Rectangle().fill(Theme.editorBorder).frame(height: 1)
+            Divider()
             Button(role: .destructive, action: onDelete) {
                 Label("Delete", systemImage: "trash")
             }

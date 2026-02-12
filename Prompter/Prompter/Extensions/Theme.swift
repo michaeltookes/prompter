@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Theme constants for Presenter Overlay.
+/// Theme constants for Prompter.
 ///
 /// These values come from the UI/UX Style Guide and should be used
 /// throughout the app for consistent styling. Never hardcode colors
@@ -110,7 +110,6 @@ enum Theme {
     static let note = Font.system(size: noteFontSize, weight: .regular, design: .default)
     static let caption = Font.system(size: captionFontSize, weight: .regular, design: .default)
     static let footerMedium = Font.system(size: footerFontSize, weight: .medium, design: .default)
-    static let smallSemibold = Font.system(size: footerFontSize, weight: .semibold, design: .default)
 
     // MARK: - Shadows
 

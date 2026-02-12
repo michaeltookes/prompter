@@ -75,6 +75,7 @@ struct DeckPickerPanelView: View {
                 Image(systemName: selectedIds.contains(deck.id) ? "checkmark.square.fill" : "square")
                     .font(.system(size: Theme.captionFontSize))
                     .foregroundColor(selectedIds.contains(deck.id) ? Theme.accent : Theme.textSecondary)
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(deck.title)
@@ -97,6 +98,9 @@ struct DeckPickerPanelView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("\(deck.title), \(deck.cards.count) card\(deck.cards.count == 1 ? "" : "s")")
+        .accessibilityValue(selectedIds.contains(deck.id) ? "Selected" : "Not selected")
+        .accessibilityHint("Click to toggle selection")
     }
 
     // MARK: - Actions

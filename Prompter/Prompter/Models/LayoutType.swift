@@ -124,4 +124,18 @@ enum LayoutType: String, Codable, CaseIterable, Identifiable, Equatable {
         default:                return false
         }
     }
+
+    // MARK: - Accessibility
+
+    /// Description for screen readers explaining what this layout contains
+    var accessibilityDescription: String {
+        switch self {
+        case .titleBullets:     return "Title with bullet points"
+        case .titleNotes:       return "Title with notes"
+        case .imageTopNotes:    return "Image with notes below"
+        case .twoImagesNotes:   return "Two side-by-side images with notes"
+        case .grid2x2Caption:   return "Four images in a grid with caption"
+        case .fullBleedBullets: return "Full image with three bullet points"
+        }
+    }
 }

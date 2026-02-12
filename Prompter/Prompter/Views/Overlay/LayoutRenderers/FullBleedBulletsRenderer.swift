@@ -22,7 +22,9 @@ struct FullBleedBulletsRenderer: View {
                         Image(systemName: "photo.fill")
                             .font(.system(size: 32))
                             .foregroundColor(Theme.textSecondary.opacity(0.5))
+                            .accessibilityHidden(true)
                     )
+                    .accessibilityLabel("Empty image")
             }
 
             // 3 Bullets
@@ -37,6 +39,7 @@ struct FullBleedBulletsRenderer: View {
                                 .frame(width: 22, height: 22)
                                 .background(Theme.accent.opacity(0.2))
                                 .clipShape(Circle())
+                                .accessibilityHidden(true)
 
                             Text(bullet)
                                 .font(.system(size: Theme.notesFontSize * fontScale))

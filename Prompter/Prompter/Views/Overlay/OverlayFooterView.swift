@@ -9,30 +9,33 @@ struct OverlayFooterView: View {
         HStack {
             // Card position
             Text("Card \(appState.currentCardIndex + 1) / \(appState.totalCards)")
-                .font(.system(size: Theme.footerFontSize, weight: .medium))
+                .font(.footnote.weight(.medium))
                 .foregroundColor(Theme.textSecondary)
+                .accessibilityLabel("Card \(appState.currentCardIndex + 1) of \(appState.totalCards)")
 
             // Timer display
             if appState.isTimerActiveForCurrentDeck {
                 Text("|")
-                    .font(.system(size: Theme.footerFontSize))
+                    .font(.footnote)
                     .foregroundColor(Theme.textSecondary.opacity(0.3))
 
                 // Play/Pause button
                 Button(action: { appState.toggleTimerStartPause() }) {
                     Image(systemName: timerButtonIcon)
-                        .font(.system(size: Theme.footerFontSize))
+                        .font(.footnote)
                         .foregroundColor(Theme.accent)
                 }
                 .buttonStyle(.plain)
                 .help(timerButtonHelp)
+                .accessibilityLabel(timerButtonHelp)
 
                 // Countdown display
                 Text(appState.isTimerRunning || appState.timerSecondsRemaining > 0
                      ? appState.timerDisplayText
                      : formatTime(appState.effectivePerCardSeconds))
-                    .font(.system(size: Theme.footerFontSize, weight: .medium, design: .monospaced))
+                    .font(.system(.footnote, design: .monospaced, weight: .medium))
                     .foregroundColor(appState.isTimerWarning ? Theme.timerWarning : Theme.textSecondary)
+                    .accessibilityLabel("Timer: \(appState.isTimerRunning || appState.timerSecondsRemaining > 0 ? appState.timerDisplayText : formatTime(appState.effectivePerCardSeconds))")
                     .opacity(appState.isTimerWarning ? (warningPulse ? 0.4 : 1.0) : 1.0)
                     .animation(
                         appState.isTimerWarning
@@ -46,7 +49,7 @@ struct OverlayFooterView: View {
 
                 if appState.isTimerPaused {
                     Text("PAUSED")
-                        .font(Theme.smallSemibold)
+                        .font(.footnote.weight(.semibold))
                         .foregroundColor(Theme.accent.opacity(0.7))
                 }
             }
@@ -56,17 +59,21 @@ struct OverlayFooterView: View {
             // Opacity slider
             HStack(spacing: 6) {
                 Image(systemName: "circle.lefthalf.filled")
-                    .font(.system(size: 10))
+                    .font(.caption2)
                     .foregroundColor(Theme.textSecondary.opacity(0.7))
+                    .accessibilityHidden(true)
 
                 Slider(value: $appState.overlayOpacity, in: 0.3...1.0, step: 0.05)
                     .frame(width: 60)
                     .controlSize(.mini)
+                    .accessibilityLabel("Overlay opacity")
+                    .accessibilityValue("\(Int(appState.overlayOpacity * 100)) percent")
 
                 Text("\(Int(appState.overlayOpacity * 100))%")
-                    .font(.system(size: 10, weight: .medium))
+                    .font(.caption2.weight(.medium))
                     .foregroundColor(Theme.textSecondary.opacity(0.7))
                     .frame(width: 28, alignment: .trailing)
+                    .accessibilityHidden(true)
             }
             .help("Adjust overlay transparency")
 
@@ -84,13 +91,16 @@ struct OverlayFooterView: View {
                     // Warning when Protected Mode is off
                     HStack(spacing: 4) {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(.yellow)
+                            .accessibilityHidden(true)
                         Text("Visible to capture")
-                            .font(.system(size: 10, weight: .medium))
+                            .font(.caption2.weight(.medium))
                             .foregroundColor(.yellow)
                     }
                     .help("Protected Mode is off. Enable it before sharing your screen.")
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Warning: Visible to capture. Protected Mode is off.")
                 }
 
                 if appState.isClickThroughEnabled {
@@ -147,9 +157,10 @@ struct StatusIndicator: View {
 
     var body: some View {
         Image(systemName: iconName)
-            .font(.system(size: 12))
+            .font(.caption)
             .foregroundColor(color)
             .help(label)
+            .accessibilityLabel(label)
     }
 }
 

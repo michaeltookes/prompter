@@ -81,7 +81,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             // Use SF Symbol for the menu bar icon
             button.image = NSImage(
                 systemSymbolName: "text.bubble",
-                accessibilityDescription: "Presenter Overlay"
+                accessibilityDescription: "Prompter"
             )
             button.image?.isTemplate = true  // Adapts to light/dark menu bar
         }
@@ -180,7 +180,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         // Quit
         let quitItem = NSMenuItem(
-            title: "Quit Presenter Overlay",
+            title: "Quit Prompter",
             action: #selector(quitApp),
             keyEquivalent: "q"
         )
@@ -230,6 +230,8 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             editorWindow?.center()
             editorWindow?.minSize = NSSize(width: 800, height: 500)
             editorWindow?.isReleasedWhenClosed = false
+            editorWindow?.setAccessibilityLabel("Deck Editor")
+            editorWindow?.setAccessibilityHelp("Create and edit presenter note cards")
 
             // Observe window close to update app state
             editorCloseObserver = NotificationCenter.default.addObserver(
@@ -274,6 +276,8 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             testCaptureWindow?.contentView = NSHostingView(rootView: testView)
             testCaptureWindow?.center()
             testCaptureWindow?.isReleasedWhenClosed = false
+            testCaptureWindow?.setAccessibilityLabel("Test Protected Mode")
+            testCaptureWindow?.setAccessibilityHelp("Verify that the overlay is hidden during screen capture")
 
             // Observe window close to clean up reference
             testCaptureWindowObserver = NotificationCenter.default.addObserver(

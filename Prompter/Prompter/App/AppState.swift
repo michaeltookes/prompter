@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import AppKit
 import os
 
 private let logger = Logger(subsystem: "com.tookes.Prompter", category: "AppState")
@@ -145,6 +146,21 @@ final class AppState: ObservableObject {
     /// Whether navigation to the previous card is possible
     var canGoPrevious: Bool {
         currentCardIndex > 0
+    }
+
+    // MARK: - Accessibility
+
+    /// Posts an accessibility announcement for screen readers.
+    private func postAccessibilityAnnouncement(_ message: String) {
+        let userInfo: [NSAccessibility.NotificationUserInfoKey: Any] = [
+            .announcement: message,
+            .priority: NSAccessibilityPriorityLevel.high.rawValue
+        ]
+        NSAccessibility.post(
+            element: NSApp as Any,
+            notification: .announcementRequested,
+            userInfo: userInfo
+        )
     }
 
     // MARK: - Persistence
@@ -322,6 +338,7 @@ final class AppState: ObservableObject {
             currentCardIndex += 1
             overlayScrollOffset = 0
         }
+        postAccessibilityAnnouncement("Card \(currentCardIndex + 1) of \(totalCards)")
         // Auto-start timer on first navigation if not yet running
         if isTimerActiveForCurrentDeck && !isTimerRunning {
             startTimer()
@@ -337,6 +354,7 @@ final class AppState: ObservableObject {
             currentCardIndex -= 1
             overlayScrollOffset = 0
         }
+        postAccessibilityAnnouncement("Card \(currentCardIndex + 1) of \(totalCards)")
         // Auto-start timer on first navigation if not yet running
         if isTimerActiveForCurrentDeck && !isTimerRunning {
             startTimer()
@@ -497,41 +515,48 @@ final class AppState: ObservableObject {
     /// Toggles overlay visibility
     func toggleOverlay() {
         isOverlayVisible.toggle()
+        postAccessibilityAnnouncement(isOverlayVisible ? "Overlay shown" : "Overlay hidden")
     }
 
     /// Toggles click-through mode
     func toggleClickThrough() {
         isClickThroughEnabled.toggle()
+        postAccessibilityAnnouncement("Click-through \(isClickThroughEnabled ? "enabled" : "disabled")")
         saveSettings()
     }
 
     /// Toggles Protected Mode
     func toggleProtectedMode() {
         isProtectedModeEnabled.toggle()
+        postAccessibilityAnnouncement("Protected Mode \(isProtectedModeEnabled ? "enabled" : "disabled")")
         saveSettings()
     }
 
     /// Increases overlay font size
     func increaseFontSize() {
         overlayFontScale = min(2.0, overlayFontScale + 0.1)
+        postAccessibilityAnnouncement("Font size \(Int(overlayFontScale * 100))%")
         saveSettings()
     }
 
     /// Decreases overlay font size
     func decreaseFontSize() {
         overlayFontScale = max(0.5, overlayFontScale - 0.1)
+        postAccessibilityAnnouncement("Font size \(Int(overlayFontScale * 100))%")
         saveSettings()
     }
 
     /// Increases overlay opacity (more opaque)
     func increaseOpacity() {
         overlayOpacity = min(1.0, overlayOpacity + 0.1)
+        postAccessibilityAnnouncement("Opacity \(Int(overlayOpacity * 100))%")
         saveSettings()
     }
 
     /// Decreases overlay opacity (more transparent)
     func decreaseOpacity() {
         overlayOpacity = max(0.3, overlayOpacity - 0.1)
+        postAccessibilityAnnouncement("Opacity \(Int(overlayOpacity * 100))%")
         saveSettings()
     }
 
@@ -621,12 +646,16 @@ final class AppState: ObservableObject {
     func toggleTimerStartPause() {
         if !isTimerRunning {
             startTimer()
+            postAccessibilityAnnouncement("Timer started")
         } else if isTimerPaused {
             resumeTimer()
+            postAccessibilityAnnouncement("Timer resumed")
         } else if timerShowPauseButton {
             pauseTimer()
+            postAccessibilityAnnouncement("Timer paused at \(timerDisplayText)")
         } else {
             stopTimer()
+            postAccessibilityAnnouncement("Timer stopped")
         }
     }
 
@@ -667,6 +696,7 @@ final class AppState: ObservableObject {
             isTimerPaused = false
             timerSecondsRemaining = 0
             isTimerWarning = true
+            postAccessibilityAnnouncement("Card time expired")
             return
         }
         timerSecondsRemaining -= 1
@@ -677,12 +707,17 @@ final class AppState: ObservableObject {
             isTimerRunning = false
             isTimerPaused = false
             isTimerWarning = true
+            postAccessibilityAnnouncement("Card time expired")
             return
         }
 
         // Warning at last 20% of per-card time
         let threshold = Int(Double(effectivePerCardSeconds) * 0.2)
+        let wasWarning = isTimerWarning
         isTimerWarning = timerSecondsRemaining <= threshold
+        if isTimerWarning && !wasWarning {
+            postAccessibilityAnnouncement("Warning: \(timerDisplayText) remaining")
+        }
     }
 
     // MARK: - Persistence
