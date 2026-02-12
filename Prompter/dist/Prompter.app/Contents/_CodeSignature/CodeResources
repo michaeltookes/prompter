@@ -10,11 +10,20 @@
 		</data>
 		<key>Resources/Assets.car</key>
 		<data>
-		TWEP4v/38POl4z0lu6BEKGBJPNI=
+		1zolwdHXd1R56mABL6D4KH3gu7s=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Frameworks/Sparkle.framework</key>
+		<dict>
+			<key>cdhash</key>
+			<data>
+			xnUfOGgNWkMMJ4D5wXlQ8p+iyRg=
+			</data>
+			<key>requirement</key>
+			<string>anchor apple generic and identifier "org.sparkle-project.Sparkle" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "6739LM5834")</string>
+		</dict>
 		<key>Resources/AppIcon.icns</key>
 		<dict>
 			<key>hash2</key>
@@ -26,7 +35,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			SbGxANxNfp/kj8zLgbVcRPIFeQJfgR+I98zNJ++vYRk=
+			bkHPidJjnuxl0fHCg1iOL2QnKKF/QiNNFgp5kFwgzws=
 			</data>
 		</dict>
 	</dict>

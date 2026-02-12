@@ -1,101 +1,394 @@
-2026-02-02 02:46:22 +0000 [MT] Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x14f33ada0; archive(resolved)="<IDEArchive: 0x6000038110a0>", distributionTask(resolved)="2", distributionDestination(resolved)="1", distributionMethod(resolved)="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team(resolved)="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
+2026-02-12 20:49:19 +0000 [MT] Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0xa96078c00; archive(resolved)="<IDEArchive: 0xa9670f410>", distributionTask(resolved)="2", distributionDestination(resolved)="1", distributionMethod(resolved)="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team(resolved)="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
 	Chain (12, self inclusive):
-	<IDEDistributionProcessingPipelineContext: 0x14f33ada0; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionProcessingPipelineContext: 0x14f33ab10; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionContext: 0x14f33a900; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionContext: 0x14f24b890; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionContext: 0x14f24c030; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionContext: 0x14df36ae0; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionContext: 0x14f14ee60; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionContext: 0x14f14e950; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionContext: 0x14de04690; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="<IDEProvisioningBasicTeam: 0x6000012d31a0; teamID='6739LM5834', teamName='(null)'>">
-	<IDEDistributionContext: 0x14f03b8b0; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="(null)">
-	<IDEDistributionContext: 0x14f332b70; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="<IDEDistributionMethodDeveloperID: 0x6000011dbe70>", team="(null)">
-	<IDEDistributionContext: 0x14f032e00; archive = "<IDEArchive: 0x6000038110a0>", distributionMethod="(null)", team="(null)">
-</IDEDistributionProcessingPipelineContext: 0x14f33ada0>
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionCreateDestRootStep
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionCopyItemStep
-2026-02-02 02:46:22 +0000 [MT] Running /usr/bin/ditto '-V' '/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app' '/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app'
-2026-02-02 02:46:22 +0000  >>> Copying /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app 
-2026-02-02 02:46:22 +0000  copying file ./Contents/_CodeSignature/CodeResources ... 
-2026-02-02 02:46:22 +0000  2672 bytes for ./Contents/_CodeSignature/CodeResources
-2026-02-02 02:46:22 +0000  copying file ./Contents/MacOS/Prompter ... 
-2026-02-02 02:46:22 +0000  685056 bytes for ./Contents/MacOS/Prompter
-2026-02-02 02:46:22 +0000  copying file ./Contents/Resources/AppIcon.icns ... 
-2026-02-02 02:46:22 +0000  91181 bytes for ./Contents/Resources/AppIcon.icns
-2026-02-02 02:46:22 +0000  copying file ./Contents/Resources/Assets.car ... 
-2026-02-02 02:46:22 +0000  914744 bytes for ./Contents/Resources/Assets.car
-2026-02-02 02:46:22 +0000  copying file ./Contents/Info.plist ... 
-2026-02-02 02:46:22 +0000  1834 bytes for ./Contents/Info.plist
-2026-02-02 02:46:22 +0000  copying file ./Contents/PkgInfo ... 
-2026-02-02 02:46:22 +0000  8 bytes for ./Contents/PkgInfo
-2026-02-02 02:46:22 +0000 [MT] /usr/bin/ditto exited with 0
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionEmbedProfileStep
-2026-02-02 02:46:22 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x6000037fdb60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0x6000037056e0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000037fdaa0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000026bc6c0; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+	<IDEDistributionProcessingPipelineContext: 0xa96078c00; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionProcessingPipelineContext: 0xa96078900; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0xa9860de00; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0xa9860db80; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0xa9860d900; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0xa9860d680; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0xa9860c780; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0xa9860c500; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0xa9860c280; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="<IDEProvisioningBasicTeam: 0xa98761ae0; teamID='6739LM5834', teamName='(null)'>">
+	<IDEDistributionContext: 0xa9860c000; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="(null)">
+	<IDEDistributionContext: 0x102c9deb0; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="<IDEDistributionMethodDeveloperID: 0xa967f0bb0>", team="(null)">
+	<IDEDistributionContext: 0x102cb27b0; archive = "<IDEArchive: 0xa9670f410>", distributionMethod="(null)", team="(null)">
+</IDEDistributionProcessingPipelineContext: 0xa96078c00>
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionCreateDestRootStep
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionCopyItemStep
+2026-02-12 20:49:19 +0000 [MT] Running /usr/bin/ditto '-V' '/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app' '/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app'
+2026-02-12 20:49:19 +0000  >>> Copying /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app 
+2026-02-12 20:49:19 +0000  copying file ./Contents/_CodeSignature/CodeResources ... 
+2026-02-12 20:49:19 +0000  3164 bytes for ./Contents/_CodeSignature/CodeResources
+2026-02-12 20:49:19 +0000  copying file ./Contents/MacOS/Prompter ... 
+2026-02-12 20:49:19 +0000  1885472 bytes for ./Contents/MacOS/Prompter
+2026-02-12 20:49:19 +0000  copying file ./Contents/Resources/AppIcon.icns ... 
+2026-02-12 20:49:19 +0000  91181 bytes for ./Contents/Resources/AppIcon.icns
+2026-02-12 20:49:19 +0000  copying file ./Contents/Resources/Assets.car ... 
+2026-02-12 20:49:19 +0000  914744 bytes for ./Contents/Resources/Assets.car
+2026-02-12 20:49:19 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Resources ... 
+2026-02-12 20:49:19 +0000  linked ./Contents/Frameworks/Sparkle.framework/Resources
+2026-02-12 20:49:19 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Versions/Current ... 
+2026-02-12 20:49:19 +0000  linked ./Contents/Frameworks/Sparkle.framework/Versions/Current
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/_CodeSignature/CodeResources ... 
+2026-02-12 20:49:19 +0000  17524 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/_CodeSignature/CodeResources
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/de.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  11648 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/de.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/he.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  9657 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/he.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ar.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  3554 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ar.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/el.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5934 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/el.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ja.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  8697 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ja.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fa.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5716 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fa.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/uk.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5842 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/uk.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_CN.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  7475 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_CN.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nb.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5539 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nb.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/es.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  7040 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/es.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/is.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  3954 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/is.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sl.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5646 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sl.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/da.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  4882 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/da.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/it.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  10956 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/it.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sk.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5675 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sk.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sv.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5160 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sv.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ReleaseNotesColorStyle.css ... 
+2026-02-12 20:49:19 +0000  231 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ReleaseNotesColorStyle.css
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/cs.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  10774 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/cs.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ko.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  7797 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ko.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/Base.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5831 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/Base.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/hu.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  4449 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/hu.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_HK.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  6469 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_HK.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/tr.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  6183 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/tr.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pl.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5453 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pl.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_TW.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  7625 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_TW.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pt-BR.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  9976 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pt-BR.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ru.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5784 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ru.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdatePermissionPrompt.nib/keyedobjects-110000.nib ... 
+2026-02-12 20:49:19 +0000  25365 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdatePermissionPrompt.nib/keyedobjects-110000.nib
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdatePermissionPrompt.nib/keyedobjects-101300.nib ... 
+2026-02-12 20:49:19 +0000  25388 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdatePermissionPrompt.nib/keyedobjects-101300.nib
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUStatus.nib ... 
+2026-02-12 20:49:19 +0000  13047 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUStatus.nib
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdateAlert.nib ... 
+2026-02-12 20:49:19 +0000  18461 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdateAlert.nib
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fr.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  7855 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fr.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fi.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  3252 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fi.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nl.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  9574 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nl.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/th.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5339 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/th.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nn.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5671 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nn.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pt-PT.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  5984 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pt-PT.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ro.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  6115 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ro.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/Info.plist ... 
+2026-02-12 20:49:19 +0000  1340 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/Info.plist
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/hr.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  6367 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/hr.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ca.lproj/Sparkle.strings ... 
+2026-02-12 20:49:19 +0000  3501 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ca.lproj/Sparkle.strings
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate ... 
+2026-02-12 20:49:19 +0000  694928 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/_CodeSignature/CodeResources ... 
+2026-02-12 20:49:19 +0000  2446 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/_CodeSignature/CodeResources
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater ... 
+2026-02-12 20:49:19 +0000  274752 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/Resources/SUStatus.nib ... 
+2026-02-12 20:49:19 +0000  13047 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/Resources/SUStatus.nib
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/Info.plist ... 
+2026-02-12 20:49:19 +0000  2377 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/Info.plist
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/PkgInfo ... 
+2026-02-12 20:49:19 +0000  8 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/PkgInfo
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/_CodeSignature/CodeResources ... 
+2026-02-12 20:49:19 +0000  2200 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/_CodeSignature/CodeResources
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader ... 
+2026-02-12 20:49:19 +0000  172192 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/Info.plist ... 
+2026-02-12 20:49:19 +0000  1716 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/Info.plist
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/_CodeSignature/CodeResources ... 
+2026-02-12 20:49:19 +0000  2200 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/_CodeSignature/CodeResources
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer ... 
+2026-02-12 20:49:19 +0000  223936 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/Info.plist ... 
+2026-02-12 20:49:19 +0000  1604 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/Info.plist
+2026-02-12 20:49:19 +0000  copying file ./Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle ... 
+2026-02-12 20:49:19 +0000  860560 bytes for ./Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle
+2026-02-12 20:49:19 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Autoupdate ... 
+2026-02-12 20:49:19 +0000  linked ./Contents/Frameworks/Sparkle.framework/Autoupdate
+2026-02-12 20:49:19 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/Updater.app ... 
+2026-02-12 20:49:19 +0000  linked ./Contents/Frameworks/Sparkle.framework/Updater.app
+2026-02-12 20:49:19 +0000  copying symlink ./Contents/Frameworks/Sparkle.framework/XPCServices ... 
+2026-02-12 20:49:19 +0000  linked ./Contents/Frameworks/Sparkle.framework/XPCServices
+copying symlink ./Contents/Frameworks/Sparkle.framework/Sparkle ... 
+2026-02-12 20:49:19 +0000  linked ./Contents/Frameworks/Sparkle.framework/Sparkle
+2026-02-12 20:49:19 +0000  copying file ./Contents/Info.plist ... 
+2026-02-12 20:49:19 +0000  2070 bytes for ./Contents/Info.plist
+2026-02-12 20:49:19 +0000  copying file ./Contents/PkgInfo ... 
+2026-02-12 20:49:19 +0000  8 bytes for ./Contents/PkgInfo
+2026-02-12 20:49:19 +0000 [MT] /usr/bin/ditto exited with 0
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionEmbedProfileStep
+2026-02-12 20:49:19 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0xa98694900; bundleID='org.sparkle-project.DownloaderService', path='<DVTFilePath:0xa9866f060:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa986948a0; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.DownloaderService', executablePath='<DVTFilePath:0xa9866f480:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader'>', hardenedRuntime='1'>'>
+2026-02-12 20:49:19 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0xa98694780; bundleID='org.sparkle-project.InstallerLauncher', path='<DVTFilePath:0xa9866f720:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694720; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.InstallerLauncher', executablePath='<DVTFilePath:0xa9866fb40:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer'>', hardenedRuntime='1'>'>
+2026-02-12 20:49:19 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0xa986949c0; bundleID='(null)', path='<DVTFilePath:0xa9866e580:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694960; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+    "com.apple.application-identifier" = "org.sparkle-project.Sparkle.Autoupdate";
+}', teamID='(null)', identifier='Autoupdate-5555494459251b2ebc0232c783a3e31c4a4e4056', executablePath='<DVTFilePath:0xa9866e580:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>', hardenedRuntime='1'>'>
+2026-02-12 20:49:19 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0xa98694840; bundleID='org.sparkle-project.Sparkle.Updater', path='<DVTFilePath:0xa9866e640:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa986947e0; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.Sparkle.Updater', executablePath='<DVTFilePath:0xa9866ea60:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater'>', hardenedRuntime='1'>'>
+2026-02-12 20:49:19 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0xa98694c00; bundleID='org.sparkle-project.Sparkle', path='<DVTFilePath:0xa98599da0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694a20; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xa99b3af40; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='(null)', teamID='6739LM5834', identifier='org.sparkle-project.Sparkle', executablePath='<DVTFilePath:0xa9866fe40:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle'>', hardenedRuntime='1'>'>
+2026-02-12 20:49:19 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0xa98694c60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0xa9857bf60:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694cc0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xa99b3af40; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
     "1.2.840.113635.100.6.1.13"
 ), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
     "com.apple.security.app-sandbox" = 0;
-}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0x600003700cc0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'>
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionInfoPlistStep
-2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionInfoPlistStep because it said so
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionAppThinningPlistStep
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionSymbolsStep
-2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionAppThinningStep
-2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionAppThinningStep because it said so
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionArchThinningStep
-2026-02-02 02:46:22 +0000 [MT] Item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app doesn't have the entitlement com.apple.developer.web-browser-engine.host enabled, returning ["arm64e"]
-2026-02-02 02:46:22 +0000 [MT] Archs to thin for item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app are ["arm64e"]
-2026-02-02 02:46:22 +0000 [MT] Running /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app/Contents/MacOS/Prompter' '-verify_arch' 'arm64e'
-2026-02-02 02:46:22 +0000 [MT] /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo exited with 1
-2026-02-02 02:46:22 +0000 [MT] Skipping architecture thinning for item "Prompter" because arch "arm64e" wasn't found
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionODRStep
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionStripXattrsStep
-2026-02-02 02:46:22 +0000 [MT] Skipping stripping extended attributes because the codesign step will strip them.
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionCodesignStep
-2026-02-02 02:46:22 +0000 [MT] Entitlements for <IDEDistributionItem: 0x6000037fdb60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0x6000037056e0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000037fdaa0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000026a1c80; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
-    "1.2.840.113635.100.6.1.13"
-), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
-    "com.apple.security.app-sandbox" = 0;
-}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0x600003700cc0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'>: {
-    "com.apple.security.app-sandbox" = 0;
+}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0xa98599680:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'>
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionInfoPlistStep
+2026-02-12 20:49:19 +0000 [MT] Skipping step: IDEDistributionInfoPlistStep because it said so
+2026-02-12 20:49:19 +0000 [MT] Skipping step: IDEDistributionInfoPlistStep because it said so
+2026-02-12 20:49:19 +0000 [MT] Skipping step: IDEDistributionInfoPlistStep because it said so
+2026-02-12 20:49:19 +0000 [MT] Skipping step: IDEDistributionInfoPlistStep because it said so
+2026-02-12 20:49:19 +0000 [MT] Skipping step: IDEDistributionInfoPlistStep because it said so
+2026-02-12 20:49:19 +0000 [MT] Skipping step: IDEDistributionInfoPlistStep because it said so
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionAppThinningPlistStep
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionSymbolsStep
+2026-02-12 20:49:19 +0000 [MT] Skipping step: IDEDistributionSymbolsStep because it said so
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionAppThinningStep
+2026-02-12 20:49:19 +0000 [MT] Skipping step: IDEDistributionAppThinningStep because it said so
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionArchThinningStep
+2026-02-12 20:49:19 +0000 [MT] Archs to thin for item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc are []
+2026-02-12 20:49:19 +0000 [MT] Archs to thin for item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc are []
+2026-02-12 20:49:19 +0000 [MT] Archs to thin for item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate are []
+2026-02-12 20:49:19 +0000 [MT] Archs to thin for item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app are []
+2026-02-12 20:49:19 +0000 [MT] Archs to thin for item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B are []
+2026-02-12 20:49:19 +0000 [MT] Archs to thin for item /Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app are []
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionODRStep
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionStripXattrsStep
+2026-02-12 20:49:19 +0000 [MT] Skipping stripping extended attributes because the codesign step will strip them.
+2026-02-12 20:49:19 +0000 [MT] Skipping stripping extended attributes because the codesign step will strip them.
+2026-02-12 20:49:19 +0000 [MT] Skipping stripping extended attributes because the codesign step will strip them.
+2026-02-12 20:49:19 +0000 [MT] Skipping stripping extended attributes because the codesign step will strip them.
+2026-02-12 20:49:19 +0000 [MT] Skipping stripping extended attributes because the codesign step will strip them.
+2026-02-12 20:49:19 +0000 [MT] Skipping stripping extended attributes because the codesign step will strip them.
+2026-02-12 20:49:19 +0000 [MT] Processing step: IDEDistributionCodesignStep
+2026-02-12 20:49:19 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694900; bundleID='org.sparkle-project.DownloaderService', path='<DVTFilePath:0xa9866f060:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa986948a0; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.DownloaderService', executablePath='<DVTFilePath:0xa9866f480:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader'>', hardenedRuntime='1'>'>: {
 }
-2026-02-02 02:46:22 +0000 [MT] Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
-2026-02-02 02:46:22 +0000 [MT] Entitlements for <IDEDistributionItem: 0x6000037fdb60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0x6000037056e0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000037fdaa0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000026a1d40; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
-    "1.2.840.113635.100.6.1.13"
-), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
-    "com.apple.security.app-sandbox" = 0;
-}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0x600003700cc0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'> are: {
-    "com.apple.security.app-sandbox" = 0;
+2026-02-12 20:49:19 +0000 [MT] Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2026-02-12 20:49:19 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694900; bundleID='org.sparkle-project.DownloaderService', path='<DVTFilePath:0xa9866f060:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa986948a0; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.DownloaderService', executablePath='<DVTFilePath:0xa9866f480:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader'>', hardenedRuntime='1'>'> are: {
 }
-2026-02-02 02:46:22 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x6000037fdb60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0x6000037056e0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000037fdaa0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000026a1d40; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
-    "1.2.840.113635.100.6.1.13"
-), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
-    "com.apple.security.app-sandbox" = 0;
-}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0x600003700cc0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'> to: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/entitlements~~~WysMN3
-2026-02-02 02:46:22 +0000 [MT] invoking codesign: <NSConcreteTask: 0x6000033d5860; launchPath='/usr/bin/codesign', arguments='(
+2026-02-12 20:49:19 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0xa98694900; bundleID='org.sparkle-project.DownloaderService', path='<DVTFilePath:0xa9866f060:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa986948a0; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.DownloaderService', executablePath='<DVTFilePath:0xa9866f480:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader'>', hardenedRuntime='1'>'> to: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~APEJJj
+2026-02-12 20:49:19 +0000 [MT] invoking codesign: <NSConcreteTask: 0xa99b42b20; launchPath='/usr/bin/codesign', arguments='(
     "-f",
     "-s",
     8A363647D79DDDC4F9135535695CB883092C7F87,
     "--entitlements",
-    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/entitlements~~~WysMN3",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~APEJJj",
     "--requirements",
     "=designated => anchor apple generic  and identifier \"$self.identifier\" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = \"6739LM5834\" ))",
-    "--preserve-metadata=identifier,flags,runtime",
+    "--preserve-metadata=identifier,flags,runtime,launch-constraints,library-constraints",
     "--generate-entitlement-der",
     "--strip-disallowed-xattrs",
     "-vvv",
-    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app"
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc"
 )'>
-2026-02-02 02:46:22 +0000 [MT] codesign output: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app: replacing existing signature
-/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app: signed app bundle with Mach-O thin (arm64) [com.tookes.Prompter]
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionZipODRItemStep
-2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionSkipPackagingStep
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionAppStoreInformationStep
-2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionAppStoreInformationStep because it said so
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionGenerateProcessedDistributionItems
-2026-02-02 02:46:22 +0000 [MT] IDEDistributionItem init <DVTFilePath:0x60000370f780:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app'>
-2026-02-02 02:46:22 +0000 [MT] [OPTIONAL] Didn't find embedded provisioning profile for <DVTFilePath:0x60000370f780:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app'>: Error Domain=NSCocoaErrorDomain Code=4 "No file at <DVTFilePath:0x600003845500:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app/Contents/embedded.provisionprofile'>" UserInfo={NSLocalizedDescription=No file at <DVTFilePath:0x600003845500:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~Y4iyoG/Root/Applications/Prompter.app/Contents/embedded.provisionprofile'>}
-2026-02-02 02:46:22 +0000 [MT] Processing step: IDEDistributionCreateManifestStep
-2026-02-02 02:46:22 +0000 [MT] Skipping step: IDEDistributionCreateManifestStep because it said so
+2026-02-12 20:49:19 +0000 [MT] codesign output: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc: replacing existing signature
+/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc: signed bundle with Mach-O universal (x86_64 arm64) [org.sparkle-project.DownloaderService]
+2026-02-12 20:49:19 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694780; bundleID='org.sparkle-project.InstallerLauncher', path='<DVTFilePath:0xa9866f720:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694720; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.InstallerLauncher', executablePath='<DVTFilePath:0xa9866fb40:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer'>', hardenedRuntime='1'>'>: {
+}
+2026-02-12 20:49:19 +0000 [MT] Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2026-02-12 20:49:19 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694780; bundleID='org.sparkle-project.InstallerLauncher', path='<DVTFilePath:0xa9866f720:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694720; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.InstallerLauncher', executablePath='<DVTFilePath:0xa9866fb40:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer'>', hardenedRuntime='1'>'> are: {
+}
+2026-02-12 20:49:19 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0xa98694780; bundleID='org.sparkle-project.InstallerLauncher', path='<DVTFilePath:0xa9866f720:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694720; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.InstallerLauncher', executablePath='<DVTFilePath:0xa9866fb40:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer'>', hardenedRuntime='1'>'> to: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~gZVWXr
+2026-02-12 20:49:19 +0000 [MT] invoking codesign: <NSConcreteTask: 0xa99b42c60; launchPath='/usr/bin/codesign', arguments='(
+    "-f",
+    "-s",
+    8A363647D79DDDC4F9135535695CB883092C7F87,
+    "--entitlements",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~gZVWXr",
+    "--requirements",
+    "=designated => anchor apple generic  and identifier \"$self.identifier\" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = \"6739LM5834\" ))",
+    "--preserve-metadata=identifier,flags,runtime,launch-constraints,library-constraints",
+    "--generate-entitlement-der",
+    "--strip-disallowed-xattrs",
+    "-vvv",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc"
+)'>
+2026-02-12 20:49:19 +0000 [MT] codesign output: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc: replacing existing signature
+/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc: signed bundle with Mach-O universal (x86_64 arm64) [org.sparkle-project.InstallerLauncher]
+2026-02-12 20:49:19 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa986949c0; bundleID='(null)', path='<DVTFilePath:0xa9866e580:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694960; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+    "com.apple.application-identifier" = "org.sparkle-project.Sparkle.Autoupdate";
+}', teamID='(null)', identifier='Autoupdate-5555494459251b2ebc0232c783a3e31c4a4e4056', executablePath='<DVTFilePath:0xa9866e580:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>', hardenedRuntime='1'>'>: {
+    "com.apple.application-identifier" = "org.sparkle-project.Sparkle.Autoupdate";
+}
+2026-02-12 20:49:19 +0000 [MT] Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2026-02-12 20:49:19 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa986949c0; bundleID='(null)', path='<DVTFilePath:0xa9866e580:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694960; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+    "com.apple.application-identifier" = "org.sparkle-project.Sparkle.Autoupdate";
+}', teamID='(null)', identifier='Autoupdate-5555494459251b2ebc0232c783a3e31c4a4e4056', executablePath='<DVTFilePath:0xa9866e580:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>', hardenedRuntime='1'>'> are: {
+    "com.apple.application-identifier" = "org.sparkle-project.Sparkle.Autoupdate";
+}
+2026-02-12 20:49:19 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0xa986949c0; bundleID='(null)', path='<DVTFilePath:0xa9866e580:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694960; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+    "com.apple.application-identifier" = "org.sparkle-project.Sparkle.Autoupdate";
+}', teamID='(null)', identifier='Autoupdate-5555494459251b2ebc0232c783a3e31c4a4e4056', executablePath='<DVTFilePath:0xa9866e580:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>', hardenedRuntime='1'>'> to: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~UwCsSW
+2026-02-12 20:49:19 +0000 [MT] invoking codesign: <NSConcreteTask: 0xa99b42c60; launchPath='/usr/bin/codesign', arguments='(
+    "-f",
+    "-s",
+    8A363647D79DDDC4F9135535695CB883092C7F87,
+    "--entitlements",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~UwCsSW",
+    "--requirements",
+    "=designated => anchor apple generic  and identifier \"$self.identifier\" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = \"6739LM5834\" ))",
+    "--preserve-metadata=identifier,flags,runtime,launch-constraints,library-constraints",
+    "--generate-entitlement-der",
+    "--strip-disallowed-xattrs",
+    "-vvv",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate"
+)'>
+2026-02-12 20:49:20 +0000 [MT] codesign output: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate: replacing existing signature
+/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate: signed Mach-O universal (x86_64 arm64) [Autoupdate-5555494459251b2ebc0232c783a3e31c4a4e4056]
+2026-02-12 20:49:20 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694840; bundleID='org.sparkle-project.Sparkle.Updater', path='<DVTFilePath:0xa9866e640:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa986947e0; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.Sparkle.Updater', executablePath='<DVTFilePath:0xa9866ea60:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater'>', hardenedRuntime='1'>'>: {
+}
+2026-02-12 20:49:20 +0000 [MT] Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2026-02-12 20:49:20 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694840; bundleID='org.sparkle-project.Sparkle.Updater', path='<DVTFilePath:0xa9866e640:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa986947e0; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.Sparkle.Updater', executablePath='<DVTFilePath:0xa9866ea60:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater'>', hardenedRuntime='1'>'> are: {
+}
+2026-02-12 20:49:20 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0xa98694840; bundleID='org.sparkle-project.Sparkle.Updater', path='<DVTFilePath:0xa9866e640:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa986947e0; isSigned='1', isAdHocSigned='1', signingCertificate='(null)', entitlements='{
+}', teamID='(null)', identifier='org.sparkle-project.Sparkle.Updater', executablePath='<DVTFilePath:0xa9866ea60:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater'>', hardenedRuntime='1'>'> to: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~BRjoAh
+2026-02-12 20:49:20 +0000 [MT] invoking codesign: <NSConcreteTask: 0xa99b42c60; launchPath='/usr/bin/codesign', arguments='(
+    "-f",
+    "-s",
+    8A363647D79DDDC4F9135535695CB883092C7F87,
+    "--entitlements",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~BRjoAh",
+    "--requirements",
+    "=designated => anchor apple generic  and identifier \"$self.identifier\" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = \"6739LM5834\" ))",
+    "--preserve-metadata=identifier,flags,runtime,launch-constraints,library-constraints",
+    "--generate-entitlement-der",
+    "--strip-disallowed-xattrs",
+    "-vvv",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app"
+)'>
+2026-02-12 20:49:20 +0000 [MT] codesign output: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app: replacing existing signature
+/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app: signed app bundle with Mach-O universal (x86_64 arm64) [org.sparkle-project.Sparkle.Updater]
+2026-02-12 20:49:20 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694c00; bundleID='org.sparkle-project.Sparkle', path='<DVTFilePath:0xa98599da0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694a20; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xa99b3af40; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='(null)', teamID='6739LM5834', identifier='org.sparkle-project.Sparkle', executablePath='<DVTFilePath:0xa9866fe40:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle'>', hardenedRuntime='1'>'>: {
+}
+2026-02-12 20:49:20 +0000 [MT] Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2026-02-12 20:49:20 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694c00; bundleID='org.sparkle-project.Sparkle', path='<DVTFilePath:0xa98599da0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694a20; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xa99b3ab80; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='(null)', teamID='6739LM5834', identifier='org.sparkle-project.Sparkle', executablePath='<DVTFilePath:0xa9866fe40:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle'>', hardenedRuntime='1'>'> are: {
+}
+2026-02-12 20:49:20 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0xa98694c00; bundleID='org.sparkle-project.Sparkle', path='<DVTFilePath:0xa98599da0:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694a20; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xa99b3ab80; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='(null)', teamID='6739LM5834', identifier='org.sparkle-project.Sparkle', executablePath='<DVTFilePath:0xa9866fe40:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle'>', hardenedRuntime='1'>'> to: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~pz7n3V
+2026-02-12 20:49:20 +0000 [MT] invoking codesign: <NSConcreteTask: 0xa99b42c60; launchPath='/usr/bin/codesign', arguments='(
+    "-f",
+    "-s",
+    8A363647D79DDDC4F9135535695CB883092C7F87,
+    "--entitlements",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~pz7n3V",
+    "--requirements",
+    "=designated => anchor apple generic  and identifier \"$self.identifier\" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = \"6739LM5834\" ))",
+    "--preserve-metadata=identifier,flags,runtime,launch-constraints,library-constraints",
+    "--generate-entitlement-der",
+    "--strip-disallowed-xattrs",
+    "-vvv",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B"
+)'>
+2026-02-12 20:49:20 +0000 [MT] codesign output: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B: replacing existing signature
+/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B: signed bundle with Mach-O universal (x86_64 arm64) [org.sparkle-project.Sparkle]
+2026-02-12 20:49:20 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694c60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0xa9857bf60:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694cc0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xa99b3af40; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
+    "com.apple.security.app-sandbox" = 0;
+}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0xa98599680:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'>: {
+    "com.apple.security.app-sandbox" = 0;
+}
+2026-02-12 20:49:20 +0000 [MT] Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2026-02-12 20:49:20 +0000 [MT] Entitlements for <IDEDistributionItem: 0xa98694c60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0xa9857bf60:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694cc0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xa99b3ab80; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
+    "com.apple.security.app-sandbox" = 0;
+}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0xa98599680:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'> are: {
+    "com.apple.security.app-sandbox" = 0;
+}
+2026-02-12 20:49:20 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0xa98694c60; bundleID='com.tookes.Prompter', path='<DVTFilePath:0xa9857bf60:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xa98694cc0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xa99b3ab80; name='Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)', hash='8A363647D79DDDC4F9135535695CB883092C7F87', serialNumber='1ED7628586BB0319', certificateKinds='(
+    "1.2.840.113635.100.6.1.13"
+), issueDate='2026-01-18 22:38:15 +0000''>', entitlements='{
+    "com.apple.security.app-sandbox" = 0;
+}', teamID='6739LM5834', identifier='com.tookes.Prompter', executablePath='<DVTFilePath:0xa98599680:'/Users/michaeltookes/Desktop/prompter/Prompter/build/Prompter.xcarchive/Products/Applications/Prompter.app/Contents/MacOS/Prompter'>', hardenedRuntime='1'>'> to: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~5hVOok
+2026-02-12 20:49:20 +0000 [MT] invoking codesign: <NSConcreteTask: 0xa99b42c60; launchPath='/usr/bin/codesign', arguments='(
+    "-f",
+    "-s",
+    8A363647D79DDDC4F9135535695CB883092C7F87,
+    "--entitlements",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/entitlements~~~5hVOok",
+    "--requirements",
+    "=designated => anchor apple generic  and identifier \"$self.identifier\" and ((cert leaf[field.1.2.840.113635.100.6.1.9] exists) or ( certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists  and certificate leaf[subject.OU] = \"6739LM5834\" ))",
+    "--preserve-metadata=identifier,flags,runtime,launch-constraints,library-constraints",
+    "--generate-entitlement-der",
+    "--strip-disallowed-xattrs",
+    "-vvv",
+    "/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app"
+)'>
+2026-02-12 20:49:20 +0000 [MT] codesign output: /var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app: replacing existing signature
+/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app: signed app bundle with Mach-O universal (x86_64 arm64) [com.tookes.Prompter]
+2026-02-12 20:49:20 +0000 [MT] Processing step: IDEDistributionZipODRItemStep
+2026-02-12 20:49:20 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2026-02-12 20:49:20 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2026-02-12 20:49:20 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2026-02-12 20:49:20 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2026-02-12 20:49:20 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2026-02-12 20:49:20 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2026-02-12 20:49:20 +0000 [MT] Processing step: IDEDistributionSkipPackagingStep
+2026-02-12 20:49:20 +0000 [MT] Processing step: IDEDistributionAppStoreInformationStep
+2026-02-12 20:49:20 +0000 [MT] Skipping step: IDEDistributionAppStoreInformationStep because it said so
+2026-02-12 20:49:20 +0000 [MT] Processing step: IDEDistributionGenerateProcessedDistributionItems
+2026-02-12 20:49:20 +0000 [MT] IDEDistributionItem init <DVTFilePath:0xa998e4420:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc'>
+2026-02-12 20:49:20 +0000 [MT] [OPTIONAL] Didn't find embedded provisioning profile for <DVTFilePath:0xa998e4420:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc'>: Error Domain=NSCocoaErrorDomain Code=4 "No file at <DVTFilePath:0xa96217b10:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/embedded.provisionprofile'>" UserInfo={NSLocalizedDescription=No file at <DVTFilePath:0xa96217b10:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/embedded.provisionprofile'>}
+2026-02-12 20:49:20 +0000 [MT] IDEDistributionItem init <DVTFilePath:0xa998e43c0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc'>
+2026-02-12 20:49:20 +0000 [MT] [OPTIONAL] Didn't find embedded provisioning profile for <DVTFilePath:0xa998e43c0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc'>: Error Domain=NSCocoaErrorDomain Code=4 "No file at <DVTFilePath:0xa96216990:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/embedded.provisionprofile'>" UserInfo={NSLocalizedDescription=No file at <DVTFilePath:0xa96216990:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/embedded.provisionprofile'>}
+2026-02-12 20:49:20 +0000 [MT] IDEDistributionItem init <DVTFilePath:0xa998e4360:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app'>
+2026-02-12 20:49:20 +0000 [MT] [OPTIONAL] Didn't find embedded provisioning profile for <DVTFilePath:0xa998e4360:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app'>: Error Domain=NSCocoaErrorDomain Code=4 "No file at <DVTFilePath:0xa96217aa0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/embedded.provisionprofile'>" UserInfo={NSLocalizedDescription=No file at <DVTFilePath:0xa96217aa0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/embedded.provisionprofile'>}
+2026-02-12 20:49:20 +0000 [MT] IDEDistributionItem init <DVTFilePath:0xa998e5aa0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>
+2026-02-12 20:49:20 +0000 [MT] [OPTIONAL] Didn't find info dictionary for <DVTFilePath:0xa998e5aa0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>: Error Domain=DVTFoundationNSBundleAdditionsErrorDomain Code=1 "Couldn't load Info dictionary for <DVTFilePath:0xa998e5aa0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>" UserInfo={NSLocalizedDescription=Couldn't load Info dictionary for <DVTFilePath:0xa998e5aa0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>}
+2026-02-12 20:49:20 +0000 [MT] [OPTIONAL] Can't have a profile, not a bundle at <DVTFilePath:0xa998e5aa0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate'>
+2026-02-12 20:49:20 +0000 [MT] IDEDistributionItem init <DVTFilePath:0xa998e5320:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/Frameworks/Sparkle.framework/Versions/B'>
+2026-02-12 20:49:20 +0000 [MT] IDEDistributionItem init <DVTFilePath:0xa998e4d20:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app'>
+2026-02-12 20:49:20 +0000 [MT] [OPTIONAL] Didn't find embedded provisioning profile for <DVTFilePath:0xa998e4d20:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app'>: Error Domain=NSCocoaErrorDomain Code=4 "No file at <DVTFilePath:0xa962176b0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/embedded.provisionprofile'>" UserInfo={NSLocalizedDescription=No file at <DVTFilePath:0xa962176b0:'/var/folders/qv/kdtdtjdx0pj2wrg17b_lhrcr0000gn/T/XcodeDistPipeline.~~~p3kBU5/Root/Applications/Prompter.app/Contents/embedded.provisionprofile'>}
+2026-02-12 20:49:20 +0000 [MT] Processing step: IDEDistributionCreateManifestStep
+2026-02-12 20:49:20 +0000 [MT] Skipping step: IDEDistributionCreateManifestStep because it said so
