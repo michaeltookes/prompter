@@ -167,7 +167,7 @@ Verify the release is live: `https://github.com/michaeltookes/prompter/releases/
 
 #### 5.1 Update Homebrew Cask
 
-The Homebrew tap lives at `~/Desktop/homebrew-prompter/` (repo: `michaeltookes/homebrew-prompter`).
+The Homebrew tap lives at `~/Desktop/Current Projects/homebrew-tap/` (repo: `michaeltookes/homebrew-tap`).
 
 1. Get the SHA256 of the new DMG:
    ```bash
@@ -180,13 +180,13 @@ The Homebrew tap lives at `~/Desktop/homebrew-prompter/` (repo: `michaeltookes/h
 
 3. Commit and push:
    ```bash
-   cd ~/Desktop/homebrew-prompter
+   cd ~/Desktop/"Current Projects"/homebrew-tap
    git add Casks/prompter.rb
    git commit -m "Update Prompter cask to vX.Y.Z"
    git push origin main
    ```
 
-4. Verify: `brew info michaeltookes/prompter/prompter` should show the new version.
+4. Verify: `brew info michaeltookes/tap/prompter` should show the new version.
 
 #### 5.2 Verify Sparkle Appcast
 
@@ -235,7 +235,7 @@ For users on versions before Sparkle was configured (pre-v1.1.0), they must be m
 
 Share the release link and/or Homebrew install command:
 ```
-brew tap michaeltookes/prompter
+brew tap michaeltookes/tap
 brew upgrade --cask prompter
 ```
 
@@ -271,7 +271,7 @@ These must be set up before running the release pipeline:
 - **Apple notarization credentials**: Stored in Keychain (`notarytool` profile)
 - **Sparkle EdDSA keypair**: Private key in login Keychain (generated via `generate_keys`)
 - **gh CLI**: Authenticated (`gh auth status`)
-- **Homebrew tap repo**: Cloned to `~/Desktop/homebrew-prompter/`
+- **Homebrew tap repo**: Cloned to `~/Desktop/Current Projects/homebrew-tap/`
 
 ## Important Notes
 

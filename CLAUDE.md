@@ -246,7 +246,7 @@ Referenced by the `/release-prep` skill:
 | Sparkle appcast script | Handled by `publish-release.sh` |
 | Sparkle appcast URL | `https://michaeltookes.github.io/prompter/appcast.xml` |
 | Sparkle appcast file | `appcast.xml` (repo root, served by GitHub Pages from `main`) |
-| Homebrew tap location | `~/Desktop/homebrew-prompter/` |
+| Homebrew tap location | `~/Desktop/Current Projects/homebrew-tap/` |
 | Homebrew cask file | `Casks/prompter.rb` |
 | Homebrew cask URL template | `https://github.com/michaeltookes/prompter/releases/download/v{VERSION}/Prompter.dmg` |
 | Notarization keychain profile | `Prompter-Notarize` (hardcoded in `notarize.sh`) |

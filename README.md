@@ -10,7 +10,7 @@ The overlay is intended to be visible only to the presenter. The app includes **
 ### Homebrew (Recommended)
 
 ```bash
-brew tap michaeltookes/prompter
+brew tap michaeltookes/tap
 brew install --cask prompter
 ```
 
