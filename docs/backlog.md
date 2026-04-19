@@ -9,7 +9,7 @@ Prioritized list of planned features, improvements, and technical debt.
 1. ~~**Add Sparkle auto-update framework**~~  **DONE**
    Integrated Sparkle 2.x via SPM. UpdateManager service, "Check for Updates..." menu item, Info.plist placeholders for appcast URL and EdDSA key. Release infrastructure (key generation, appcast hosting) still needed before first shipped update.
 
-2. **Adopt macOS 26 Liquid Glass design**
+{PRMT-001} **Adopt macOS 26 Liquid Glass design**
    Apply Apple's Liquid Glass material to the overlay and editor UI using `.glassEffect()` (SwiftUI) and `NSGlassEffectView` (AppKit). Must use `#available(macOS 26.0, *)` checks to keep macOS 14 as minimum target. Key areas: overlay background (replace `.ultraThinMaterial`), traffic light buttons, footer controls, deck editor toolbar. Note: standard components (toolbars, sidebars, sheets) get Liquid Glass automatically when compiled with Xcode 26 — custom views need explicit adoption. Limit to 5-10 glass views for performance. Use `GlassEffectContainer` when grouping multiple glass elements.
 
 3. ~~**Replace NSAlert dialogs with custom NSPanel**~~  **DONE**
@@ -38,16 +38,16 @@ Prioritized list of planned features, improvements, and technical debt.
    ~~**Phase 4 — Dynamic Type (Medium)**~~ **DONE**
    Replaced hardcoded font sizes in CardListSidebar and OverlayFooterView with Dynamic Type equivalents (`.caption2`, `.footnote`, `.callout`, etc.). Overlay renderers kept as-is with `fontScale` multiplier.
 
-7. **Export/import decks**
+{PRMT-002} **Export/import decks**
    Allow users to share decks as `.prompter` files (JSON + bundled assets).
 
 ## Low Priority
 
-8. **Keyboard shortcut customization**
+{PRMT-003} **Keyboard shortcut customization**
    Let users rebind global hotkeys from a settings panel.
 
-9. **Deck templates**
+{PRMT-004} **Deck templates**
    Pre-built deck templates for common presentation scenarios.
 
-10. **Overlay position presets**
+{PRMT-005} **Overlay position presets**
     Quick-select overlay positions (top-right, bottom-left, etc.) instead of manual drag.
