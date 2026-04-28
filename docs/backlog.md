@@ -12,6 +12,9 @@ Prioritized list of planned features, improvements, and technical debt.
 {PRMT-001} **Adopt macOS 26 Liquid Glass design**
    Apply Apple's Liquid Glass material to the overlay and editor UI using `.glassEffect()` (SwiftUI) and `NSGlassEffectView` (AppKit). Must use `#available(macOS 26.0, *)` checks to keep macOS 14 as minimum target. Key areas: overlay background (replace `.ultraThinMaterial`), traffic light buttons, footer controls, deck editor toolbar. Note: standard components (toolbars, sidebars, sheets) get Liquid Glass automatically when compiled with Xcode 26 — custom views need explicit adoption. Limit to 5-10 glass views for performance. Use `GlassEffectContainer` when grouping multiple glass elements.
 
+{PRMT-006} **Add Mission Control backlog sync workflow**
+   Add `.github/workflows/sync-backlog.yml` so this repo's `docs/backlog.md` syncs to Mission Control on every push to `main` (and via manual `workflow_dispatch`). Copy the canonical template and instructions from the Mission Control repo at `docs/backlog-sync-workflow.md`. Set `PROJECT_SLUG` to this repo's project slug in Mission Control and add the `INGEST_API_KEY` repo secret (key will be provided separately).
+
 3. ~~**Replace NSAlert dialogs with custom NSPanel**~~  **DONE**
    Replaced NSAlert with ThemedPanelWindow (NSPanel subclass) + SwiftUI views (TimeInputPanelView, DeckPickerPanelView) for consistent themed styling.
 
