@@ -7,11 +7,15 @@ set -e
 
 # Configuration
 APP_NAME="Prompter"
-SIGNING_IDENTITY="Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)"
-KEYCHAIN_PROFILE="Prompter-Notarize"
 
 # Paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Signing identity and notary credentials come from the environment (see scripts/README.md)
+# shellcheck source=release-env.sh
+source "$SCRIPT_DIR/release-env.sh"
+require_env SIGNING_IDENTITY
+require_notary_env
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 OUTPUT_DIR="$PROJECT_ROOT/dist"
 APP_BUNDLE="$OUTPUT_DIR/$APP_NAME.app"
@@ -150,7 +154,7 @@ notarize_dmg() {
     echo "  This may take several minutes..."
 
     xcrun notarytool submit "$DMG_OUTPUT" \
-        --keychain-profile "$KEYCHAIN_PROFILE" \
+        "${NOTARY_AUTH_ARGS[@]}" \
         --wait
 
     echo "  ✓ DMG notarized"
