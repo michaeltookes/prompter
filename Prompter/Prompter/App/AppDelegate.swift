@@ -124,9 +124,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Only a hunt bundle id owns its defaults domain. A Debug build of the
         // production bundle id run with PROMPTER_HUNT_MODE=1 shares the
         // released app's domain, which must never be wiped.
-        if let bundleId = Bundle.main.bundleIdentifier,
-           bundleId != AppEnvironment.productionBundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleId)
+        if let domain = environment.huntDefaultsDomainToReset(bundleIdentifier: Bundle.main.bundleIdentifier) {
+            UserDefaults.standard.removePersistentDomain(forName: domain)
         }
     }
 

@@ -2,16 +2,16 @@ import SwiftUI
 
 /// Entry point: picks the scene set for the running flavor.
 ///
-/// The unit-test host gets an app with no window scene, so launching it under
-/// XCTest opens no window and AppKit never autosaves a window frame into the
-/// `com.tookes.Prompter` defaults domain (US-25 AC2).
+/// The unit-test host, and a hunt launch running under the released app's
+/// bundle id, get an app with no window scene, so AppKit never autosaves a
+/// window frame into the `com.tookes.Prompter` defaults domain (US-25 AC2).
 @main
 enum PrompterMain {
     static func main() {
-        if AppEnvironment.current.runsFullLaunch {
+        if AppEnvironment.current.opensWindowScene(bundleIdentifier: Bundle.main.bundleIdentifier) {
             PrompterApp.main()
         } else {
-            PrompterTestHostApp.main()
+            PrompterHeadlessApp.main()
         }
     }
 }
@@ -37,9 +37,10 @@ struct PrompterApp: App {
     }
 }
 
-/// App used when the process hosts the unit tests. A Settings scene opens no
-/// window at launch; AppDelegate returns right after the activation policy.
-struct PrompterTestHostApp: App {
+/// App with no window scene: used by the unit-test host (AppDelegate returns
+/// right after the activation policy) and by a hunt launch that shares the
+/// released app's defaults domain. A Settings scene opens no window at launch.
+struct PrompterHeadlessApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {

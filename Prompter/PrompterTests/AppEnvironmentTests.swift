@@ -121,6 +121,47 @@ final class AppEnvironmentTests: XCTestCase {
         XCTAssertEqual(paths.settings.path, "/data/Prompter/Settings.json")
     }
 
+    // MARK: - Defaults identity
+
+    func testHuntUnderProductionBundleIdWritesNothingToProductionDomain() {
+        // A Debug build of com.tookes.Prompter selected as hunt by
+        // PROMPTER_HUNT_MODE=1 or the .prowl/DerivedData path
+        let viaEnv = resolve(environment: [AppEnvironment.huntModeEnvironmentKey: "1"], debug: true)
+        let viaPath = resolve(bundlePath: "/r/.prowl/DerivedData/Build/Products/Debug/Prompter.app")
+        let productionId = AppEnvironment.productionBundleIdentifier
+
+        for flavor in [viaEnv, viaPath] {
+            XCTAssertEqual(flavor, .hunt)
+            let env = AppEnvironment(flavor: flavor)
+            XCTAssertTrue(env.sharesProductionDefaults(bundleIdentifier: productionId))
+            // No placeholder window, so no frame autosave into com.tookes.Prompter
+            XCTAssertFalse(env.opensWindowScene(bundleIdentifier: productionId))
+            // The released app's domain is never wiped
+            XCTAssertNil(env.huntDefaultsDomainToReset(bundleIdentifier: productionId))
+            // No other defaults writer runs: event tap (prompt timestamp),
+            // Sparkle, and the legacy migration flag are all off
+            XCTAssertFalse(env.installsEventTap)
+            XCTAssertFalse(env.startsUpdater)
+            XCTAssertFalse(env.migratesLegacyData)
+        }
+    }
+
+    func testWindowSceneAndDefaultsResetPerBundleId() {
+        let huntId = "com.tookes.Prompter.hunt"
+        let productionId = AppEnvironment.productionBundleIdentifier
+
+        XCTAssertTrue(AppEnvironment(flavor: .production).opensWindowScene(bundleIdentifier: productionId))
+        XCTAssertFalse(AppEnvironment(flavor: .production).sharesProductionDefaults(bundleIdentifier: productionId))
+        XCTAssertTrue(AppEnvironment(flavor: .qa).opensWindowScene(bundleIdentifier: "com.tookes.Prompter.qa"))
+        XCTAssertTrue(AppEnvironment(flavor: .hunt).opensWindowScene(bundleIdentifier: huntId))
+        XCTAssertFalse(AppEnvironment(flavor: .unitTest).opensWindowScene(bundleIdentifier: productionId))
+
+        XCTAssertEqual(AppEnvironment(flavor: .hunt).huntDefaultsDomainToReset(bundleIdentifier: huntId), huntId)
+        XCTAssertNil(AppEnvironment(flavor: .hunt).huntDefaultsDomainToReset(bundleIdentifier: nil))
+        XCTAssertNil(AppEnvironment(flavor: .qa).huntDefaultsDomainToReset(bundleIdentifier: "com.tookes.Prompter.qa"))
+        XCTAssertNil(AppEnvironment(flavor: .production).huntDefaultsDomainToReset(bundleIdentifier: productionId))
+    }
+
     // MARK: - This process
 
     func testTestHostRunsAsUnitTestFlavor() {

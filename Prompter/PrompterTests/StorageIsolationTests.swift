@@ -15,6 +15,10 @@ struct RealDataSnapshot: Equatable {
     let files: [String: String]
     let defaults: NSDictionary?
 
+    /// Taken on first access, which `PrompterTestObserver.init` makes when the
+    /// test bundle loads (a lazy `static let`, so no Swift 5.10 isolation syntax).
+    static let beforeSuite = capture()
+
     static func capture() -> RealDataSnapshot {
         var files: [String: String] = [:]
         let keys: [URLResourceKey] = [.fileSizeKey, .contentModificationDateKey, .isDirectoryKey]
@@ -39,17 +43,27 @@ struct RealDataSnapshot: Equatable {
 @objc(PrompterTestObserver)
 final class PrompterTestObserver: NSObject, XCTestObservation {
 
-    nonisolated(unsafe) static var snapshotBeforeSuite: RealDataSnapshot?
+    /// Records that XCTest created the observer at bundle load (Swift 5.9-safe box).
+    final class Registration: @unchecked Sendable {
+        private let lock = NSLock()
+        private var value = false
+        var isRegistered: Bool {
+            get { lock.lock(); defer { lock.unlock() }; return value }
+            set { lock.lock(); value = newValue; lock.unlock() }
+        }
+    }
+
+    static let registration = Registration()
 
     override init() {
         super.init()
-        Self.snapshotBeforeSuite = RealDataSnapshot.capture()
+        _ = RealDataSnapshot.beforeSuite
+        Self.registration.isRegistered = true
         XCTestObservationCenter.shared.addTestObserver(self)
     }
 
     func testBundleDidFinish(_ testBundle: Bundle) {
-        guard let before = Self.snapshotBeforeSuite else { return }
-        let changed = RealDataSnapshot.capture() != before
+        let changed = RealDataSnapshot.capture() != RealDataSnapshot.beforeSuite
         print("PrompterTests storage isolation: real Application Support/Prompter and defaults "
               + (changed ? "CHANGED during the suite" : "unchanged after the suite"))
     }
@@ -152,7 +166,8 @@ final class StorageIsolationTests: XCTestCase {
 final class ZZRealDataUntouchedTests: XCTestCase {
 
     func testRealApplicationSupportAndDefaultsUnchangedBySuite() throws {
-        let before = try XCTUnwrap(PrompterTestObserver.snapshotBeforeSuite, "observer did not run")
+        XCTAssertTrue(PrompterTestObserver.registration.isRegistered, "observer did not run at bundle load")
+        let before = RealDataSnapshot.beforeSuite
         let after = RealDataSnapshot.capture()
         XCTAssertEqual(after.files, before.files, "Files under Application Support/Prompter changed")
         XCTAssertEqual(after.defaults, before.defaults, "The com.tookes.Prompter defaults domain changed")

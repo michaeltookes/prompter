@@ -139,6 +139,34 @@ struct AppEnvironment: Equatable, Sendable {
         }
     }
 
+    // MARK: - Defaults identity
+
+    /// True when this flavor runs under the released app's bundle id, so
+    /// `UserDefaults.standard` is the released app's `com.tookes.Prompter`
+    /// domain. Only a Debug build selected as hunt by `PROMPTER_HUNT_MODE=1` or
+    /// the `.prowl/DerivedData/` path can be in that state.
+    func sharesProductionDefaults(bundleIdentifier: String?) -> Bool {
+        flavor != .production && bundleIdentifier == Self.productionBundleIdentifier
+    }
+
+    /// Whether the app may open SwiftUI's placeholder `WindowGroup`. Its window
+    /// autosaves a frame into the standard defaults domain, so it is skipped
+    /// under XCTest and whenever a non-production flavor shares the released
+    /// app's domain.
+    func opensWindowScene(bundleIdentifier: String?) -> Bool {
+        flavor != .unitTest && !sharesProductionDefaults(bundleIdentifier: bundleIdentifier)
+    }
+
+    /// The defaults domain the hunt launch wipes, or nil when there is none it
+    /// may wipe (not hunt, or the domain belongs to the released app).
+    func huntDefaultsDomainToReset(bundleIdentifier: String?) -> String? {
+        guard flavor == .hunt, let bundleIdentifier,
+              !sharesProductionDefaults(bundleIdentifier: bundleIdentifier) else {
+            return nil
+        }
+        return bundleIdentifier
+    }
+
     // MARK: - Storage
 
     /// Storage paths for this flavor.
