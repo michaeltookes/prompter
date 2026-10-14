@@ -1,0 +1,8 @@
+version: 2
+updates:
+  # GitHub Actions only: Dependabot's Swift support does not read
+  # package references inside an .xcodeproj, so Sparkle is bumped by hand.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
