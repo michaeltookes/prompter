@@ -25,9 +25,11 @@ jobs:
     # A missing description is cosmetic. This job must never leave a failing
     # check on the PR: a red here would block the watcher's merge-ready gate
     # and could trigger doomed "fix CI" passes against a workflow the PR
-    # branch cannot even see. With job-level continue-on-error the check
-    # concludes successfully even if the step fails.
-    continue-on-error: true
+    # branch cannot even see. Job-level continue-on-error is not enough: the
+    # run succeeds but the job's check is still reported as failed. So each
+    # step that can fail on an API or token problem carries step-level
+    # continue-on-error, and later steps run only if the step they read from
+    # succeeded; the job's own result stays green.
     permissions:
       contents: read
       pull-requests: read
@@ -40,6 +42,7 @@ jobs:
 
       - name: Check PR description state
         id: description_state
+        continue-on-error: true
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -88,8 +91,9 @@ jobs:
           PY
 
       - name: Generate PR description from the diff
-        if: steps.description_state.outputs.should_suggest == 'true'
+        if: steps.description_state.outcome == 'success' && steps.description_state.outputs.should_suggest == 'true'
         id: describe
+        continue-on-error: true
         uses: anthropics/claude-code-action@7b0b255830a1fab6e602658672acad11c12d841d # v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -109,7 +113,8 @@ jobs:
             --json-schema '{"type":"object","properties":{"should_suggest":{"type":"boolean"},"body":{"type":"string"}},"required":["should_suggest","body"],"additionalProperties":false}'
 
       - name: Publish suggested PR description
-        if: steps.description_state.outputs.should_suggest == 'true'
+        if: steps.describe.outcome == 'success' && steps.description_state.outputs.should_suggest == 'true'
+        continue-on-error: true
         shell: bash
         env:
           BODY_JSON: ${{ steps.describe.outputs.structured_output }}
