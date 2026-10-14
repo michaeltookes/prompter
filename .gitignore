@@ -7,7 +7,12 @@ DerivedData/
 *.dSYM
 .DS_Store
 xcuserdata/
-**/*.xcodeproj/project.xcworkspace/
+# Keep only the SwiftPM pin file from the project workspace (clean-clone builds resolve the same Sparkle)
+**/*.xcodeproj/project.xcworkspace/*
+!**/*.xcodeproj/project.xcworkspace/xcshareddata/
+**/*.xcodeproj/project.xcworkspace/xcshareddata/*
+!**/*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+**/*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/*
+!**/*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 *.xcworkspace/xcuserdata/
-*.xcworkspace/xcshareddata/swiftpm/Package.resolved
 dist/
