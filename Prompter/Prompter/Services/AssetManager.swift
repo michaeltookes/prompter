@@ -6,7 +6,8 @@ private let logger = Logger(subsystem: "com.tookes.Prompter", category: "Assets"
 
 /// Manages image assets stored on disk.
 ///
-/// Assets are stored in ~/Library/Application Support/Prompter/Assets/
+/// Assets are stored in the flavor's `StoragePaths.assets` folder
+/// (`~/Library/Application Support/Prompter/Assets/` for the released app)
 /// with UUID-based filenames to ensure uniqueness.
 ///
 /// Responsibilities:
@@ -19,7 +20,7 @@ final class AssetManager {
 
     // MARK: - Singleton
 
-    static let shared = AssetManager()
+    static let shared = AssetManager(paths: .current)
 
     // MARK: - Properties
 
@@ -37,12 +38,11 @@ final class AssetManager {
 
     // MARK: - Initialization
 
-    private init() {
-        // Get Application Support directory
+    /// Creates a manager storing assets under `paths.assets`.
+    init(paths: StoragePaths) {
         let fileManager = FileManager.default
-        let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        appSupportURL = appSupport.appendingPathComponent("Prompter", isDirectory: true)
-        assetsURL = appSupportURL.appendingPathComponent("Assets", isDirectory: true)
+        appSupportURL = paths.root
+        assetsURL = paths.assets
 
         // Create directories if needed
         try? fileManager.createDirectory(at: appSupportURL, withIntermediateDirectories: true)
