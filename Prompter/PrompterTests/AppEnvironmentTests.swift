@@ -7,11 +7,15 @@ final class AppEnvironmentTests: XCTestCase {
     private let appSupport = URL(fileURLWithPath: "/Users/tester/Library/Application Support", isDirectory: true)
     private let temp = URL(fileURLWithPath: "/private/tmp", isDirectory: true)
     private let installedPath = "/Applications/Prompter.app"
+    private let derivedDataPath = "/Users/runner/work/prompter/.prowl/DerivedData/Build/Products/Debug/Prompter.app"
+    private let productionId = AppEnvironment.productionBundleIdentifier
+    private let huntId = AppEnvironment.huntBundleIdentifier
 
     private func resolve(
         flavor: String? = nil,
         environment: [String: String] = [:],
         bundlePath: String? = nil,
+        bundleId: String? = AppEnvironment.productionBundleIdentifier,
         debug: Bool = true
     ) -> AppFlavor {
         var info: [String: Any] = [:]
@@ -22,6 +26,7 @@ final class AppEnvironmentTests: XCTestCase {
             infoDictionary: info,
             environment: environment,
             bundlePath: bundlePath ?? installedPath,
+            bundleIdentifier: bundleId,
             allowsHuntModeOverride: debug
         )
     }
@@ -52,18 +57,53 @@ final class AppEnvironmentTests: XCTestCase {
         XCTAssertEqual(resolve(flavor: "hunt", environment: env, debug: false), .unitTest)
     }
 
-    func testHuntModeEnvironmentSelectsHuntInDebugOnly() {
+    func testHuntModeEnvironmentSelectsHuntInDebugOnlyUnderHuntBundleId() {
         let env = [AppEnvironment.huntModeEnvironmentKey: "1"]
-        XCTAssertEqual(resolve(environment: env, debug: true), .hunt)
+        XCTAssertEqual(resolve(environment: env, bundleId: huntId, debug: true), .hunt)
         // AC5: a Release build ignores PROMPTER_HUNT_MODE
-        XCTAssertEqual(resolve(environment: env, debug: false), .production)
-        XCTAssertEqual(resolve(environment: [AppEnvironment.huntModeEnvironmentKey: "0"]), .production)
+        XCTAssertEqual(resolve(environment: env, bundleId: huntId, debug: false), .production)
+        XCTAssertEqual(resolve(environment: [AppEnvironment.huntModeEnvironmentKey: "0"], bundleId: huntId), .production)
     }
 
-    func testProwlDerivedDataBundleIsHunt() {
-        let path = "/Users/runner/work/prompter/.prowl/DerivedData/Build/Products/Debug/Prompter.app"
-        XCTAssertEqual(resolve(bundlePath: path), .hunt)
-        XCTAssertEqual(resolve(bundlePath: path, debug: false), .hunt)
+    func testProwlDerivedDataBundleIsHuntUnderHuntBundleId() {
+        XCTAssertEqual(resolve(bundlePath: derivedDataPath, bundleId: huntId), .hunt)
+        XCTAssertEqual(resolve(bundlePath: derivedDataPath, bundleId: huntId, debug: false), .hunt)
+    }
+
+    func testHuntRequestUnderOtherBundleIdRunsAsProduction() {
+        // The hunt UI never runs under the released app's bundle id (and its
+        // defaults domain): env or path requests fall back to production
+        let env = [AppEnvironment.huntModeEnvironmentKey: "1"]
+        for bundleId in [productionId, "com.example.other", nil] {
+            XCTAssertEqual(resolve(environment: env, bundleId: bundleId), .production)
+            XCTAssertEqual(resolve(bundlePath: derivedDataPath, bundleId: bundleId), .production)
+            XCTAssertTrue(AppEnvironment.isHuntRequestIgnored(
+                environment: env, bundlePath: installedPath, bundleIdentifier: bundleId, allowsHuntModeOverride: true
+            ))
+            XCTAssertTrue(AppEnvironment.isHuntRequestIgnored(
+                environment: [:], bundlePath: derivedDataPath, bundleIdentifier: bundleId, allowsHuntModeOverride: false
+            ))
+        }
+    }
+
+    func testHuntRequestIgnoredOnlyWhenRequestedAndNotHuntId() {
+        let env = [AppEnvironment.huntModeEnvironmentKey: "1"]
+        XCTAssertFalse(AppEnvironment.isHuntRequestIgnored(
+            environment: env, bundlePath: installedPath, bundleIdentifier: huntId, allowsHuntModeOverride: true
+        ))
+        XCTAssertFalse(AppEnvironment.isHuntRequestIgnored(
+            environment: [:], bundlePath: installedPath, bundleIdentifier: productionId, allowsHuntModeOverride: true
+        ))
+        // Release builds never honor the variable, so there is nothing to ignore
+        XCTAssertFalse(AppEnvironment.isHuntRequestIgnored(
+            environment: env, bundlePath: installedPath, bundleIdentifier: productionId, allowsHuntModeOverride: false
+        ))
+        // The test host is unitTest regardless
+        var hosted = env
+        hosted[AppEnvironment.xcTestEnvironmentKey] = "/tmp/config.xctestconfiguration"
+        XCTAssertFalse(AppEnvironment.isHuntRequestIgnored(
+            environment: hosted, bundlePath: installedPath, bundleIdentifier: productionId, allowsHuntModeOverride: true
+        ))
     }
 
     func testQAFlavorIsNotOverriddenByHuntMode() {
@@ -106,6 +146,15 @@ final class AppEnvironmentTests: XCTestCase {
         XCTAssertEqual([production, qa, hunt, unitTest].map(\.resetsDataOnLaunch), [false, false, true, false])
     }
 
+    func testVisibleFlavorMarkers() {
+        XCTAssertNil(AppEnvironment(flavor: .production).statusItemBadge)
+        XCTAssertEqual(AppEnvironment(flavor: .qa).statusItemBadge, "QA")
+        XCTAssertEqual(AppEnvironment(flavor: .hunt).statusItemBadge, "Hunt")
+        XCTAssertNil(AppEnvironment(flavor: .production).menuBuildLabel)
+        XCTAssertEqual(AppEnvironment(flavor: .qa).menuBuildLabel, "Prompter QA build")
+        XCTAssertEqual(AppEnvironment(flavor: .hunt).menuBuildLabel, "Prompter Hunt build")
+    }
+
     func testStatusItemLabelNamesFlavor() {
         XCTAssertEqual(AppEnvironment(flavor: .production).statusItemLabel, "Prompter")
         XCTAssertEqual(AppEnvironment(flavor: .qa).statusItemLabel, "Prompter QA")
@@ -123,32 +172,24 @@ final class AppEnvironmentTests: XCTestCase {
 
     // MARK: - Defaults identity
 
-    func testHuntUnderProductionBundleIdWritesNothingToProductionDomain() {
-        // A Debug build of com.tookes.Prompter selected as hunt by
-        // PROMPTER_HUNT_MODE=1 or the .prowl/DerivedData path
-        let viaEnv = resolve(environment: [AppEnvironment.huntModeEnvironmentKey: "1"], debug: true)
-        let viaPath = resolve(bundlePath: "/r/.prowl/DerivedData/Build/Products/Debug/Prompter.app")
-        let productionId = AppEnvironment.productionBundleIdentifier
-
-        for flavor in [viaEnv, viaPath] {
-            XCTAssertEqual(flavor, .hunt)
-            let env = AppEnvironment(flavor: flavor)
-            XCTAssertTrue(env.sharesProductionDefaults(bundleIdentifier: productionId))
-            // No placeholder window, so no frame autosave into com.tookes.Prompter
-            XCTAssertFalse(env.opensWindowScene(bundleIdentifier: productionId))
-            // The released app's domain is never wiped
-            XCTAssertNil(env.huntDefaultsDomainToReset(bundleIdentifier: productionId))
-            // No other defaults writer runs: event tap (prompt timestamp),
-            // Sparkle, and the legacy migration flag are all off
-            XCTAssertFalse(env.installsEventTap)
-            XCTAssertFalse(env.startsUpdater)
-            XCTAssertFalse(env.migratesLegacyData)
-        }
+    func testDeclaredHuntUnderProductionBundleIdWritesNothingToProductionDomain() {
+        // Safety net: a build declaring PrompterFlavor=hunt without the hunt
+        // bundle id shares the released app's defaults domain
+        XCTAssertEqual(resolve(flavor: "hunt", bundleId: productionId), .hunt)
+        let env = AppEnvironment(flavor: .hunt)
+        XCTAssertTrue(env.sharesProductionDefaults(bundleIdentifier: productionId))
+        // No placeholder window, so no frame autosave into com.tookes.Prompter
+        XCTAssertFalse(env.opensWindowScene(bundleIdentifier: productionId))
+        // The released app's domain is never wiped
+        XCTAssertNil(env.huntDefaultsDomainToReset(bundleIdentifier: productionId))
+        // No other defaults writer runs: event tap (prompt timestamp),
+        // Sparkle, and the legacy migration flag are all off
+        XCTAssertFalse(env.installsEventTap)
+        XCTAssertFalse(env.startsUpdater)
+        XCTAssertFalse(env.migratesLegacyData)
     }
 
     func testWindowSceneAndDefaultsResetPerBundleId() {
-        let huntId = "com.tookes.Prompter.hunt"
-        let productionId = AppEnvironment.productionBundleIdentifier
 
         XCTAssertTrue(AppEnvironment(flavor: .production).opensWindowScene(bundleIdentifier: productionId))
         XCTAssertFalse(AppEnvironment(flavor: .production).sharesProductionDefaults(bundleIdentifier: productionId))

@@ -75,7 +75,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
     /// Creates and configures the menu bar icon
     private func setupStatusItem() {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        statusItem = NSStatusBar.system.statusItem(withLength: Self.statusItemLength)
 
         if let button = statusItem.button {
             // Use SF Symbol for the menu bar icon
@@ -84,6 +84,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
                 accessibilityDescription: AppEnvironment.current.statusItemLabel
             )
             button.image?.isTemplate = true  // Adapts to light/dark menu bar
+            Self.applyFlavorBadge(to: button)
         }
 
         // Build and attach the menu with delegate for dynamic refresh
@@ -97,7 +98,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     /// Called when the menu is about to be displayed - refreshes menu state
     func menuNeedsUpdate(_ menu: NSMenu) {
         menu.removeAllItems()
-        for item in buildMenuItems() {
+        for item in flavorMarkerItems() + buildMenuItems() {
             menu.addItem(item)
         }
     }
@@ -193,7 +194,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     /// Builds the dropdown menu
     private func buildMenu() -> NSMenu {
         let menu = NSMenu()
-        for item in buildMenuItems() {
+        for item in flavorMarkerItems() + buildMenuItems() {
             menu.addItem(item)
         }
         return menu
@@ -596,5 +597,32 @@ struct TestCapturePlaceholderView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    }
+}
+
+// MARK: - Flavor markers (US-25)
+
+/// QA and hunt builds are visibly marked so a screenshot can never be
+/// mistaken for the release.
+extension MenuBarController {
+
+    /// Square for the release; variable when a flavor badge sits beside the icon.
+    fileprivate static var statusItemLength: CGFloat {
+        AppEnvironment.current.statusItemBadge == nil ? NSStatusItem.squareLength : NSStatusItem.variableLength
+    }
+
+    /// Shows "QA" or "Hunt" next to the icon.
+    fileprivate static func applyFlavorBadge(to button: NSStatusBarButton) {
+        guard let badge = AppEnvironment.current.statusItemBadge else { return }
+        button.title = badge
+        button.imagePosition = .imageLeading
+    }
+
+    /// Disabled first menu item ("Prompter QA build" / "Prompter Hunt build").
+    fileprivate func flavorMarkerItems() -> [NSMenuItem] {
+        guard let title = AppEnvironment.current.menuBuildLabel else { return [] }
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        item.isEnabled = false
+        return [item, .separator()]
     }
 }

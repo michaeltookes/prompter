@@ -38,6 +38,10 @@ struct AppEnvironment: Equatable, Sendable {
     /// Bundle id of the released app; its defaults domain is never wiped.
     static let productionBundleIdentifier = "com.tookes.Prompter"
 
+    /// Bundle id of hunt builds. `PROMPTER_HUNT_MODE` and the
+    /// `.prowl/DerivedData/` path select hunt only under this id.
+    static let huntBundleIdentifier = "com.tookes.Prompter.hunt"
+
     let flavor: AppFlavor
 
     // MARK: - Current
@@ -47,8 +51,18 @@ struct AppEnvironment: Equatable, Sendable {
         infoDictionary: Bundle.main.infoDictionary ?? [:],
         environment: ProcessInfo.processInfo.environment,
         bundlePath: Bundle.main.bundlePath,
+        bundleIdentifier: Bundle.main.bundleIdentifier,
         allowsHuntModeOverride: isDebugBuild
     ))
+
+    /// True when this process asked for hunt by environment or path but runs
+    /// under another bundle id, so it was resolved as production instead.
+    static let ignoredHuntRequest = isHuntRequestIgnored(
+        environment: ProcessInfo.processInfo.environment,
+        bundlePath: Bundle.main.bundlePath,
+        bundleIdentifier: Bundle.main.bundleIdentifier,
+        allowsHuntModeOverride: isDebugBuild
+    )
 
     /// True when compiled with the DEBUG condition. `PROMPTER_HUNT_MODE` is
     /// honored only then, so no environment variable can redirect a released
@@ -66,12 +80,15 @@ struct AppEnvironment: Equatable, Sendable {
     /// Resolves the flavor from the process's inputs.
     ///
     /// Order: hosted unit tests win; then an explicit `PrompterFlavor` of `qa`
-    /// or `hunt`; then the Debug-only `PROMPTER_HUNT_MODE=1`; then a bundle
-    /// built under `.prowl/DerivedData/`; otherwise `production`.
+    /// or `hunt`; then the Debug-only `PROMPTER_HUNT_MODE=1` or a bundle built
+    /// under `.prowl/DerivedData/`, both only when the bundle id is
+    /// `com.tookes.Prompter.hunt` (the hunt UI never runs under the released
+    /// app's bundle id and defaults domain); otherwise `production`.
     static func resolveFlavor(
         infoDictionary: [String: Any],
         environment: [String: String],
         bundlePath: String,
+        bundleIdentifier: String?,
         allowsHuntModeOverride: Bool
     ) -> AppFlavor {
         if environment[xcTestEnvironmentKey] != nil {
@@ -90,15 +107,36 @@ struct AppEnvironment: Equatable, Sendable {
             break
         }
 
-        if allowsHuntModeOverride, environment[huntModeEnvironmentKey] == "1" {
-            return .hunt
-        }
-
-        if bundlePath.contains(prowlDerivedDataPathFragment) {
+        if bundleIdentifier == huntBundleIdentifier,
+           requestsHunt(environment: environment, bundlePath: bundlePath, allowsHuntModeOverride: allowsHuntModeOverride) {
             return .hunt
         }
 
         return .production
+    }
+
+    /// Whether `PROMPTER_HUNT_MODE=1` (Debug only) or the `.prowl/DerivedData/`
+    /// path asks for the hunt flavor.
+    static func requestsHunt(
+        environment: [String: String],
+        bundlePath: String,
+        allowsHuntModeOverride: Bool
+    ) -> Bool {
+        (allowsHuntModeOverride && environment[huntModeEnvironmentKey] == "1")
+            || bundlePath.contains(prowlDerivedDataPathFragment)
+    }
+
+    /// True when hunt was asked for by environment or path under a bundle id
+    /// other than the hunt one (the launch then runs as production).
+    static func isHuntRequestIgnored(
+        environment: [String: String],
+        bundlePath: String,
+        bundleIdentifier: String?,
+        allowsHuntModeOverride: Bool
+    ) -> Bool {
+        environment[xcTestEnvironmentKey] == nil
+            && bundleIdentifier != huntBundleIdentifier
+            && requestsHunt(environment: environment, bundlePath: bundlePath, allowsHuntModeOverride: allowsHuntModeOverride)
     }
 
     // MARK: - Capabilities
@@ -136,6 +174,24 @@ struct AppEnvironment: Equatable, Sendable {
         case .production, .unitTest: return "Prompter"
         case .qa: return "Prompter QA"
         case .hunt: return "Prompter Hunt"
+        }
+    }
+
+    /// Short visible marker next to the status item icon, or nil for the release.
+    var statusItemBadge: String? {
+        switch flavor {
+        case .qa: return "QA"
+        case .hunt: return "Hunt"
+        case .production, .unitTest: return nil
+        }
+    }
+
+    /// Disabled first item of the status menu naming a non-release build.
+    var menuBuildLabel: String? {
+        switch flavor {
+        case .qa: return "Prompter QA build"
+        case .hunt: return "Prompter Hunt build"
+        case .production, .unitTest: return nil
         }
     }
 
