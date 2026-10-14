@@ -3,42 +3,44 @@ import XCTest
 
 /// Tests for PersistenceService.
 ///
-/// Note: These tests use the real file system in the app's Application Support directory.
-/// The shared singleton is used, so tests may have side effects on each other.
-/// For production, consider dependency injection for better isolation.
+/// Each test gets its own service rooted at a fresh temporary folder, which is
+/// deleted in `tearDown`; nothing here touches `~/Library/Application Support`.
 @MainActor
 final class PersistenceServiceTests: XCTestCase {
 
     private var service: PersistenceService!
-    private var testDeckIds: [UUID] = []
+    private var rootURL: URL!
 
     override func setUp() async throws {
         try await super.setUp()
-        service = PersistenceService.shared
-        testDeckIds = []
+        rootURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("PrompterTests-\(UUID().uuidString)", isDirectory: true)
+        service = PersistenceService(rootURL: rootURL)
     }
 
     override func tearDown() async throws {
-        // Clean up any test decks we created
-        for deckId in testDeckIds {
-            service.deleteDeck(id: deckId)
+        service = nil
+        if let rootURL {
+            try? FileManager.default.removeItem(at: rootURL)
         }
-        testDeckIds = []
+        rootURL = nil
         try await super.tearDown()
     }
 
     // MARK: - Settings Tests
 
     func testLoadDefaultSettings() {
-        // When no settings file exists, should return defaults
-        // Note: This test may not work if settings already exist
+        // A fresh root has no settings file, so defaults come back
         let settings = service.loadSettings()
 
-        // Just verify the settings are valid (within expected ranges)
-        XCTAssertGreaterThanOrEqual(settings.overlayOpacity, 0.3)
-        XCTAssertLessThanOrEqual(settings.overlayOpacity, 1.0)
-        XCTAssertGreaterThanOrEqual(settings.overlayFontScale, 0.5)
-        XCTAssertLessThanOrEqual(settings.overlayFontScale, 2.0)
+        XCTAssertEqual(settings, Settings.default)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: StoragePaths(root: rootURL).settings.path))
+    }
+
+    func testSaveSettingsWritesUnderInjectedRoot() {
+        service.saveSettingsSync(Settings.default)
+
+        XCTAssertTrue(FileManager.default.fileExists(atPath: StoragePaths(root: rootURL).settings.path))
     }
 
     func testSaveAndLoadSettings() {
@@ -91,7 +93,6 @@ final class PersistenceServiceTests: XCTestCase {
         var deck = Deck(title: "Test Deck")
         deck.addCard(Card(layout: .titleBullets))
         deck.addCard(Card(layout: .imageTopNotes))
-        testDeckIds.append(deck.id)
 
         // Save synchronously
         service.saveDeckSync(deck)
@@ -132,8 +133,6 @@ final class PersistenceServiceTests: XCTestCase {
         // Create a few test decks
         let deck1 = Deck(title: "Deck 1")
         let deck2 = Deck(title: "Deck 2")
-        testDeckIds.append(deck1.id)
-        testDeckIds.append(deck2.id)
 
         service.saveDeckSync(deck1)
         service.saveDeckSync(deck2)
@@ -148,8 +147,6 @@ final class PersistenceServiceTests: XCTestCase {
         // Create test decks
         let deck1 = Deck(title: "All Decks Test 1")
         let deck2 = Deck(title: "All Decks Test 2")
-        testDeckIds.append(deck1.id)
-        testDeckIds.append(deck2.id)
 
         service.saveDeckSync(deck1)
         service.saveDeckSync(deck2)
@@ -166,7 +163,6 @@ final class PersistenceServiceTests: XCTestCase {
         deck.addCard(Card(layout: .titleBullets))
         deck.addCard(Card(layout: .imageTopNotes))
         deck.addCard(Card(layout: .grid2x2Caption))
-        testDeckIds.append(deck.id)
 
         service.saveDeckSync(deck)
 
@@ -186,7 +182,6 @@ final class PersistenceServiceTests: XCTestCase {
 
         var deck = Deck(title: "Complex Deck")
         deck.addCard(card)
-        testDeckIds.append(deck.id)
 
         service.saveDeckSync(deck)
 
