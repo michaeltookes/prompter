@@ -149,6 +149,7 @@ jobs:
 
       # Errors fail the job; warnings are annotations. --strict is turned on
       # once the existing warnings are burned down (design 4.2, AC7).
+      # Run from the repository root so annotation paths (Prompter/Prompter/...)
+      # match tracked files and attach to the PR's lines.
       - name: Lint
-        working-directory: Prompter
-        run: swiftlint lint --config .swiftlint.yml --reporter github-actions-logging --no-cache
+        run: swiftlint lint --config Prompter/.swiftlint.yml --reporter github-actions-logging --no-cache Prompter

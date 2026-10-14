@@ -115,6 +115,10 @@ Source: `docs/requirements/audit-and-modernization.md` (findings F-01 to F-19, s
    `project.pbxproj` sets `DEVELOPMENT_TEAM` to the owner's team id in all four build configurations; move it to an untracked or environment-supplied setting (for example a gitignored `.xcconfig` with a committed placeholder, or `DEVELOPMENT_TEAM` passed by `release.sh` and `qa-build.yml`) so the public repo names no team. The tracked build output under `Prompter/dist/` that also embeds it is already untracked by PRMT-007. Not a credential; no rotation. Follow-up to F-20 / US-audit-and-modernization-27.
    **Acceptance:** `git grep` for the team id finds nothing in tracked files; a clean clone still builds unsigned in CI (PRMT-008) and the release and QA builds still sign with the owner's Developer ID when the team id comes from the environment; with the team id unset, a signed build fails with a message naming `DEVELOPMENT_TEAM` (or the variable `release.sh` reads).
 
+{PRMT-036} **Burn down the SwiftLint warnings and turn on `--strict` in Swift CI** (Size S, Low; after PRMT-008)
+   PRMT-008's "SwiftLint" job fails on errors only; `Prompter/.swiftlint.yml` reports 35 warnings on `main` (identifier names, file and function length, among others). Fix or justify each (inline `swiftlint:disable` with a reason only where the rule is wrong for the code), then add `--strict` to the Lint step in `.github/workflows/swift-ci.yml`. Coordinate with Epic A, which edits the same files. Design 4.2 item 4.
+   **Acceptance:** `swiftlint lint --strict --config Prompter/.swiftlint.yml Prompter` exits 0 on `main`; the Swift CI "SwiftLint" job runs with `--strict`, so a new warning fails the check.
+
 ### Epic A: Audit fixes
 
 {PRMT-013} **Hotkeys only consume keys while they are in use** (Size M)
