@@ -42,9 +42,6 @@ Prioritized list of planned features, improvements, and technical debt.
 {PRMT-002} **Export/import decks**
    Allow users to share decks as `.prompter` files (JSON + bundled assets).
 
-{PRMT-007} **Reproducible clean-clone build: shared scheme, pinned Sparkle, no tracked binaries** (completed: 2026-10-14)
-   Shared `Prompter` scheme (PrompterTests in its Test action), Sparkle pinned to exactly 2.8.1 with `Package.resolved` tracked, and the 74 build-output files under `Prompter/dist/` removed from git.
-
 ## Low Priority
 
 {PRMT-003} **Keyboard shortcut customization**
@@ -71,7 +68,6 @@ Source: `docs/requirements/audit-and-modernization.md` (findings F-01 to F-19, s
 
 {PRMT-007} **Reproducible clean-clone build: shared scheme, pinned Sparkle, no tracked binaries** (completed: 2026-10-14)
    Shared `Prompter` scheme (PrompterTests in its Test action), Sparkle pinned to exactly 2.8.1 with `Package.resolved` tracked, and the 74 build-output files under `Prompter/dist/` removed from git. Branch `prmt-007-clean-clone-build` (acf9f3e), PR #17. Findings F-10, F-11. Story US-audit-and-modernization-1 (AC2, AC3 done; AC1 and AC4 are proven by PRMT-008's first run after PRMT-031).
-   *This entry replaces the completed PRMT-007 line the builder added at the end of Medium Priority on that branch; keep only this one after both merge.*
 
 {PRMT-031} **Build flavors with isolated storage: tests, hunts, and QA builds never touch user data** (in progress) (Size M; first after PRMT-007; blocks PRMT-007's test run, PRMT-008's Build & Test job, PRMT-010, PRMT-032, and the pre-PR QA gate)
    Four flavors per design 3.2: `production` (`com.tookes.Prompter`, `Application Support/Prompter/`), `qa` (`com.tookes.Prompter.qa`, `Prompter-QA/`), `hunt` (`com.tookes.Prompter.hunt`, `Prompter-Hunt/`, wiped and re-seeded from bundled fixtures each launch), `unitTest` (no storage). Tasks: `App/AppEnvironment.swift`, `Services/StoragePaths.swift`; `PersistenceService` and `AssetManager` take `StoragePaths`; `Info.plist` `PrompterFlavor = $(PROMPTER_FLAVOR)` defaulting to `production`; legacy `PresenterOverlay` migration only in `production`; hunt build copies `docs/qa/fixtures/` into `Contents/Resources/HuntSeed/` (empty deck folder until PRMT-021). Finding F-21 (High). Story US-audit-and-modernization-25.
