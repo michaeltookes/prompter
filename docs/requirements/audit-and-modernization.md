@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Slug | `audit-and-modernization` (story ids `US-audit-and-modernization-<n>`) |
-| Branch | `req/prompter-audit` (design on `req/prompter-audit-arch`, `docs/architecture/audit-and-modernization.md`) |
+| Branch | `req/prompter-audit` (design merged in from `req/prompter-audit-arch`: `docs/architecture/audit-and-modernization.md`) |
 | Source | Owner intake 2026-10-14: audit the whole app, bring it into the Lucius QA lane the way ContainerBar is, add the CI/CD ContainerBar has, and give it a Liquid Glass makeover for macOS 26 |
 | Baseline | `main` at `0e3e602` (code as of `b536f1b`, 2026-02-18; last release v1.2.0) |
 | Backlog | `docs/backlog.md`, items PRMT-007 to PRMT-030 (Epics B, A, C, D in build order); PRMT-006 marked obsolete |
-| Status | Draft for the architect's feasibility pass and the owner's answers to section 9 |
+| Status | Reconciled with the architect's design 2026-10-14 (feasibility review applied: US-25, US-26, US-27 added, US-10 split into 10a/10b, rulings on US-3 and US-19 recorded). Waiting on the owner's answers to section 9 (Q1, Q6, Q7). |
 
 ## 1. Problem
 
@@ -73,6 +73,15 @@ A one-time migration copies data from the pre-rename `PresenterOverlay` folder (
 | Branches | 16 remote branches besides `main`; every one is 0 commits ahead of `main` (fully merged), including `next-updates` and `phase-1`; `chore/add-backlog-sync-workflow` keeps only the Mission Control sync commits, which are obsolete | `git rev-list --count origin/main..origin/<b>` |
 | Dead or unfinished code | `TestCaptureWindowController` is never used (the menu builds its own window); `DeckEditorPlaceholderView` and `TestCapturePlaceholderView` are leftovers; `PersistenceService.loadDeckMetadata`, `totalDataSize`, `clearAllData` and the `ioQueue` are unused; `AssetManager.deleteAsset` and `cleanupUnusedAssets` have no callers | F-09, F-14 |
 
+### 2.2a Repo hygiene already done by PRMT-007 (branch `prmt-007-clean-clone-build`, not yet merged)
+
+Stories below do not redo these; they build on them.
+
+- **Shared scheme:** `Prompter.xcodeproj/xcshareddata/xcschemes/Prompter.xcscheme` is committed with `PrompterTests` in its Test action (commit `6678889`).
+- **Sparkle pinned:** the package requirement is `exactVersion 2.8.1`, the version v1.2.0 shipped with, and `Package.resolved` is tracked through `.gitignore` negations under `project.xcworkspace/xcshareddata/swiftpm/` (commit `3e6f2d2`). Release tooling (US-5) fetches the Sparkle 2.8.1 tools to match; a Sparkle upgrade is its own later PR.
+- **Build output out of git:** the 80 files under `Prompter/dist/` (app, DMG, zip, logs, duplicate `ExportOptions.plist`) are removed and `dist/` stays ignored (commit `6807acd`).
+- **Not done by PRMT-007 and still open:** running the unit tests anywhere is unsafe until US-25 lands (F-21); no workflow runs build, tests, or lint until US-2.
+
 ### 2.3 PM intake inputs (2026-10-14) and corrections
 
 The project-manager's snapshot was taken as input. Confirmed: last release v1.2.0 (2026-02-12), deployment target 14.0, nine unit-test files, a hardcoded notarization keychain profile, no swift-ci, prowl-qa, or release workflow, the tap cask on the deprecated `depends_on macos:` string form (genkei-ops backlog 16b), no `docs/qa/`. Two corrections from the code: the release scripts live in `Prompter/scripts/` (not `Prompter/Prompter/scripts/`), and `Prompter/.swiftlint.yml` does exist; the gap is that no workflow runs it.
@@ -113,13 +122,16 @@ Severity: **Critical** breaks the core promise for most users; **High** breaks a
 | F-17 | Low | The appcast's release notes are empty headings ("What's New in 1.2.0" with no content), so the Sparkle dialog shows users nothing about the update; the CHANGELOG date for 1.2.0 does not match the release. | `appcast.xml:9-11`, `:25-27`, `:41-43`; `CHANGELOG.md:9` |
 | F-18 | Low | `CLAUDE.md` and `AGENTS.md` say the backlog is "maintained separately, not in repo"; it now lives at `docs/backlog.md`. `CLAUDE.md` also says the deck debounce is 0.5 s; it is 1.0 s. | `CLAUDE.md:15`, `AGENTS.md:13`; `App/AppState.swift:119` |
 | F-19 | Low (verify) | The overlay sits at `.floating` window level. Whether it stays above Keynote's or PowerPoint's full-screen slideshow and above a Meet/Teams "share this window" picker has never been checked. | `Windows/OverlayWindow.swift:42` |
+| F-20 | High | The owner's personal Apple ID email is hardcoded in a script of this **public** repository, and the Developer ID signing identity string is hardcoded in two more; any release path built on these scripts (local or CI) keeps publishing them. (Architect finding A-05.) The email is not a credential, so nothing needs rotating, but it is personal data the repo should not carry. | `Prompter/scripts/notarize.sh:6`; `Prompter/scripts/build-release.sh:4`; `Prompter/scripts/create-dmg.sh:4` |
+| F-21 | High | The unit tests boot the full app (test host = `Prompter.app`): status item, Accessibility prompt, event tap, a Sparkle check against the live appcast, and the real deck store. `PersistenceServiceTests` uses the real `~/Library/Application Support/Prompter/` through the singleton, and `testSaveAndLoadSettings` overwrites the real `Settings.json` with a random `lastOpenedDeckId`. Running the suite on a developer Mac clobbers the user's settings; on Lucius' Mini it would clobber the QA baseline. (Architect findings A-01, A-02.) | `PrompterTests/PersistenceServiceTests.swift:17,44-60`; `App/AppDelegate.swift:40-77`; `Services/PersistenceService.swift:70-83` |
+| F-22 | Medium | SwiftLint already reports one **error** with the repo's own config, so a lint gate fails on its first run: `type_body_length` 602 lines against the 600-line error threshold. 35 warnings besides. (Architect finding A-03.) | `App/AppState.swift:19`; `Prompter/.swiftlint.yml` |
 
-Count: High 4 (one may become Critical), Medium 8, Low 7. Defects F-01 to F-09, F-14 to F-16 become Epic A stories; F-10 to F-13 and F-17 are solved in Epic B; F-18 is fixed in passing by PRMT-020; F-19 is a Lucius check in Epic C.
+Count: High 6 (one may become Critical), Medium 9, Low 7. Defects F-01 to F-09, F-14 to F-16 become Epic A stories; F-10 to F-13, F-17, F-20 (US-27), F-21 (US-25), and F-22 (US-2 task) are solved in Epic B; F-18 is fixed in passing by PRMT-020; F-19 is a Lucius check in Epic C. The architect's further findings (A-04 version in two places, A-06 cache eviction, A-07 timer re-render, A-08 Swift 6 readiness, A-09 Codable fragility, A-13 deprecated activate) are folded as tasks below or left in the design's section 2.3 as later items.
 
 ## 3. Goal and non-goals
 
 **Goals**
-1. Every pull request to `main` gets a build, the unit tests, SwiftLint, prowl-qa, and a Claude review, and a tagged release is built, signed, notarized, published, and reflected in the appcast and the cask without the owner's laptop (Epic B).
+1. Every pull request to `main` gets a build, the unit tests, SwiftLint, and prowl-qa (code review comes from the factory's pre-PR Codex review and the repo's bot reviewer; the Claude code-review workflow is dropped per the 2026-10-12 decision, see US-3), and a tagged release is built, signed, notarized, published, and reflected in the appcast and the cask without the owner's laptop (Epic B).
 2. The defects in section 2.5 are fixed, each with a regression test or a Lucius check (Epic A).
 3. Lucius proves every day that the released Prompter installs, launches, shows its overlay, answers its hotkeys, keeps its settings, and finds its updates, as he does for ContainerBar (Epic C).
 4. On macOS 26 Prompter looks like a macOS 26 app, verified by screenshot, without breaking the overlay's one job: being readable to the presenter and absent from the shared screen (Epic D).
@@ -142,16 +154,28 @@ Count: High 4 (one may become Critical), Medium 8, Low 7. Defects F-01 to F-09, 
 
 ## 5. User stories and acceptance criteria
 
-Conventions. "The QA deck" is the fictional fixture deck defined in US-audit-and-modernization-14 (all text invented, any address on `example.com`). "Text field" means a TextEdit window with the line `alpha beta gamma` and the caret after `beta`. Timings are wall-clock from the triggering action. Where a criterion depends on the deployment-target decision (Q1), it is written to hold for both options: **26-only** (deployment target 26.0) and **14+ with a 26 path** (deployment target 14.0, macOS 26 look behind availability checks).
+Conventions. "The QA deck" is the fictional fixture deck defined in US-audit-and-modernization-15 and the design's section 5.2 (all text invented, any address on `example.com`). "Text field" means a TextEdit window with the line `alpha beta gamma` and the caret after `beta`. Timings are wall-clock from the triggering action. Where a criterion depends on the deployment-target decision (Q1), it is written to hold for both options: **26-only** (deployment target 26.0) and **14+ with a 26 path** (deployment target 14.0, macOS 26 look behind availability checks).
 
 ### Epic B: CI/CD and QA parity with ContainerBar (build first)
 
+Build order inside this epic (architect review 2026-10-14): US-1 (PRMT-007, done on its branch) → **US-25** (first after PRMT-007: until it lands the test target boots the app and overwrites the real `Settings.json`, F-21) → US-2, US-3, US-27 in parallel → US-26 and US-4 → US-5, US-6. Stories are numbered in the order they were written, not the order they are built.
+
 #### US-audit-and-modernization-1: The project builds the same way on any clean machine
 As a builder, I want a clean clone to build and test with one command so that CI and Lucius build exactly what I built.
-- **AC1.** Given a fresh clone of `main` on a Mac with Xcode 26, when `xcodebuild -project Prompter/Prompter.xcodeproj -scheme Prompter -destination 'platform=macOS' build test` runs, then it exits 0 and reports all unit tests passed (134 or more).
+- **AC1.** Given a fresh clone of `main` on a clean GitHub-hosted macOS runner with Xcode 26 (US-2's job; tests never run on the owner's MacBook or dev Mini), when `xcodebuild build-for-testing` and `test-without-building` run for scheme `Prompter`, then both exit 0 and all unit tests pass (134 or more). Verified by US-2's first run after US-25 lands, because before US-25 the suite writes the real Application Support folder (F-21).
 - **AC2.** Given the repo, when `git ls-files` runs, then it lists a shared scheme `Prompter.xcodeproj/xcshareddata/xcschemes/Prompter.xcscheme` whose Test action includes `PrompterTests`, and a committed `Package.resolved` that pins Sparkle to one exact version.
 - **AC3.** Given the repo, when `git ls-files Prompter/dist` runs, then it prints nothing, and `.gitignore` still ignores `dist/`.
 - **AC4 (unhappy).** Given `Package.resolved` names a Sparkle version that cannot be fetched, when the build runs, then it fails at package resolution with an error naming Sparkle, not later with a missing-module error.
+- **Done on PRMT-007's branch:** AC2 (shared scheme; Sparkle pinned exactly to 2.8.1 with `Package.resolved` tracked) and AC3 (`Prompter/dist/` removed). See 2.2a. AC1 and AC4 are proven by US-2's job.
+
+#### US-audit-and-modernization-25: Build flavors with isolated storage, so tests and QA builds never touch a user's data (F-21)
+As the owner, I want the unit tests, PR hunts, QA builds, and the released app each to keep their own data so that running any of them can never overwrite a presenter's decks or settings, or the QA baseline on Lucius' Mini. First story after PRMT-007; it blocks US-1's test run, US-2's Build & Test job, US-4, US-26, and the QA gate. Design: section 3.2.
+- **AC1.** Given the four flavors `production`, `qa`, `hunt`, `unitTest`, when each is launched, then it uses exactly the bundle id and data root in the design's section 3.2 table (`com.tookes.Prompter` → `Application Support/Prompter/`; `com.tookes.Prompter.qa` → `Prompter-QA/`; `com.tookes.Prompter.hunt` → `Prompter-Hunt/`, wiped and re-seeded from the bundled fixtures on every launch; `unitTest` → none), and a unit test covers the resolution table.
+- **AC2.** Given the test suite runs, when `~/Library/Application Support/Prompter/` and the `com.tookes.Prompter` defaults domain are hashed before and after, then both are unchanged; every persistence test uses `PersistenceService(rootURL:)` on a temporary directory it deletes in `tearDown`.
+- **AC3.** Given the test host launches under XCTest, when `applicationDidFinishLaunching` runs, then no status item, Accessibility prompt, event tap, Sparkle updater, or storage access happens (the app returns right after setting the accessory policy).
+- **AC4.** Given the `hunt` or `qa` flavor, when it runs, then Sparkle is never started and the status item's accessibility label names the flavor ("Prompter QA", "Prompter Hunt").
+- **AC5 (unhappy).** Given a production (Release) build, when it is launched with `PROMPTER_HUNT_MODE=1` in its environment, then it still uses `Application Support/Prompter/` (the override is compiled into Debug builds only).
+- **Technical tasks:** `App/AppEnvironment.swift`, `Services/StoragePaths.swift`; `PersistenceService` and `AssetManager` take `StoragePaths` in their initializers; `Info.plist` key `PrompterFlavor = $(PROMPTER_FLAVOR)` with project default `production`; the legacy `PresenterOverlay` migration runs only in `production`; the hunt build script copies `docs/qa/fixtures/` into `Contents/Resources/HuntSeed/` (fixtures come from US-15; until they exist the hunt seed is an empty deck folder).
 
 #### US-audit-and-modernization-2: Every pull request is built, tested, and linted
 As the owner, I want each PR to show build, test, and lint results so that I never merge a change nobody compiled.
@@ -161,35 +185,64 @@ As the owner, I want each PR to show build, test, and lint results so that I nev
 - **AC4.** Given two pushes to the same PR within a minute, when the second starts, then the first run is cancelled (concurrency group per ref).
 - **AC5 (unhappy).** Given the runner has no Xcode 26, when the select step runs, then the job fails with an error that lists the installed Xcode versions.
 - **AC6.** Given the workflow file, when it is read, then every third-party action is pinned to a full commit SHA and `permissions` is `contents: read`.
+- **AC7.** Given `main` before this story, when SwiftLint runs with `Prompter/.swiftlint.yml`, then it reports 0 errors (the existing error is cleared by this story's task below); warnings remain annotations, not failures.
+- **Technical task (F-22).** Clear the pre-existing SwiftLint error `App/AppState.swift:19` `type_body_length` (602 lines, error threshold 600) in the same branch that adds the job. The builder chooses: **trim** (move the timer block `AppState.swift:579-721` and the auto-save sinks `:723-803` into `AppState+Timer.swift` and `AppState+AutoSave.swift` extensions; the rule counts each type declaration body separately) or **raise the threshold** in `.swiftlint.yml` with a comment naming this story. Note for the builder: Epic A adds code to `AppState` (US-7, US-9, US-11, US-12, US-13), so a raised threshold will be hit again within weeks; trimming is the durable choice.
+- **Technical task.** The CI test build signs ad hoc with hardened runtime off for the test build only (`CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= ENABLE_HARDENED_RUNTIME=NO`); library validation would otherwise refuse to load the ad-hoc test bundle (design 4.2). Depends on US-25 for a side-effect-free test run.
 
-#### US-audit-and-modernization-3: Claude review and PR hygiene match ContainerBar
-As the owner, I want the same review automation on Prompter as on ContainerBar so that reviews look the same in every repo.
-- **AC1.** Given a PR from a branch in this repo, when it is opened, then the Claude code review workflow runs and posts a review, and a PR-description workflow fills an empty PR body, matching ContainerBar's `claude-code-review.yml` and `claude-pr-description.yml`.
+#### US-audit-and-modernization-3: Claude workflows and PR hygiene follow the factory's review model
+As the owner, I want Prompter's PR automation to match the factory's current review model so that reviews come from the same places in every repo.
+
+**Ruling (orchestrator, 2026-10-14):** the architect's design stands. Per the 2026-10-12 decision the Claude code-review workflow is dropped (reviews come from the orchestrator's pre-PR Codex review and the repo's bot reviewer); `claude.yml` (on-demand `@claude`) stays; `claude-pr-description.yml` is added.
+- **AC1.** Given the repo after this story, when `.github/workflows/` is listed, then `claude-code-review.yml` is absent, `claude.yml` is present with its actions pinned to commit SHAs, and `claude-pr-description.yml` is a verbatim copy of ContainerBar's portable file; given a same-repo PR opened with an empty body, the PR-description workflow writes a suggested description to the workflow summary and never edits the PR body.
 - **AC2.** Given a new PR or issue, when the form opens, then it uses a PR template and bug/feature issue templates adapted to Prompter (fields: macOS version, Prompter version, meeting app, display setup).
 - **AC3 (unhappy).** Given a PR from a fork, when it is opened, then no workflow that uses a repository secret runs.
 
 #### US-audit-and-modernization-4: prowl-qa runs on every pull request
 As the owner, I want prowl-qa on Prompter PRs so that a change is exercised on a real Mac before merge.
 - **AC1.** Given a same-repo PR to `main`, when it is opened or updated, then a `Prowl QA` workflow runs on the self-hosted macOS runner, with the pinned Prowl version used by ContainerBar, builds the PR's app, and reports a check result.
-- **AC2.** Given the hunt build, when it is inspected, then it uses a bundle id distinct from the release (`com.tookes.Prompter.hunt` or the architect's equivalent) and its own Application Support folder, so it never reads or writes the installed app's decks.
-- **AC3 (unhappy).** Given the self-hosted runner is offline, when a PR is opened, then the check stays queued or times out within 30 minutes and does not report success.
-- **AC4.** Given the run finished, when the Mini is inspected, then the hunt app is no longer running and no hunt build is left in `/Applications`.
+- **AC2.** Given the hunt build, when it is inspected, then its bundle id is `com.tookes.Prompter.hunt` and its data root is `~/Library/Application Support/Prompter-Hunt/` (US-25), so it never reads or writes the installed app's decks.
+- **AC3 (unhappy).** Given the self-hosted runner is offline, when a PR is opened, then the check stays pending (GitHub keeps a job queued on an offline self-hosted runner for up to 24 hours; `timeout-minutes: 30` bounds only a job that has started) or fails, and never reports success; the merge checklist treats a pending check as not green.
+- **AC4.** Given the run finished, when the Mini is inspected, then the hunt app is no longer running (the last step quits it with `osascript -e 'quit app id "com.tookes.Prompter.hunt"'`, no signals) and no hunt build is left in `/Applications`.
+- **Preconditions (not builder work).** `homelab-it` registers a repository-scoped self-hosted runner for `michaeltookes/prompter` on Lucius' Mini (labels `self-hosted, macOS, ARM64`) and adds `repos/michaeltookes/prompter/actions/runners` to the Mini's CI-busy predicate; the **owner grants Accessibility once** to that runner's host process (Q7). Until then the workflow's Accessibility preflight fails with its error message.
+- **Depends on:** US-25 (hunt flavor). Hunts and forbidden selectors: design 4.3 and 3.3.
+
+#### US-audit-and-modernization-26: A QA build of any branch for the pre-PR QA gate
+As the orchestrator, I want a signed QA build of a story's branch that Lucius can install beside the release so that the factory's QA gate can run the story's TC cases before the PR (design 4.4).
+- **AC1.** Given a `workflow_dispatch` of `qa-build.yml` with input `ref`, when it finishes, then an artifact `Prompter-QA-<shortsha>.zip` (retention 3 days) holds `Prompter QA.app` with bundle id `com.tookes.Prompter.qa`, flavor `qa` (US-25), signed with the Developer ID certificate with hardened runtime, not notarized.
+- **AC2.** Given two QA builds of different commits, when `codesign -d -r-` is compared, then the designated requirement is identical (so the one-time Accessibility grant for `com.tookes.Prompter.qa` survives every new build).
+- **AC3.** Given the QA app is installed in `~/Applications/` on the Mini and launched, when the released `/Applications/Prompter.app` data is hashed before and after, then it is unchanged; the QA app uses `Application Support/Prompter-QA/` and never starts Sparkle.
+- **AC4 (unhappy).** Given the certificate secret is missing or wrong, when the workflow runs, then it fails at the keychain import step with a message naming the secret, and no artifact is uploaded; the temporary keychain is deleted in every case.
+- **Secrets (GitHub environment `qa-build`, created by `vendor-ops`):** `MACOS_CERTIFICATE_P12`, `MACOS_CERTIFICATE_PASSWORD`, `APPLE_TEAM_ID` (same values as Sentwise's release secrets; owner approval Q6).
+- **Precondition:** the **owner grants Accessibility once** to `~/Applications/Prompter QA.app` on the Mini (Q7).
+
+#### US-audit-and-modernization-27: No personal data or hardcoded identity in the release scripts (F-20)
+As the owner, I want the release scripts in this public repo to read identity and credentials from the environment so that my personal Apple ID stops being published and CI and local releases run the same script.
+- **AC1.** Given the repo after this story, when `git grep` searches the working tree for the owner's Apple ID email, the team-qualified Developer ID identity string, and the keychain profile name `Prompter-Notarize`, then nothing in `Prompter/scripts/` matches.
+- **AC2.** Given the scripts, when they run, then they read `SIGNING_IDENTITY`, `DEVELOPMENT_TEAM`, `NOTARY_APPLE_ID`, `NOTARY_TEAM_ID`, and either `NOTARY_PASSWORD` (CI) or `NOTARY_KEYCHAIN_PROFILE` (local) from the environment; a gitignored `Prompter/scripts/.env.local` (with a committed `.env.example` of placeholders) serves local runs.
+- **AC3 (unhappy).** Given a required variable is unset, when a script starts, then it exits non-zero naming the missing variable before running any build or notarization step.
+- **Note.** The email stays in git history. It is not a credential, so nothing is rotated; rewriting public history is not part of this story (it would break every clone) and is the owner's call if ever wanted.
+- **Folds into US-5's `release.sh`** (one script for CI and local); can run in parallel with US-2 and US-3 because it touches only `Prompter/scripts/`.
 
 #### US-audit-and-modernization-5: A tag produces a signed, notarized, published release
 As the owner, I want pushing a version tag to produce the complete release so that releases no longer depend on my laptop or on pushes to `main`.
-- **AC1.** Given `Info.plist`, `project.pbxproj`, and `CHANGELOG.md` agree on version V and a tag `vV` is pushed, when the release workflow finishes, then the GitHub Release `vV` exists with `Prompter.zip` and `Prompter.dmg`, its notes are the CHANGELOG section for V, and the CHANGELOG date for V equals the release date.
+- **AC1.** Given `Info.plist`, `project.pbxproj`, and `CHANGELOG.md` agree on version V and a tag `vV` is pushed, when the release workflow finishes, then the GitHub Release `vV` exists with `Prompter.zip`, `Prompter.dmg`, and `Prompter.dmg.sha256`, its notes are the CHANGELOG section for V, and the CHANGELOG date for V equals the tag's commit date in America/Chicago.
 - **AC2.** Given the downloaded `Prompter.zip`, when `codesign --verify --deep --strict`, `spctl --assess --type execute`, and `xcrun stapler validate` run against the extracted app, then all three exit 0 and `codesign -dv` names the owner's Developer ID authority; the same holds for the app inside the DMG.
 - **AC3.** Given the release succeeded, when `https://michaeltookes.github.io/prompter/appcast.xml` is fetched, then its newest item is V with a valid `sparkle:edSignature`, the zip's exact byte length, `minimumSystemVersion` equal to the deployment target, and non-empty release notes drawn from the CHANGELOG.
-- **AC4.** Given the workflow, when its steps are read, then the appcast change reaches `main` through a pull request (or a Pages source the architect chooses that is not `main`), never a direct push to `main`; signing identities, the notarization credentials, and the Sparkle private key come from GitHub secrets and appear in no log.
+- **AC4.** Given the workflow, when its steps are read, then the appcast change is pushed to the `gh-pages` branch, which is the GitHub Pages source (same public URL), never to `main`; signing identities, the notarization credentials, and the Sparkle private key come from GitHub secrets and appear in no log.
 - **AC5 (unhappy, mismatch).** Given the tag says V but `Info.plist` says another version, when the workflow starts, then it fails before building with a message naming both versions, and nothing is published.
-- **AC6 (unhappy, rerun).** Given a release `vV` already exists, when the workflow runs again for `vV`, then it fails without deleting or replacing the existing release.
+- **AC6 (unhappy, rerun).** Given a release `vV` already exists, when the workflow runs again for `vV`, then it fails without deleting or replacing the existing release; a `workflow_dispatch` with `resume=publish-tail` for that tag only finishes the appcast and cask steps (each skipped if already done) and never modifies the release.
 - **AC7 (unhappy, notarization).** Given notarization is rejected, when the step finishes, then the job fails with the notary log summary, and no GitHub Release, appcast change, or cask change is made.
+- **AC8 (dry run).** Given a `workflow_dispatch` with `dry_run=true` and no secrets, when it runs, then version checks, the gate, an unsigned archive, the DMG layout, and the rendered appcast item (job summary) complete, and nothing is published.
+- **Technical tasks:** one `Prompter/scripts/release.sh` used by CI and locally (absorbs the four scripts; US-27 makes it read the environment); `Prompter/scripts/validate-release.py` (`pre`, `appcast-item`, `appcast-check`) with stdlib tests in `Prompter/scripts/tests/` run by US-2's job; **version single source** (architect A-04): `Info.plist` `CFBundleShortVersionString = $(MARKETING_VERSION)` and `CFBundleVersion = $(CURRENT_PROJECT_VERSION)`; Sparkle `sign_update` comes from the Sparkle 2.8.1 release tarball, matching the pin (2.2a); `sparkle:minimumSystemVersion` is read from `MACOSX_DEPLOYMENT_TARGET`.
+- **Secrets (GitHub environment `release`, deployment policy "tags matching `v*`", created by `vendor-ops`):** `MACOS_CERTIFICATE_P12`, `MACOS_CERTIFICATE_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `NOTARY_APP_SPECIFIC_PASSWORD`, `SPARKLE_ED_PRIVATE_KEY`, `TAP_PUSH_TOKEN`. Names match Sentwise's `release.yml`; the certificate, Apple ID, team, and notary password values are re-used, while `SPARKLE_ED_PRIVATE_KEY` is Prompter's own key (Q6).
+- **Preconditions (not builder work):** the **owner exports Prompter's Sparkle EdDSA private key** (`generate_keys -x`) into `SPARKLE_ED_PRIVATE_KEY` (Q6); `vendor-ops` moves the Pages source from `main /` to a new `gh-pages /` branch seeded byte-for-byte with today's `appcast.xml`, verifies the public URL serves the same bytes, and only then is `appcast.xml` deleted from `main` (design 4.5).
 
 #### US-audit-and-modernization-6: The Homebrew cask is current and updated with each release
 As a presenter who installs with Homebrew, I want the cask to install the latest signed build and not fight Sparkle.
-- **AC1.** Given the tap's `Casks/prompter.rb` after this story, when `brew audit --cask --strict michaeltookes/tap/prompter` runs, then it reports no deprecation for `depends_on`, and the cask declares `auto_updates true` and a `depends_on macos:` symbol form matching the deployment target.
+- **AC1.** Given the tap's `Casks/prompter.rb` after this story, when `brew audit --cask --strict michaeltookes/tap/prompter` runs (last step of `release.yml`; it is a lint, not an app test), then it reports no deprecation for `depends_on`, and the cask declares `auto_updates true` and a `depends_on macos:` symbol form matching the deployment target.
 - **AC2.** Given release V was published by US-5, when the tap is checked, then a tap change to `version` V with the DMG's `sha256` exists (as a tap PR or commit, as the architect decides for the tap repo), and `brew install --cask michaeltookes/tap/prompter` on a clean Mac installs V.
 - **AC3 (unhappy).** Given the DMG checksum in the cask does not match the asset, when `brew install` runs, then it refuses with a checksum error (the release workflow computes the checksum from the uploaded asset, not from a local file).
+- **Note.** The live tap's `depends_on` line and `auto_updates true` can be fixed now in a tap PR without a version change (genkei-ops backlog 16b); the cask template `Prompter/distribution/prompter.rb` (design 4.6) is synced whole by US-5's tap step. The tap push uses `TAP_PUSH_TOKEN` (US-5 environment `release`).
 
 ### Epic A: Audit fixes
 
@@ -217,13 +270,19 @@ As a presenter with a second display, I want the overlay to come back on a visib
 - **AC4.** Given one display, when the presenter opens the status menu, then "Move Overlay to" is absent or disabled.
 - **AC5 (unhappy).** Given an overlay frame partly off the right edge (one third visible), when Prompter launches, then the overlay is moved so that it is fully visible, not left partly hidden.
 
-#### US-audit-and-modernization-10: Protected Mode tells the truth on this Mac (F-04)
-As a presenter, I want to know whether the audience can see my notes so that I never rely on a protection that does not work on my macOS version.
-- **AC1.** Given the overlay is visible with Protected Mode on, when Lucius captures the main display with `screencapture` and with a ScreenCaptureKit-based capture (the architect names the tool) on macOS 26, then the report states, for each method, whether the overlay's text is present in the image. This result decides the remaining criteria and is recorded in `docs/qa/` and in `.claude/reference-docs/CAPTURE_PROTECTION.md`.
+#### US-audit-and-modernization-10a: Measure whether Protected Mode hides the overlay on macOS 26 (F-04)
+As the owner, I want to know, before any copy changes, which capture methods on macOS 26 still see the overlay. No app code: Lucius runs TC-PR-10 and the result is documented. Split from US-10 by the architect review because measurement and the in-app self-test are different branches of work.
+- **AC1.** Given the overlay is visible with Protected Mode on, when Lucius captures the main display with `screencapture` and with Peekaboo's ScreenCaptureKit-based screen capture on macOS 26, then the report states, for each method, whether the overlay's text is present in the image. This result decides the remaining criteria and is recorded in `docs/qa/` and in `.claude/reference-docs/CAPTURE_PROTECTION.md`.
+- **AC2.** Given the result, when it is recorded, then it names the macOS build, each method (`screencapture -x -D 1`, Peekaboo's ScreenCaptureKit capture, and in the weekly leg a Chrome `getDisplayMedia` preview of the whole screen from `docs/qa/fixtures/share-preview.html`), and for each "hidden" or "visible", with cropped evidence images.
+- **Precondition:** for the weekly Chrome leg the **owner grants Screen Recording to Chrome once** on the Mini (Q7); without it that leg is SKIPPED.
+
+#### US-audit-and-modernization-10b: Protected Mode tells the truth in the app (F-04)
+As a presenter, I want the app to tell me whether the audience can see my notes so that I never rely on a protection that does not work on my macOS version. Starts after US-10a's result is recorded. Design 6.4.
 - **AC2.** Given the recorded result says a capture method shows the overlay, when the presenter opens "Test Protected Mode…", then the window says in plain words which capture methods on this macOS version can still see the overlay, and the footer's protected indicator no longer claims protection without qualification.
-- **AC3.** Given "Test Protected Mode…" is open, when the presenter clicks "Run Test", then the app captures its own overlay (with the Screen Recording permission requested only at that moment) and shows "Hidden from capture" or "Visible to capture" with the captured thumbnail, within 5 seconds.
+- **AC3.** Given "Test Protected Mode…" is open **and the Screen Recording permission is already granted**, when the presenter clicks "Run Test", then within 5 seconds the window shows "Hidden from capture" or "Visible to capture" with the captured thumbnail (the app captures only its own overlay's rectangle with ScreenCaptureKit, once with the overlay shown and once hidden, compares them, and writes nothing to disk). Without the permission, the window first explains why it is needed, then requests it; on macOS 15 and later granting requires quitting and reopening Prompter, and the window says so.
 - **AC4 (unhappy).** Given the presenter declines the Screen Recording permission, when "Run Test" finishes, then the window says the test could not run because permission was declined and how to grant it, and nothing else changes.
 - **AC5.** Given Protected Mode is off, when the overlay is visible, then the footer shows the existing "Visible to capture" warning (unchanged behavior, regression check).
+- **Copy constraint (binding):** before the system prompt the window says Prompter captures only its own overlay area to check whether it is hidden, keeps nothing, and sends nothing. Any change to the footer's "Protected" wording, the Test window's verdict text, or the README's Protected Mode claim is customer-facing and waits for the owner's approval before release.
 
 #### US-audit-and-modernization-11: Hotkeys come alive when permission is granted, and the menu says when they are off (F-05)
 As a presenter, I want hotkeys to start working as soon as I grant Accessibility so that I do not have to know to relaunch.
@@ -241,7 +300,7 @@ As a presenter, I want every edit to reach disk, in order, and to be told if a d
 
 #### US-audit-and-modernization-13: Images no longer pile up, and deletes can be undone (F-08, F-09)
 As a presenter, I want removed images to free their space and an accidental delete to be reversible.
-- **AC1.** Given a card with an image that no other card in any deck references, when the card is deleted, the image replaced, or the deck deleted, then within one save cycle the image's file is gone from `Assets/`.
+- **AC1.** Given a card with an image that no other card in any deck (and no undo step) references, when the card is deleted, the image replaced, or the deck deleted, then within one save cycle the image's file is moved out of `Assets/` into `Assets/.Trash/`, and `Assets/.Trash/` is emptied at the next launch (this keeps AC3's undo able to restore the image during the session).
 - **AC2.** Given a deck cloned from another, when the clone's card using image X is deleted, then X's file remains (the source deck still references it).
 - **AC3.** Given the presenter deletes a card in the editor, when they press ⌘Z, then the card returns at its position with its content and images, and ⌘⇧Z deletes it again.
 - **AC4 (unhappy).** Given an asset file referenced by a card is missing from `Assets/`, when the card is shown, then the image slot shows the empty-slot placeholder with "Image missing" and the app does not crash or delete the reference.
@@ -278,9 +337,9 @@ As the owner, I want the pass to prove the presenter's core loop: show notes, st
 - **AC2 (hotkeys).** Given the overlay is visible and the Accessibility permission was granted to Prompter once by the owner (precondition in the recipe), when Lucius sends the next-card hotkey twice, then the counter reads "3 / 5"; previous-card once gives "2 / 5"; the toggle hotkey hides and shows the overlay; font-size up changes the rendered title size (two screenshots differ); scroll-down moves card 3's content (US-8 AC1).
 - **AC3 (pass-through).** Given the overlay is hidden, when Lucius types `alpha beta gamma` in TextEdit, places the caret after `beta`, and sends ⌘⇧←, then `alpha beta` is selected (US-7 AC1 check; known failure until the release containing PRMT-013).
 - **AC4 (display).** Given the Mini's display configuration (one display unless the owner attaches a second; assumption in section 9), when Lucius writes an off-screen overlay frame into `Settings.json` with Prompter quit and relaunches, then the overlay opens fully on a visible screen (US-9 AC1; known failure until PRMT-015 ships). If a second display is attached, "Move Overlay to" moves it there (screenshot of each display).
-- **AC5 (Protected Mode).** Given the overlay is visible with Protected Mode on, when Lucius runs `screencapture -x` of the overlay's display and the ScreenCaptureKit capture method the architect names, then the report records for each whether "QA Card 1 - Opening" is visible in the image; with Protected Mode off, both captures show it. A protected capture that shows the overlay is FAIL unless US-10 has recorded that method as unsupported on this macOS version, in which case it is a known limitation.
+- **AC5 (Protected Mode).** Given the overlay is visible with Protected Mode on, when Lucius runs `screencapture -x` of the overlay's display and Peekaboo's ScreenCaptureKit screen capture (TC-PR-10), then the report records for each whether "QA Card 1 - Opening" is visible in the image; with Protected Mode off, both captures show it. A protected capture that shows the overlay is FAIL unless US-10a has recorded that method as unsupported on this macOS version, in which case it is a known limitation.
 - **AC6 (click-through).** Given click-through is on, when Lucius clicks in the centre of the overlay over a TextEdit window, then TextEdit receives the click (caret moves) and the overlay does not become key.
-- **AC7 (unhappy, permission missing).** Given Prompter lacks the Accessibility permission on the Mini, when the hotkey case starts, then it is BLOCKED `tcc-accessibility` with a cropped screenshot of the status menu, Lucius does not open System Settings to grant it, and one line asks the owner to act.
+- **AC7 (unhappy, permission missing).** Given Prompter lacks the Accessibility permission on the Mini (detected by `menuHotkeyStatus` once US-11 ships; before that, by the first hotkey leaving the overlay's accessibility value unchanged), when the hotkey case starts, then it is BLOCKED `tcc-accessibility` with a cropped screenshot of the status menu, Lucius does not open System Settings to grant it, and one line asks the owner to act.
 
 #### US-audit-and-modernization-18: Settings persist and the update check works, every day
 As the owner, I want proof that a presenter's settings survive a relaunch and that updates are found.
@@ -292,9 +351,11 @@ As the owner, I want proof that a presenter's settings survive a relaunch and th
 
 #### US-audit-and-modernization-19: The pass is scheduled, safe, reported, and leaves the Mini as it found it
 As the orchestrator, I want the Prompter pass to share the desktop with the Sentwise and ContainerBar passes without collisions and to report in the same shape.
-- **AC1.** Given the schedule the architect sets (staggered from ContainerBar's), when it fires, then one full pass runs, and an hourly zero-token check verifies that the release tag, appcast top version, cask version, and installed version agree and that `pgrep -x Prompter` finds the process; it posts only on a change of state.
+**Ruling (orchestrator, 2026-10-14):** the architect's design stands. Until a release containing PRMT-013 (US-7) is installed on the Mini, a running Prompter swallows ⌘⇧ shortcuts that the Sentwise and ContainerBar passes use on the same desktop, so the pass quits Prompter at the end and the hourly check asserts it is **not** running. After that release is installed, the pass leaves it running and the hourly check asserts it is.
+- **AC1.** Given the daily schedule **08:15 America/Chicago** (after ContainerBar's 07:05 pass, before Sentwise's 09:35; design 5.4), when it fires, then one full pass runs; and an hourly zero-token launchd check (08:00–20:00, skipped while the desktop lock is held) verifies that the release tag, appcast top version, cask version, and installed version agree, that `spctl --assess` passes on the installed app, and that `pgrep -x Prompter` finds **no** process outside a pass (until the PRMT-013 release is installed) or exactly one (after it); it posts only on a change of state.
 - **AC2.** Given CI is busy on the Mini (the factory's `Runner.Worker` and runners-API predicate) or another desktop brief holds the lock, when a pass is due, then it waits up to 10 minutes and then reports BLOCKED `ci-busy` or `desktop-busy`; it never runs concurrently with another desktop brief.
-- **AC3.** Given a run ends for any reason, when the restore runs, then Prompter is running with the baseline settings and the QA deck current, the overlay hidden, no Sparkle or Test Protected Mode window open, and TextEdit closed without saving.
+- **AC3.** Given a run ends for any reason, when the restore runs, then the baseline Application Support folder and defaults are back (manifest matches), no Sparkle, editor, or Test Protected Mode window is open, TextEdit is closed without saving, the desktop picture is restored, and Prompter is **quit** (until the PRMT-013 release is installed; after it: running with the overlay hidden).
+- **Preconditions (one-time, owner):** grant Accessibility to `/Applications/Prompter.app` on the Mini (Q7); Lucius never grants a permission. Baseline seeding, recipe `PROMPTER_QA.md`, cron job, and launchd job are orchestrator work through a brief (design 5.1).
 - **AC4.** Given a finished pass, when the orchestrator opens its `report.md`, then it has the Lucius brief template shape (header, per-case table, steps with asset paths, known failures keyed `{PRMT id, fixed-in version}`, defects and proposed backlog items, restore notes), and one Discord message starts `QA PASS` or `QA FAIL — Prompter <version>`.
 - **AC5.** Given a run, when its command log is reviewed, then it contains no `kill`, `pkill`, or `killall`; Prompter is quit only through its Quit menu item or `osascript -e 'quit app "Prompter"'`.
 - **AC6 (unhappy).** Given a system dialog the recipe does not cover (Keychain, TCC, Gatekeeper), when it appears, then Lucius does not grant or type anything, captures a cropped screenshot, marks the run BLOCKED, and asks the owner in one line.
@@ -307,7 +368,7 @@ Scope is set by the architect. Every criterion below holds for both deployment-t
 #### US-audit-and-modernization-20: Built on the macOS 26 SDK with the deployment-target decision applied
 As a builder, I want the project on Xcode 26 and the macOS 26 SDK with the chosen deployment target so that the system's Liquid Glass components are available.
 - **AC1.** Given the project, when CI builds it (US-2), then it builds with Xcode 26 and the macOS 26 SDK with zero warnings from Prompter's sources, and `MACOSX_DEPLOYMENT_TARGET`, the appcast's `minimumSystemVersion`, the cask's `depends_on macos:`, and the README all state the same minimum.
-- **AC2 (14+ path).** Given the 14+ option, when the codebase is searched, then every Liquid Glass API call is inside an `if #available(macOS 26, *)` or `@available` scope, and the app launches on macOS 14 (Lucius or a CI macOS 14 runner if one is available; otherwise the architect names the check).
+- **AC2 (14+ path).** Given the 14+ option, when the codebase is searched, then every Liquid Glass API call is inside an `if #available(macOS 26, *)` or `@available` scope, and the app launches on macOS 14, proven by the CI job **macOS 14 smoke** (design 4.2: the hunt-flavor build runs `--self-check` on a GitHub-hosted `macos-14` runner, renders each seed card and the editor with `ImageRenderer`, exits 0, and uploads the PNGs). If an interim release set `UIDesignRequiresCompatibility`, this story removes it.
 - **AC3 (unhappy, 26-only).** Given the 26-only option, when a user on macOS 15 has Sparkle check for updates, then Sparkle does not offer the new version (because of `minimumSystemVersion`), and the cask refuses to install on macOS 15 with Homebrew's macOS-version message.
 
 #### US-audit-and-modernization-21: The overlay surface is Liquid Glass on macOS 26 and stays readable
@@ -315,13 +376,13 @@ As a presenter on macOS 26, I want the overlay to use the system glass so that i
 - **AC1.** Given macOS 26 and the QA backdrop, when the overlay is screenshotted at opacity 100 %, then the checkerboard behind it is visibly blurred and tinted through the surface (no hard checker edges inside the overlay bounds), the surface has continuous rounded corners with no square corners or dark rectangular halo outside them, and no custom flat dark fill covers the glass.
 - **AC2.** Given the same screenshot at the minimum opacity (30 %) and at 100 %, in Light and Dark appearance, when the title text colour is sampled against the surface directly behind it, then the contrast ratio is at least 4.5:1 for body text and 3:1 for the 26 pt title.
 - **AC3.** Given Protected Mode on, when US-17 AC5 runs against the redesigned overlay, then the result is the same as before the redesign (the glass layer does not change capture behavior).
-- **AC4 (earlier macOS, 14+ path).** Given macOS 14 or 15, when the overlay is screenshotted, then it shows the current frosted surface, pixel-comparable to a v1.2.0 screenshot of the same card (same layout, corner radius, and colours within a small tolerance the architect sets).
+- **AC4 (earlier macOS, 14+ path).** Given macOS 14 or 15, when the overlay is screenshotted, then it shows the current frosted surface, pixel-comparable to a snapshot rendered from the last pre-Epic-D commit (same layout, corner radius, and colours; mean absolute pixel difference ≤ 2 % per image with the text frames masked; both images from the macOS 14 smoke job).
 - **AC5 (unhappy, Reduce Transparency).** Given System Settings > Accessibility > Display > Reduce Transparency is on, when the overlay is screenshotted on macOS 26, then the surface is opaque or near-opaque (checkerboard not visible) and text still meets AC2.
 
 #### US-audit-and-modernization-22: Overlay controls use system glass controls instead of fake chrome
 As a presenter, I want the overlay's controls to look and behave like macOS 26 controls.
 - **AC1.** Given macOS 26, when the overlay is screenshotted, then the top-left fake traffic lights (one red and two grey circles) are gone, replaced by the controls the architect specifies (at minimum a hide control), drawn as glass buttons grouped in one glass container.
-- **AC2.** Given the footer, when it is screenshotted, then the timer, card counter, opacity, and Protected Mode controls appear as glass capsule controls consistent with the system, and the Protected Mode off warning is still visible in orange or red.
+- **AC2.** Given the footer, when it is screenshotted, then the card counter, timer, Protected Mode indicator, and click-through indicator appear as glass capsule controls (the footer has no opacity control today) consistent with the system, and the Protected Mode off warning is still visible in orange or red.
 - **AC3.** Given VoiceOver, when the presenter moves through the overlay, then each control from AC1 and AC2 is announced with a label and role (US-14 AC3 still holds).
 - **AC4 (unhappy, click-through).** Given click-through is on, when the presenter clicks a glass control, then the click passes to the app below (controls do not capture clicks while click-through is on), and the footer shows that click-through is on.
 
@@ -343,7 +404,7 @@ As a presenter, I want the icon to match macOS 26 in the Dock-less places it app
 - **Platform.** macOS menu-bar app (`LSUIElement`), not sandboxed, hardened runtime, Developer ID distribution. Deployment target is the owner's decision (Q1); stories hold for both options.
 - **Tier gating and billing.** None. Prompter is free and MIT-licensed; nothing here adds payment, licensing, or accounts.
 - **Offline.** The app must work fully offline; the only network call is Sparkle's update check, and its failure must never block the overlay or hotkeys.
-- **Permissions.** Accessibility (hotkeys) is required; Screen Recording may be requested only when the presenter runs the protection self-test (US-10 AC3), never at launch.
+- **Permissions.** Accessibility (hotkeys) is required; Screen Recording may be requested only when the presenter runs the protection self-test (US-10b AC3), never at launch.
 - **Factory rules.** Nothing commits to `main` except docs; no PRs unless the owner asks; every PR waits for all checks including prowl-qa; testing runs on Lucius' Mini or in CI, never on the owner's MacBook or dev Mini.
 - **Prowl lane.** Prompter is a Genkei/Michael repo (not `prowl-tools/*`), so the anonymity rule does not apply inside it; prowl-qa runs as a consumer of the pinned Prowl release, as in ContainerBar.
 - **Secrets.** Developer ID certificate, notarization credentials, and the Sparkle EdDSA private key live only in GitHub encrypted secrets (and the owner's keychain); none appears in the repo, a log, a QA asset, or this document.
@@ -352,9 +413,9 @@ As a presenter, I want the icon to match macOS 26 in the Dock-less places it app
 
 - **What leaves the device:** only Sparkle's update request to GitHub Pages (app version, macOS version, and the user agent Sparkle sends by default; system profiling is not enabled and must stay off). Decks, images, and settings never leave the Mac. No telemetry is added by this work.
 - **What is stored:** decks, imported images, and settings under `~/Library/Application Support/Prompter/`; a few UserDefaults keys. US-12 adds a `Decks/Unreadable/` quarantine folder; US-13 deletes unreferenced images, which is a destructive change and must only remove files no deck references.
-- **Consent copy:** the Screen Recording request (US-10 AC3) must say, before the system prompt, that Prompter captures only its own overlay to check whether it is hidden, keeps nothing, and sends nothing anywhere. The Accessibility prompt copy stays as is but the menu item from US-11 must explain what the permission is for ("so Prompter's shortcuts work while other apps are in front").
+- **Consent copy:** the Screen Recording request (US-10b AC3) must say, before the system prompt, that Prompter captures only its own overlay to check whether it is hidden, keeps nothing, and sends nothing anywhere. The Accessibility prompt copy stays as is but the menu item from US-11 must explain what the permission is for ("so Prompter's shortcuts work while other apps are in front").
 - **QA evidence:** the daily pass shows only the fictional QA deck; any screenshot that would show other windows (mail, chat, browser tabs) is cropped to the overlay or the app's own windows. No customer data is ever used as a fixture.
-- **Capture claims are customer-facing:** any change to how the app describes Protected Mode (US-10) is a customer-facing promise and goes to the owner for wording approval before release.
+- **Capture claims are customer-facing:** any change to how the app describes Protected Mode (US-10b) is a customer-facing promise and goes to the owner for wording approval before release.
 
 ## 8. Out of scope
 
@@ -366,11 +427,15 @@ As a presenter, I want the icon to match macOS 26 in the Dock-less places it app
 
 ## 9. Open questions (with the assumption taken)
 
+Status after the architect review (2026-10-14): Q1 stays open with the architect's recommendation (option B = 14+ with a 26 path, design 8.2). Q6 and Q7 are added from the design. The two conflicts the review found (US-3, US-19) were ruled by the orchestrator and are recorded in those stories.
+
 1. **Deployment target: macOS 26 only, or keep 14+ with a macOS 26 path?** Assumed **14+ with a 26 path**: the cask and appcast already promise Sonoma, and presenters on managed corporate Macs often lag a major version. All Epic D stories hold either way.
 2. **May the QA deck be fictional seed notes?** Assumed **yes**: an invented "QA Demo Deck" with `example.com` addresses and a generated test-pattern image; no real demo content on the Mini.
 3. **Is the makeover a full redesign or an adoption pass?** Assumed an **adoption pass plus replacing custom chrome**: system glass on the overlay, controls, editor, panels, and icon; no new information architecture, no new screens.
 4. **Distribution: direct download and cask, or cask only?** Assumed **both continue**, as the README documents today: GitHub Release DMG and zip (Sparkle needs the zip anyway) plus the tap cask.
 5. **May the default hotkeys change?** F-01 cannot be fully fixed with the current defaults: while the overlay is visible during a demo, ⌘⇧[ / ] and ⌘⇧ arrows are still taken from the demo app. Assumed: **keep the documented ⌘⇧ defaults, consume them only while the overlay is visible** (US-7), and leave remapping to PRMT-003. If the owner prefers new defaults (for example ⌃⌥ + key), US-7 AC5 carries the change and the README is updated.
+6. **Release credentials (design R-02).** Is Prompter's Sparkle EdDSA private key (the half of `SUPublicEDKey`) in the owner's login keychain, and may it be exported into the `SPARKLE_ED_PRIVATE_KEY` secret; may the Developer ID certificate, Apple ID, team, and notary app-specific password already used by Sentwise's release be re-used for Prompter's `release` and `qa-build` environments? Assumed **yes**. US-5 cannot publish until the key is in place; if the key is lost, users who update only through Sparkle stay on 1.2.0.
+7. **One-time grants on Lucius' Mini.** The owner grants Accessibility to `/Applications/Prompter.app` (US-19), `~/Applications/Prompter QA.app` (US-26), and the new runner's host (US-4), and Screen Recording to Chrome (US-10a weekly leg). Assumed **yes, once, over Screen Sharing**; until then those cases are BLOCKED and prowl-qa fails its preflight.
 
 Answered by research, not asked: the unfinished-looking branches `next-updates`, `phase-1`, and the 14 others are all 0 commits ahead of `main`; none holds wanted work. Assumed for the Lucius lane without asking: the Mini has one display, so the second-display case runs only when the owner attaches one (US-17 AC4), and the Accessibility permission for Prompter on the Mini is granted once by the owner.
 
@@ -379,15 +444,19 @@ Answered by research, not asked: the unfinished-looking branches `next-updates`,
 | Story | Epic | Backlog item | Findings | Test cases (planner fills) |
 |---|---|---|---|---|
 | US-audit-and-modernization-1 | B | PRMT-007 | F-10, F-11 | |
-| US-audit-and-modernization-2 | B | PRMT-008 | | |
+| US-audit-and-modernization-25 | B | (BA to assign) | F-21 | |
+| US-audit-and-modernization-2 | B | PRMT-008 | F-22 | |
 | US-audit-and-modernization-3 | B | PRMT-009 | | |
 | US-audit-and-modernization-4 | B | PRMT-010 | | |
+| US-audit-and-modernization-26 | B | (BA to assign) | | |
+| US-audit-and-modernization-27 | B | (BA to assign) | F-20 | |
 | US-audit-and-modernization-5 | B | PRMT-011 | F-12, F-17 | |
 | US-audit-and-modernization-6 | B | PRMT-012 | F-13 | |
 | US-audit-and-modernization-7 | A | PRMT-013 | F-01 | |
 | US-audit-and-modernization-8 | A | PRMT-014 | F-02 | |
 | US-audit-and-modernization-9 | A | PRMT-015 | F-03 | |
-| US-audit-and-modernization-10 | A | PRMT-016 | F-04 | |
+| US-audit-and-modernization-10a | A (Lucius, no code) | PRMT-016 (BA to split) | F-04 | TC-PR-10 |
+| US-audit-and-modernization-10b | A | PRMT-016 (BA to split) | F-04 | |
 | US-audit-and-modernization-11 | A | PRMT-017 | F-05 | |
 | US-audit-and-modernization-12 | A | PRMT-018 | F-06, F-07 | |
 | US-audit-and-modernization-13 | A | PRMT-019 | F-08, F-09 | |
