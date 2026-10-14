@@ -21,9 +21,12 @@ protocol PersistenceProvider {
 
 /// Handles all file-based persistence for the application.
 ///
-/// Data is stored in ~/Library/Application Support/Prompter/:
+/// Data is stored under the flavor's `StoragePaths` root
+/// (`~/Library/Application Support/Prompter/` for the released app):
 /// - Decks/<deckId>.json - Individual deck files
 /// - Settings.json - Application settings
+///
+/// Tests build their own instance with `init(rootURL:)` on a temporary folder.
 ///
 /// This service is thread-safe and performs I/O on a background queue.
 @MainActor
@@ -31,7 +34,10 @@ final class PersistenceService: PersistenceProvider {
 
     // MARK: - Singleton
 
-    static let shared = PersistenceService()
+    static let shared = PersistenceService(
+        paths: .current,
+        migratesLegacyData: AppEnvironment.current.migratesLegacyData
+    )
 
     // MARK: - Properties
 
@@ -67,19 +73,29 @@ final class PersistenceService: PersistenceProvider {
 
     // MARK: - Initialization
 
-    private init() {
-        // Get Application Support directory
+    /// Creates a service rooted at `paths.root`.
+    /// - Parameters:
+    ///   - paths: Where decks and settings live.
+    ///   - migratesLegacyData: Copies data from the pre-rename `PresenterOverlay`
+    ///     folder next to the root. Only the production flavor sets this.
+    init(paths: StoragePaths, migratesLegacyData: Bool = false) {
         let fileManager = FileManager.default
-        let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        appSupportURL = appSupport.appendingPathComponent("Prompter", isDirectory: true)
-        decksURL = appSupportURL.appendingPathComponent("Decks", isDirectory: true)
-        settingsURL = appSupportURL.appendingPathComponent("Settings.json")
+        appSupportURL = paths.root
+        decksURL = paths.decks
+        settingsURL = paths.settings
 
         // Create directories if needed
         try? fileManager.createDirectory(at: appSupportURL, withIntermediateDirectories: true)
         try? fileManager.createDirectory(at: decksURL, withIntermediateDirectories: true)
 
-        migrateLegacyDataIfNeeded(fileManager: fileManager, appSupport: appSupport)
+        if migratesLegacyData {
+            migrateLegacyDataIfNeeded(fileManager: fileManager, appSupport: paths.root.deletingLastPathComponent())
+        }
+    }
+
+    /// Creates a service rooted at `rootURL` (used by tests with a temporary folder).
+    convenience init(rootURL: URL) {
+        self.init(paths: StoragePaths(root: rootURL))
     }
 
     private func migrateLegacyDataIfNeeded(fileManager: FileManager, appSupport: URL) {

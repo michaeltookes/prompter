@@ -47,6 +47,8 @@
 		A1000001BBBBBBBB00000205 /* TimeInputPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000205 /* TimeInputPanelView.swift */; };
 		A1000001BBBBBBBB00000206 /* DeckPickerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000206 /* DeckPickerPanelView.swift */; };
 		A1000001BBBBBBBB00000207 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000207 /* UpdateManager.swift */; };
+		A1000001BBBBBBBB00000301 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000301 /* AppEnvironment.swift */; };
+		A1000001BBBBBBBB00000302 /* StoragePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000302 /* StoragePaths.swift */; };
 		A1000001BBBBBBBB00000208 /* TitleNotesEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000208 /* TitleNotesEditorView.swift */; };
 		A1000001BBBBBBBB00000209 /* TitleNotesRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000209 /* TitleNotesRenderer.swift */; };
 		C1000001DDDDDDDD00000001 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = C3000001DDDDDDDD00000001 /* Sparkle */; };
@@ -58,6 +60,8 @@
 		B1000001CCCCCCCC00000006 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000006 /* AppStateTests.swift */; };
 		B1000001CCCCCCCC00000007 /* DebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000007 /* DebouncerTests.swift */; };
 		B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */; };
+		B1000001CCCCCCCC0000000B /* AppEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC0000000B /* AppEnvironmentTests.swift */; };
+		B1000001CCCCCCCC0000000C /* StorageIsolationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC0000000C /* StorageIsolationTests.swift */; };
 		B1000001CCCCCCCC00000009 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC00000009 /* TimerTests.swift */; };
 		B1000001CCCCCCCC0000000A /* MockPersistenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001CCCCCCCC0000000A /* MockPersistenceProvider.swift */; };
 /* End PBXBuildFile section */
@@ -115,6 +119,8 @@
 		A2000001BBBBBBBB00000205 /* TimeInputPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInputPanelView.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000206 /* DeckPickerPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckPickerPanelView.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000207 /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000301 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000302 /* StoragePaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePaths.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000208 /* TitleNotesEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleNotesEditorView.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000209 /* TitleNotesRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleNotesRenderer.swift; sourceTree = "<group>"; };
 		A3000001BBBBBBBB00000001 /* Prompter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prompter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +132,8 @@
 		B2000001CCCCCCCC00000006 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000007 /* DebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncerTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceServiceTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC0000000B /* AppEnvironmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironmentTests.swift; sourceTree = "<group>"; };
+		B2000001CCCCCCCC0000000C /* StorageIsolationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageIsolationTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC00000009 /* TimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTests.swift; sourceTree = "<group>"; };
 		B2000001CCCCCCCC0000000A /* MockPersistenceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPersistenceProvider.swift; sourceTree = "<group>"; };
 		B3000001CCCCCCCC00000001 /* PrompterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrompterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,6 +197,7 @@
 			children = (
 				A2000001BBBBBBBB00000001 /* PrompterApp.swift */,
 				A2000001BBBBBBBB00000002 /* AppDelegate.swift */,
+				A2000001BBBBBBBB00000301 /* AppEnvironment.swift */,
 				A2000001BBBBBBBB00000003 /* AppState.swift */,
 				A2000001BBBBBBBB00000004 /* MenuBarController.swift */,
 			);
@@ -235,6 +244,7 @@
 				A2000001BBBBBBBB00000010 /* HotkeyManager.swift */,
 				A2000001BBBBBBBB00000103 /* AssetManager.swift */,
 				A2000001BBBBBBBB00000201 /* PersistenceService.swift */,
+				A2000001BBBBBBBB00000302 /* StoragePaths.swift */,
 				A2000001BBBBBBBB00000207 /* UpdateManager.swift */,
 			);
 			path = Services;
@@ -352,6 +362,8 @@
 				B2000001CCCCCCCC00000008 /* PersistenceServiceTests.swift */,
 				B2000001CCCCCCCC00000009 /* TimerTests.swift */,
 				B2000001CCCCCCCC0000000A /* MockPersistenceProvider.swift */,
+				B2000001CCCCCCCC0000000B /* AppEnvironmentTests.swift */,
+				B2000001CCCCCCCC0000000C /* StorageIsolationTests.swift */,
 			);
 			path = PrompterTests;
 			sourceTree = "<group>";
@@ -500,6 +512,8 @@
 				A1000001BBBBBBBB00000205 /* TimeInputPanelView.swift in Sources */,
 				A1000001BBBBBBBB00000206 /* DeckPickerPanelView.swift in Sources */,
 				A1000001BBBBBBBB00000207 /* UpdateManager.swift in Sources */,
+				A1000001BBBBBBBB00000301 /* AppEnvironment.swift in Sources */,
+				A1000001BBBBBBBB00000302 /* StoragePaths.swift in Sources */,
 				A1000001BBBBBBBB00000208 /* TitleNotesEditorView.swift in Sources */,
 				A1000001BBBBBBBB00000209 /* TitleNotesRenderer.swift in Sources */,
 			);
@@ -519,6 +533,8 @@
 				B1000001CCCCCCCC00000008 /* PersistenceServiceTests.swift in Sources */,
 				B1000001CCCCCCCC00000009 /* TimerTests.swift in Sources */,
 				B1000001CCCCCCCC0000000A /* MockPersistenceProvider.swift in Sources */,
+				B1000001CCCCCCCC0000000B /* AppEnvironmentTests.swift in Sources */,
+				B1000001CCCCCCCC0000000C /* StorageIsolationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,6 +607,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				PROMPTER_FLAVOR = production;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -646,6 +663,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PROMPTER_FLAVOR = production;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
@@ -715,6 +733,7 @@
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 6739LM5834;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPrincipalClass = PrompterTestObserver;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tookes.PrompterTests;
@@ -733,6 +752,7 @@
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 6739LM5834;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPrincipalClass = PrompterTestObserver;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tookes.PrompterTests;

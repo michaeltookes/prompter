@@ -81,7 +81,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             // Use SF Symbol for the menu bar icon
             button.image = NSImage(
                 systemSymbolName: "text.bubble",
-                accessibilityDescription: "Prompter"
+                accessibilityDescription: AppEnvironment.current.statusItemLabel
             )
             button.image?.isTemplate = true  // Adapts to light/dark menu bar
         }

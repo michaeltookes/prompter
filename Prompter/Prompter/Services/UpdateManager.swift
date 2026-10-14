@@ -25,7 +25,14 @@ final class UpdateManager {
     /// Whether we've attempted to start the updater.
     private var hasStartedUpdater = false
 
-    init() {
+    /// - Parameter enabled: False for the QA and hunt flavors, which must never
+    ///   create or start Sparkle (design 3.2).
+    init(enabled: Bool = AppEnvironment.current.startsUpdater) {
+        guard enabled else {
+            isConfigured = false
+            unavailableReason = "Updates are disabled in \(AppEnvironment.current.statusItemLabel) builds."
+            return
+        }
         validateConfiguration()
     }
 
