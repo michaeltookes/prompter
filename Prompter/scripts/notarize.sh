@@ -7,13 +7,14 @@ set -e
 
 # Configuration
 APP_NAME="Prompter"
-BUNDLE_ID="com.tookes.Prompter"
-APPLE_ID="tookes92@att.net"
-TEAM_ID="6739LM5834"
-KEYCHAIN_PROFILE="Prompter-Notarize"
 
 # Paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Notary credentials come from the environment (see scripts/README.md)
+# shellcheck source=release-env.sh
+source "$SCRIPT_DIR/release-env.sh"
+require_notary_env
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 OUTPUT_DIR="$PROJECT_ROOT/dist"
 APP_BUNDLE="$OUTPUT_DIR/$APP_NAME.app"
@@ -65,11 +66,20 @@ check_requirements() {
 store_credentials() {
     echo_step "Checking notarization credentials..."
 
+    # Password-based credentials (CI) need no keychain profile
+    if [ -z "${NOTARY_PROFILE:-}" ]; then
+        echo "  ✓ Using Apple ID and app-specific password from the environment"
+        return 0
+    fi
+
     # Check if credentials are already stored
-    if xcrun notarytool history --keychain-profile "$KEYCHAIN_PROFILE" &> /dev/null 2>&1; then
+    if xcrun notarytool history --keychain-profile "$NOTARY_PROFILE" &> /dev/null 2>&1; then
         echo "  ✓ Credentials already stored"
         return 0
     fi
+
+    # Creating the profile needs the Apple ID and team
+    require_env APPLE_ID APPLE_TEAM_ID
 
     echo ""
     echo_info "First-time setup: You need to store your credentials in the keychain."
@@ -79,12 +89,12 @@ store_credentials() {
     echo "  2. Generate a new password named 'Prompter Notarization'"
     echo ""
     echo "Press Enter when ready, or Ctrl+C to cancel..."
-    read
+    read -r
 
     echo_step "Storing credentials in keychain..."
-    xcrun notarytool store-credentials "$KEYCHAIN_PROFILE" \
+    xcrun notarytool store-credentials "$NOTARY_PROFILE" \
         --apple-id "$APPLE_ID" \
-        --team-id "$TEAM_ID"
+        --team-id "$APPLE_TEAM_ID"
 
     echo "  ✓ Credentials stored"
 }
@@ -97,7 +107,7 @@ submit_notarization() {
 
     # Submit and wait for completion
     xcrun notarytool submit "$ZIP_FILE" \
-        --keychain-profile "$KEYCHAIN_PROFILE" \
+        "${NOTARY_AUTH_ARGS[@]}" \
         --wait
 
     echo ""

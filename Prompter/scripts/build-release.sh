@@ -8,12 +8,15 @@ set -e
 # Configuration
 APP_NAME="Prompter"
 
-# Signing identity - Developer ID Application certificate
-SIGNING_IDENTITY="Developer ID Application: MICHAEL ARRINGTON TOOKES (6739LM5834)"
-TEAM_ID="6739LM5834"
-
 # Paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Signing identity and team come from the environment (see scripts/README.md)
+# shellcheck source=release-env.sh
+source "$SCRIPT_DIR/release-env.sh"
+require_env SIGNING_IDENTITY APPLE_TEAM_ID
+TEAM_ID="$APPLE_TEAM_ID"
+
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 XCODE_PROJECT="$PROJECT_ROOT/Prompter.xcodeproj"
 BUILD_DIR="$PROJECT_ROOT/build"
@@ -108,13 +111,18 @@ build() {
 export_archive() {
     echo_step "Exporting archive..."
 
-    # Create ExportOptions.plist if it doesn't exist
-    EXPORT_OPTIONS="$SCRIPT_DIR/ExportOptions.plist"
+    # The committed ExportOptions.plist carries no team; inject it from the environment
+    EXPORT_OPTIONS_TEMPLATE="$SCRIPT_DIR/ExportOptions.plist"
+    EXPORT_OPTIONS="$BUILD_DIR/ExportOptions.plist"
 
-    if [ ! -r "$EXPORT_OPTIONS" ]; then
-        echo_error "Export options file not found or not readable at $EXPORT_OPTIONS"
+    if [ ! -r "$EXPORT_OPTIONS_TEMPLATE" ]; then
+        echo_error "Export options file not found or not readable at $EXPORT_OPTIONS_TEMPLATE"
         exit 1
     fi
+
+    cp "$EXPORT_OPTIONS_TEMPLATE" "$EXPORT_OPTIONS"
+    /usr/libexec/PlistBuddy -c "Delete :teamID" "$EXPORT_OPTIONS" >/dev/null 2>&1 || true
+    /usr/libexec/PlistBuddy -c "Add :teamID string $TEAM_ID" "$EXPORT_OPTIONS"
 
     xcodebuild -exportArchive \
         -archivePath "$ARCHIVE_PATH" \
