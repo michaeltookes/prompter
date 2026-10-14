@@ -11,6 +11,15 @@ The scripts in this folder build, sign, notarize, package, and publish Prompter.
 
 Run them from `Prompter/` in order: `./scripts/build-release.sh`, `./scripts/notarize.sh`, `./scripts/create-dmg.sh`, `./scripts/publish-release.sh`.
 
+## Flavor builds (no signing variables)
+
+| Script | Purpose |
+|--------|---------|
+| `build-flavor-app.sh <hunt\|qa>` | Ad-hoc signed hunt (`com.tookes.Prompter.hunt`, Debug, seeded from `docs/qa/fixtures/`) or QA (`com.tookes.Prompter.qa`, Release) build. It always sets `PROMPTER_FLAVOR` and the matching bundle id together: a flavor under any other bundle id runs as production. Never installed to `/Applications`. |
+| `build-hunt-app.sh` | `build-flavor-app.sh hunt` into `<repo>/.prowl/DerivedData` (prowl-qa entry point) |
+
+These need no `release-env.sh` variables; the signed QA build for the pre-PR gate comes from CI.
+
 ## Variables
 
 | Variable | Used for | Example value |
