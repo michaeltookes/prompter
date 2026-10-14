@@ -52,9 +52,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        if AppEnvironment.ignoredHuntRequest {
-            let huntId = AppEnvironment.huntBundleIdentifier
-            logger.notice("Hunt mode ignored: bundle id is not \(huntId, privacy: .public); running as production")
+        if AppEnvironment.ignoredFlavorRequest {
+            let bundleId = Bundle.main.bundleIdentifier ?? "none"
+            logger.notice("Flavor ignored: bundle id \(bundleId, privacy: .public) does not match; running as production")
         }
 
         // Hunt builds start from the bundled seed every time.

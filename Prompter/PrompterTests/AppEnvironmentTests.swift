@@ -10,6 +10,7 @@ final class AppEnvironmentTests: XCTestCase {
     private let derivedDataPath = "/Users/runner/work/prompter/.prowl/DerivedData/Build/Products/Debug/Prompter.app"
     private let productionId = AppEnvironment.productionBundleIdentifier
     private let huntId = AppEnvironment.huntBundleIdentifier
+    private let qaId = AppEnvironment.qaBundleIdentifier
 
     private func resolve(
         flavor: String? = nil,
@@ -45,9 +46,9 @@ final class AppEnvironmentTests: XCTestCase {
     }
 
     func testInfoPlistSelectsQAAndHunt() {
-        XCTAssertEqual(resolve(flavor: "qa"), .qa)
-        XCTAssertEqual(resolve(flavor: "hunt"), .hunt)
-        XCTAssertEqual(resolve(flavor: " QA "), .qa)
+        XCTAssertEqual(resolve(flavor: "qa", bundleId: qaId), .qa)
+        XCTAssertEqual(resolve(flavor: "hunt", bundleId: huntId), .hunt)
+        XCTAssertEqual(resolve(flavor: " QA ", bundleId: qaId), .qa)
     }
 
     func testXCTestHostResolvesToUnitTestWhateverTheFlavor() {
@@ -77,38 +78,60 @@ final class AppEnvironmentTests: XCTestCase {
         for bundleId in [productionId, "com.example.other", nil] {
             XCTAssertEqual(resolve(environment: env, bundleId: bundleId), .production)
             XCTAssertEqual(resolve(bundlePath: derivedDataPath, bundleId: bundleId), .production)
-            XCTAssertTrue(AppEnvironment.isHuntRequestIgnored(
-                environment: env, bundlePath: installedPath, bundleIdentifier: bundleId, allowsHuntModeOverride: true
-            ))
-            XCTAssertTrue(AppEnvironment.isHuntRequestIgnored(
-                environment: [:], bundlePath: derivedDataPath, bundleIdentifier: bundleId, allowsHuntModeOverride: false
-            ))
+            XCTAssertTrue(ignored(environment: env, bundleId: bundleId))
+            XCTAssertTrue(ignored(bundlePath: derivedDataPath, bundleId: bundleId, debug: false))
         }
     }
 
     func testHuntRequestIgnoredOnlyWhenRequestedAndNotHuntId() {
         let env = [AppEnvironment.huntModeEnvironmentKey: "1"]
-        XCTAssertFalse(AppEnvironment.isHuntRequestIgnored(
-            environment: env, bundlePath: installedPath, bundleIdentifier: huntId, allowsHuntModeOverride: true
-        ))
-        XCTAssertFalse(AppEnvironment.isHuntRequestIgnored(
-            environment: [:], bundlePath: installedPath, bundleIdentifier: productionId, allowsHuntModeOverride: true
-        ))
+        XCTAssertFalse(ignored(environment: env, bundleId: huntId))
+        XCTAssertFalse(ignored(bundleId: productionId))
         // Release builds never honor the variable, so there is nothing to ignore
-        XCTAssertFalse(AppEnvironment.isHuntRequestIgnored(
-            environment: env, bundlePath: installedPath, bundleIdentifier: productionId, allowsHuntModeOverride: false
-        ))
+        XCTAssertFalse(ignored(environment: env, bundleId: productionId, debug: false))
         // The test host is unitTest regardless
         var hosted = env
         hosted[AppEnvironment.xcTestEnvironmentKey] = "/tmp/config.xctestconfiguration"
-        XCTAssertFalse(AppEnvironment.isHuntRequestIgnored(
-            environment: hosted, bundlePath: installedPath, bundleIdentifier: productionId, allowsHuntModeOverride: true
-        ))
+        XCTAssertFalse(ignored(flavor: "qa", environment: hosted, bundleId: productionId))
     }
 
-    func testQAFlavorIsNotOverriddenByHuntMode() {
-        let env = [AppEnvironment.huntModeEnvironmentKey: "1"]
-        XCTAssertEqual(resolve(flavor: "qa", environment: env), .qa)
+    func testDeclaredFlavorUnderWrongBundleIdRunsAsProduction() {
+        // A build with only PROMPTER_FLAVOR=qa/hunt keeps com.tookes.Prompter:
+        // it must not run QA or hunt startup in the released app's defaults
+        for bundleId in [productionId, "com.example.other", nil] {
+            XCTAssertEqual(resolve(flavor: "qa", bundleId: bundleId), .production)
+            XCTAssertEqual(resolve(flavor: "hunt", bundleId: bundleId), .production)
+            XCTAssertTrue(ignored(flavor: "qa", bundleId: bundleId))
+            XCTAssertTrue(ignored(flavor: "hunt", bundleId: bundleId))
+        }
+        // Crossed ids are refused too
+        XCTAssertEqual(resolve(flavor: "qa", bundleId: huntId), .production)
+        XCTAssertEqual(resolve(flavor: "hunt", bundleId: qaId), .production)
+        XCTAssertTrue(ignored(flavor: "qa", bundleId: huntId))
+        // Matching ids are honored and not reported
+        XCTAssertFalse(ignored(flavor: "qa", bundleId: qaId))
+        XCTAssertFalse(ignored(flavor: "hunt", bundleId: huntId))
+        XCTAssertFalse(ignored(flavor: "production", bundleId: productionId))
+    }
+
+    private func ignored(
+        flavor: String? = nil,
+        environment: [String: String] = [:],
+        bundlePath: String? = nil,
+        bundleId: String?,
+        debug: Bool = true
+    ) -> Bool {
+        var info: [String: Any] = [:]
+        if let flavor {
+            info[AppEnvironment.flavorInfoKey] = flavor
+        }
+        return AppEnvironment.isFlavorRequestIgnored(
+            infoDictionary: info,
+            environment: environment,
+            bundlePath: bundlePath ?? installedPath,
+            bundleIdentifier: bundleId,
+            allowsHuntModeOverride: debug
+        )
     }
 
     // MARK: - Table
@@ -175,7 +198,8 @@ final class AppEnvironmentTests: XCTestCase {
     func testDeclaredHuntUnderProductionBundleIdWritesNothingToProductionDomain() {
         // Safety net: a build declaring PrompterFlavor=hunt without the hunt
         // bundle id shares the released app's defaults domain
-        XCTAssertEqual(resolve(flavor: "hunt", bundleId: productionId), .hunt)
+        // (resolution already refuses it; the capabilities stay safe anyway)
+        XCTAssertEqual(resolve(flavor: "hunt", bundleId: productionId), .production)
         let env = AppEnvironment(flavor: .hunt)
         XCTAssertTrue(env.sharesProductionDefaults(bundleIdentifier: productionId))
         // No placeholder window, so no frame autosave into com.tookes.Prompter

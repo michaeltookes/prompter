@@ -42,6 +42,9 @@ struct AppEnvironment: Equatable, Sendable {
     /// `.prowl/DerivedData/` path select hunt only under this id.
     static let huntBundleIdentifier = "com.tookes.Prompter.hunt"
 
+    /// Bundle id of QA builds; `PrompterFlavor = qa` is honored only under it.
+    static let qaBundleIdentifier = "com.tookes.Prompter.qa"
+
     let flavor: AppFlavor
 
     // MARK: - Current
@@ -55,9 +58,11 @@ struct AppEnvironment: Equatable, Sendable {
         allowsHuntModeOverride: isDebugBuild
     ))
 
-    /// True when this process asked for hunt by environment or path but runs
-    /// under another bundle id, so it was resolved as production instead.
-    static let ignoredHuntRequest = isHuntRequestIgnored(
+    /// True when this process asked for qa or hunt (Info.plist, environment
+    /// or path) under a bundle id that does not match, so it was resolved as
+    /// production instead.
+    static let ignoredFlavorRequest = isFlavorRequestIgnored(
+        infoDictionary: Bundle.main.infoDictionary ?? [:],
         environment: ProcessInfo.processInfo.environment,
         bundlePath: Bundle.main.bundlePath,
         bundleIdentifier: Bundle.main.bundleIdentifier,
@@ -81,9 +86,11 @@ struct AppEnvironment: Equatable, Sendable {
     ///
     /// Order: hosted unit tests win; then an explicit `PrompterFlavor` of `qa`
     /// or `hunt`; then the Debug-only `PROMPTER_HUNT_MODE=1` or a bundle built
-    /// under `.prowl/DerivedData/`, both only when the bundle id is
-    /// `com.tookes.Prompter.hunt` (the hunt UI never runs under the released
-    /// app's bundle id and defaults domain); otherwise `production`.
+    /// under `.prowl/DerivedData/`. Every non-production flavor needs its own
+    /// bundle id (`qa` → `com.tookes.Prompter.qa`, `hunt` →
+    /// `com.tookes.Prompter.hunt`), so the QA or hunt UI never runs under the
+    /// released app's bundle id and defaults domain; any other combination
+    /// resolves to `production`.
     static func resolveFlavor(
         infoDictionary: [String: Any],
         environment: [String: String],
@@ -100,9 +107,9 @@ struct AppEnvironment: Equatable, Sendable {
             .lowercased()
         switch declared {
         case AppFlavor.qa.rawValue:
-            return .qa
+            return bundleIdentifier == qaBundleIdentifier ? .qa : .production
         case AppFlavor.hunt.rawValue:
-            return .hunt
+            return bundleIdentifier == huntBundleIdentifier ? .hunt : .production
         default:
             break
         }
@@ -126,17 +133,29 @@ struct AppEnvironment: Equatable, Sendable {
             || bundlePath.contains(prowlDerivedDataPathFragment)
     }
 
-    /// True when hunt was asked for by environment or path under a bundle id
-    /// other than the hunt one (the launch then runs as production).
-    static func isHuntRequestIgnored(
+    /// True when qa or hunt was asked for (Info.plist, environment or path)
+    /// but the bundle id did not match, so the launch runs as production.
+    static func isFlavorRequestIgnored(
+        infoDictionary: [String: Any],
         environment: [String: String],
         bundlePath: String,
         bundleIdentifier: String?,
         allowsHuntModeOverride: Bool
     ) -> Bool {
-        environment[xcTestEnvironmentKey] == nil
-            && bundleIdentifier != huntBundleIdentifier
-            && requestsHunt(environment: environment, bundlePath: bundlePath, allowsHuntModeOverride: allowsHuntModeOverride)
+        let declared = (infoDictionary[flavorInfoKey] as? String)?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+        let requested = declared == AppFlavor.qa.rawValue
+            || declared == AppFlavor.hunt.rawValue
+            || requestsHunt(environment: environment, bundlePath: bundlePath, allowsHuntModeOverride: allowsHuntModeOverride)
+        let resolved = resolveFlavor(
+            infoDictionary: infoDictionary,
+            environment: environment,
+            bundlePath: bundlePath,
+            bundleIdentifier: bundleIdentifier,
+            allowsHuntModeOverride: allowsHuntModeOverride
+        )
+        return requested && resolved == .production
     }
 
     // MARK: - Capabilities
