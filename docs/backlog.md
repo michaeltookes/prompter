@@ -41,6 +41,9 @@ Prioritized list of planned features, improvements, and technical debt.
 {PRMT-002} **Export/import decks**
    Allow users to share decks as `.prompter` files (JSON + bundled assets).
 
+{PRMT-007} **Reproducible clean-clone build: shared scheme, pinned Sparkle, no tracked binaries** (completed: 2026-10-14)
+   Shared `Prompter` scheme (PrompterTests in its Test action), Sparkle pinned to exactly 2.8.1 with `Package.resolved` tracked, and the 74 build-output files under `Prompter/dist/` removed from git.
+
 ## Low Priority
 
 {PRMT-003} **Keyboard shortcut customization**
