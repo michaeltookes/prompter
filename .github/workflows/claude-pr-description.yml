@@ -21,7 +21,9 @@ jobs:
     # not process anyway.
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Above the describe step's own timeout, so a stalled Claude call ends
+    # as a failed (continue-on-error) step instead of a cancelled job.
+    timeout-minutes: 20
     # A missing description is cosmetic. This job must never leave a failing
     # check on the PR: a red here would block the watcher's merge-ready gate
     # and could trigger doomed "fix CI" passes against a workflow the PR
@@ -94,6 +96,7 @@ jobs:
         if: steps.description_state.outcome == 'success' && steps.description_state.outputs.should_suggest == 'true'
         id: describe
         continue-on-error: true
+        timeout-minutes: 10
         uses: anthropics/claude-code-action@7b0b255830a1fab6e602658672acad11c12d841d # v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
