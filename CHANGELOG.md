@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+- Build: shared `Prompter` scheme, Sparkle pinned to 2.8.1 with `Package.resolved` committed, and build output under `Prompter/dist/` no longer tracked, so a fresh clone builds with `xcodebuild -scheme Prompter`
+
 ## [1.2.0] - 2026-02-11
 
 ### Added
