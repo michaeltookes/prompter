@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- Build flavors with isolated storage: `qa` (`com.tookes.Prompter.qa`, `Application Support/Prompter-QA/`) and `hunt` (`com.tookes.Prompter.hunt`, `Application Support/Prompter-Hunt/`, re-seeded on every launch) never start Sparkle and name their flavor in the status item; `Prompter/scripts/build-flavor-app.sh` and `build-hunt-app.sh` build them
+
 ### Changed
+- The unit tests no longer boot the full app or touch `~/Library/Application Support/Prompter/` and the `com.tookes.Prompter` defaults; persistence tests use a temporary folder
 - Build: shared `Prompter` scheme, Sparkle pinned to 2.8.1 with `Package.resolved` committed, and build output under `Prompter/dist/` no longer tracked, so a fresh clone builds with `xcodebuild -scheme Prompter`
 
 ## [1.2.0] - 2026-02-11
