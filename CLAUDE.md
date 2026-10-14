@@ -249,7 +249,7 @@ Referenced by the `/release-prep` skill:
 | Homebrew tap location | `~/Desktop/Current Projects/homebrew-tap/` |
 | Homebrew cask file | `Casks/prompter.rb` |
 | Homebrew cask URL template | `https://github.com/michaeltookes/prompter/releases/download/v{VERSION}/Prompter.dmg` |
-| Notarization keychain profile | `Prompter-Notarize` (hardcoded in `notarize.sh`) |
+| Notarization credentials | From the environment: `NOTARY_PROFILE` (local keychain profile) or `APPLE_ID` + `APPLE_TEAM_ID` + `NOTARY_APP_SPECIFIC_PASSWORD` (CI); signing uses `SIGNING_IDENTITY` and `APPLE_TEAM_ID`. See `Prompter/scripts/README.md` |
 | Validation script | *Not yet implemented* |
 
 ## Important Notes
