@@ -6,7 +6,7 @@
 | Branch | `req/prompter-audit` (design merged in from `req/prompter-audit-arch`: `docs/architecture/audit-and-modernization.md`) |
 | Source | Owner intake 2026-10-14: audit the whole app, bring it into the Lucius QA lane the way ContainerBar is, add the CI/CD ContainerBar has, and give it a Liquid Glass makeover for macOS 26 |
 | Baseline | `main` at `0e3e602` (code as of `b536f1b`, 2026-02-18; last release v1.2.0) |
-| Backlog | `docs/backlog.md`, items PRMT-007 to PRMT-030 (Epics B, A, C, D in build order); PRMT-006 marked obsolete |
+| Backlog | `docs/backlog.md`, items PRMT-007 to PRMT-034 (Epics B, A, C, D in build order; PRMT-031 to PRMT-034 added by the architect review); PRMT-007 completed; PRMT-006 marked obsolete |
 | Status | Reconciled with the architect's design 2026-10-14 (feasibility review applied: US-25, US-26, US-27 added, US-10 split into 10a/10b, rulings on US-3 and US-19 recorded). Waiting on the owner's answers to section 9 (Q1, Q6, Q7). |
 
 ## 1. Problem
@@ -73,7 +73,7 @@ A one-time migration copies data from the pre-rename `PresenterOverlay` folder (
 | Branches | 16 remote branches besides `main`; every one is 0 commits ahead of `main` (fully merged), including `next-updates` and `phase-1`; `chore/add-backlog-sync-workflow` keeps only the Mission Control sync commits, which are obsolete | `git rev-list --count origin/main..origin/<b>` |
 | Dead or unfinished code | `TestCaptureWindowController` is never used (the menu builds its own window); `DeckEditorPlaceholderView` and `TestCapturePlaceholderView` are leftovers; `PersistenceService.loadDeckMetadata`, `totalDataSize`, `clearAllData` and the `ioQueue` are unused; `AssetManager.deleteAsset` and `cleanupUnusedAssets` have no callers | F-09, F-14 |
 
-### 2.2a Repo hygiene already done by PRMT-007 (branch `prmt-007-clean-clone-build`, not yet merged)
+### 2.2a Repo hygiene done by PRMT-007 (completed 2026-10-14; branch `prmt-007-clean-clone-build` at acf9f3e, PR #17)
 
 Stories below do not redo these; they build on them.
 
@@ -444,19 +444,19 @@ Answered by research, not asked: the unfinished-looking branches `next-updates`,
 | Story | Epic | Backlog item | Findings | Test cases (planner fills) |
 |---|---|---|---|---|
 | US-audit-and-modernization-1 | B | PRMT-007 | F-10, F-11 | |
-| US-audit-and-modernization-25 | B | (BA to assign) | F-21 | |
+| US-audit-and-modernization-25 | B | PRMT-031 | F-21 | |
 | US-audit-and-modernization-2 | B | PRMT-008 | F-22 | |
 | US-audit-and-modernization-3 | B | PRMT-009 | | |
 | US-audit-and-modernization-4 | B | PRMT-010 | | |
-| US-audit-and-modernization-26 | B | (BA to assign) | | |
-| US-audit-and-modernization-27 | B | (BA to assign) | F-20 | |
+| US-audit-and-modernization-26 | B | PRMT-032 | | |
+| US-audit-and-modernization-27 | B | PRMT-033 | F-20 | |
 | US-audit-and-modernization-5 | B | PRMT-011 | F-12, F-17 | |
 | US-audit-and-modernization-6 | B | PRMT-012 | F-13 | |
 | US-audit-and-modernization-7 | A | PRMT-013 | F-01 | |
 | US-audit-and-modernization-8 | A | PRMT-014 | F-02 | |
 | US-audit-and-modernization-9 | A | PRMT-015 | F-03 | |
-| US-audit-and-modernization-10a | A (Lucius, no code) | PRMT-016 (BA to split) | F-04 | TC-PR-10 |
-| US-audit-and-modernization-10b | A | PRMT-016 (BA to split) | F-04 | |
+| US-audit-and-modernization-10a | A (Lucius, no code) | PRMT-016 | F-04 | TC-PR-10 |
+| US-audit-and-modernization-10b | A | PRMT-034 | F-04 | |
 | US-audit-and-modernization-11 | A | PRMT-017 | F-05 | |
 | US-audit-and-modernization-12 | A | PRMT-018 | F-06, F-07 | |
 | US-audit-and-modernization-13 | A | PRMT-019 | F-08, F-09 | |
