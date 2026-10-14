@@ -10,6 +10,8 @@
 		A1000001BBBBBBBB00000001 /* PrompterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000001 /* PrompterApp.swift */; };
 		A1000001BBBBBBBB00000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000002 /* AppDelegate.swift */; };
 		A1000001BBBBBBBB00000003 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000003 /* AppState.swift */; };
+		A1000001BBBBBBBB00000310 /* AppState+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000310 /* AppState+Timer.swift */; };
+		A1000001BBBBBBBB00000311 /* AppState+AutoSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000311 /* AppState+AutoSave.swift */; };
 		A1000001BBBBBBBB00000004 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000004 /* MenuBarController.swift */; };
 		A1000001BBBBBBBB00000005 /* LayoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000005 /* LayoutType.swift */; };
 		A1000001BBBBBBBB00000006 /* AssetRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001BBBBBBBB00000006 /* AssetRef.swift */; };
@@ -80,6 +82,8 @@
 		A2000001BBBBBBBB00000001 /* PrompterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrompterApp.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000003 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000310 /* AppState+Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Timer.swift"; sourceTree = "<group>"; };
+		A2000001BBBBBBBB00000311 /* AppState+AutoSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+AutoSave.swift"; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000004 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000005 /* LayoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutType.swift; sourceTree = "<group>"; };
 		A2000001BBBBBBBB00000006 /* AssetRef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRef.swift; sourceTree = "<group>"; };
@@ -199,6 +203,8 @@
 				A2000001BBBBBBBB00000002 /* AppDelegate.swift */,
 				A2000001BBBBBBBB00000301 /* AppEnvironment.swift */,
 				A2000001BBBBBBBB00000003 /* AppState.swift */,
+				A2000001BBBBBBBB00000310 /* AppState+Timer.swift */,
+				A2000001BBBBBBBB00000311 /* AppState+AutoSave.swift */,
 				A2000001BBBBBBBB00000004 /* MenuBarController.swift */,
 			);
 			path = App;
@@ -476,6 +482,8 @@
 				A1000001BBBBBBBB00000001 /* PrompterApp.swift in Sources */,
 				A1000001BBBBBBBB00000002 /* AppDelegate.swift in Sources */,
 				A1000001BBBBBBBB00000003 /* AppState.swift in Sources */,
+				A1000001BBBBBBBB00000310 /* AppState+Timer.swift in Sources */,
+				A1000001BBBBBBBB00000311 /* AppState+AutoSave.swift in Sources */,
 				A1000001BBBBBBBB00000004 /* MenuBarController.swift in Sources */,
 				A1000001BBBBBBBB00000005 /* LayoutType.swift in Sources */,
 				A1000001BBBBBBBB00000006 /* AssetRef.swift in Sources */,
