@@ -1,0 +1,41 @@
+# PENDING PRMT-021: needs menuToggleOverlay, menuProtectedMode, overlayWindow
+# and the overlay state contract. Move to .prowl/hunts/ then.
+#
+# Protected Mode toggles off from the menu and back on; the overlay's state
+# string follows. Never runs the capture test (menuTestProtectedMode is
+# forbidden).
+
+name: protected-toggle
+description: Protected Mode toggles off and back on from the status menu
+
+steps:
+  - click:
+      selector: statusItem
+
+  - click:
+      selector: id=menuToggleOverlay
+
+  - waitForSelector:
+      selector: id=overlayWindow
+      timeout: 10000
+
+  - assert:
+      visible: role=window[name="protected=on"]
+
+  - click:
+      selector: statusItem
+
+  - click:
+      selector: id=menuProtectedMode
+
+  - assert:
+      visible: role=window[name="protected=off"]
+
+  - click:
+      selector: statusItem
+
+  - click:
+      selector: id=menuProtectedMode
+
+  - assert:
+      visible: role=window[name="protected=on"]

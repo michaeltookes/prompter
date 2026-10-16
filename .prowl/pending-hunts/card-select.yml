@@ -1,0 +1,34 @@
+# PENDING PRMT-021: needs the editor and overlay identifiers, the overlay state
+# contract, and the fixture deck. Move to .prowl/hunts/ then.
+#
+# Selecting the third card row in the editor makes the overlay show card 3 of 5.
+
+name: card-select
+description: Selecting a card in the editor moves the overlay to that card
+
+steps:
+  - click:
+      selector: statusItem
+
+  - click:
+      selector: id=menuOpenEditor
+
+  - waitForSelector:
+      selector: id=editorCardList
+      timeout: 10000
+
+  - click:
+      selector: id=editorCardRow-2
+
+  - click:
+      selector: statusItem
+
+  - click:
+      selector: id=menuToggleOverlay
+
+  - waitForSelector:
+      selector: id=overlayWindow
+      timeout: 10000
+
+  - assert:
+      visible: role=window[name="card=3/5;"]

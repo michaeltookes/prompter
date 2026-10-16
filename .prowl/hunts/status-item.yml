@@ -1,0 +1,32 @@
+# Smoke: the hunt app launches, its status item exists, and the status menu
+# opens with its fixed entries. Read-only; nothing in the menu is activated.
+#
+# Uses the macOS target's statusItem magic selector and exact label= matches on
+# the menu titles, so it passes before the accessibility identifiers land
+# (PRMT-021). When they do, switch to id=menuOpenEditor, id=menuProtectedMode,
+# and id=menuTimer.
+#
+# Run it:  prowl run status-item
+
+name: status-item
+description: The status item exists and its menu opens with the fixed entries
+
+steps:
+  - click:
+      selector: statusItem
+
+  # label= is an exact (case-insensitive) match on the title, description, or
+  # value; role= names match by substring, so role=menuitem[name="Protected
+  # Mode"] would also match "Test Protected Mode…". Assertions rewrite label=
+  # to the forbidden text=, so the exact checks are waitForSelector steps.
+  - waitForSelector:
+      selector: label="Open Deck Editor…"
+      timeout: 10000
+
+  - waitForSelector:
+      selector: label="Protected Mode"
+      timeout: 5000
+
+  - waitForSelector:
+      selector: label="Presentation Timer"
+      timeout: 5000

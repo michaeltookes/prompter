@@ -226,14 +226,19 @@ The app has full accessibility support across four areas:
 
 ## CI Workflows
 
-All jobs run on GitHub-hosted runners unless noted; nothing builds on the QA Mini.
+All jobs run on GitHub-hosted runners unless noted; nothing builds the app on the QA Mini (only `Prowl hunts` runs there, against a hosted build).
 
 | Workflow | Trigger | Job (check name) | Output |
 |----------|---------|------------------|--------|
 | `swift-ci.yml` | pull request and push to `main` | `Build & Test`, `SwiftLint` | unit tests and lint; result bundles on failure |
 | `qa-build.yml` | `workflow_dispatch` (inputs `ref`, `require_signed`) and `workflow_call` | `qa-build` | artifact `prompter-qa-build` (3 days): `Prompter-QA-<shortsha>.zip` with `Prompter QA.app` (`com.tookes.Prompter.qa`, flavor `qa`), `BUILD_INFO.txt` (sha, QA build number, signing mode). Signed when the `qa-build` environment has `MACOS_CERTIFICATE_P12` and `MACOS_CERTIFICATE_PASSWORD` (`APPLE_TEAM_ID` checks the team), otherwise ad hoc and marked "UNSIGNED QA BUILD". See `docs/qa/qa-build.md` |
+| `prowl-qa.yml` | same-repo pull request to `main`, `workflow_dispatch` | `Build hunt app` | artifact `Prompter-Hunt-<shortsha>` (3 days): the ad-hoc-signed hunt flavor (`com.tookes.Prompter.hunt`) |
+| `prowl-qa.yml` | same | `Prowl hunts` (self-hosted `lucius-mac-mini-prompter`, `self-hosted, macOS, ARM64`) | runs `.prowl/hunts/` against that bundle under the Mini's desktop lock; run logs and JUnit as `prowl-runs-<run>-<attempt>` (14 days), screenshots kept on the runner |
+| `prowl-qa.yml` | same | `Prowl QA` (required gate) | passes only if both jobs above succeeded; a skipped job never counts. See `docs/qa/README.md` |
 | `claude.yml` | `@claude` mentions | on-demand Claude | |
 | `claude-pr-description.yml` | pull request | suggested PR description | workflow summary only |
+
+Every pull-request check must be green before merge; a queued `Prowl QA` (Mini runner offline) is not green. Unit tests boot the app as their host, so they run in CI, never on a developer Mac.
 
 ## Release Configuration
 
