@@ -17,18 +17,14 @@
 # A hosted runner cannot drive the GUI: the runner's host process needs a
 # one-time Accessibility grant, which only a machine we control can give.
 #
-# Security boundary for the self-hosted Mini (SEC-007): NOT the `if:` checks
-# below. A pull_request run uses the PR's own copy of this file, so a fork PR
-# could simply delete them. The boundary is
-#   1. the `mini-runner` environment on the hunt job: a run reaches the Mini
-#      only after a required reviewer approves it, unless it comes from a
-#      same-repo branch the environment's branch policy covers; the approval
-#      happens before the job is handed to any runner, so no step (and no
-#      PR-controlled script, such as prowl-qa-gui-segment.sh) runs on the Mini
-#      before it; and
-#   2. the repository setting "require approval for all outside collaborators"
-#      for fork pull request workflows.
-# The same-repo `if:` conditions stay as defence in depth only.
+# Security boundary for the self-hosted Mini (SEC-007): the repository's
+# fork pull request approval policy, "require approval for all outside
+# collaborators" (fork-pr-contributor-approval = all_external_contributors).
+# It is NOT the `if:` checks below: a pull_request run uses the PR's own copy
+# of this file, so a fork PR could delete them (or any other line here). The
+# same-repo `if:` conditions stay as defence in depth. They sit on the jobs,
+# so when they skip a job nothing of it reaches the Mini, and no PR-controlled
+# file (prowl-qa-gui-segment.sh, .prowl/) runs there before them.
 # workflow_dispatch works once this file is on main.
 
 name: Prowl QA
@@ -133,9 +129,6 @@ jobs:
     # queued while it is offline stays pending (never success); the merge
     # checklist treats pending as not green (US-4 AC3).
     runs-on: [self-hosted, macOS, ARM64]
-    # The security boundary (see the header): approval or branch policy first,
-    # then the job is dispatched to the Mini. Created by vendor-ops.
-    environment: mini-runner
     # Setup (~5 min) + up to 20 min waiting for the desktop lock + the segment's
     # own 25 min limit, so the job limit never cuts the segment short.
     timeout-minutes: 55
