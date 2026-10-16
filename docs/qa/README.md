@@ -20,21 +20,18 @@ branch is in this repository and on `workflow_dispatch` once the file is on
 ### Security boundary for the Mini (SEC-007)
 
 Fork code is untrusted input for a persistent self-hosted GUI runner. The
-workflow's same-repo `if:` conditions are **not** the boundary: a
+boundary is the repository's fork pull request approval policy, **"require
+approval for all outside collaborators"**
+(`fork-pr-contributor-approval = all_external_contributors`), a setting the PR
+cannot change. Setting it is SEC-007, pending the owner's go-ahead.
+
+The workflow's same-repo `if:` conditions are **not** the boundary: a
 `pull_request` run uses the PR's own copy of the workflow, so a fork PR can
-remove them. The boundary is two settings outside the PR's control:
-
-1. **The `mini-runner` environment** on the `hunt` job (created by vendor-ops
-   with a required reviewer and a branch policy). A run reaches the Mini only
-   after a reviewer approves it, unless it comes from a same-repo branch the
-   branch policy covers. GitHub holds the job before handing it to any runner,
-   so nothing runs on the Mini before the gate, including PR-controlled files
-   such as `Prompter/scripts/prowl-qa-gui-segment.sh` and `.prowl/`; the job's
-   first step only runs after it.
-2. **The repository setting "require approval for all outside
-   collaborators"** for fork pull request workflows.
-
-The `if:` conditions stay as defence in depth.
+remove them, and the same holds for any other line in the file (an
+`environment:` gate included). They stay as defence in depth. They are
+job-level conditions, so a skipped job never reaches the Mini, and no
+PR-controlled file (`Prompter/scripts/prowl-qa-gui-segment.sh`, `.prowl/`)
+runs there before them.
 
 ### Jobs
 
@@ -45,8 +42,8 @@ The `if:` conditions stay as defence in depth.
    `Contents/Resources/HuntSeed/` (an empty deck folder until PRMT-021), and
    signs it ad hoc. The job checks the bundle id and flavor, then uploads
    `Prompter-Hunt-<shortsha>.zip` (kept 3 days).
-2. **Prowl hunts** (`hunt`, environment `mini-runner`, the self-hosted runner
-   `lucius-mac-mini-prompter`, labels `self-hosted, macOS, ARM64`). In order:
+2. **Prowl hunts** (`hunt`, the self-hosted runner `lucius-mac-mini-prompter`,
+   labels `self-hosted, macOS, ARM64`). In order:
    - fails at once, naming the variable, if `QA_DEVICE_LOCK_DIR` or
      `QA_DEVICE_LOCK_TOOL` is unset in the runner's environment;
    - checks out Prowl at `PROWL_VERSION` (ContainerBar's pin, 0.1.8), builds and
