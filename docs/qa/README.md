@@ -8,7 +8,7 @@ others.
 |---|---|---|---|
 | Swift CI (`swift-ci.yml`) | GitHub-hosted macOS | Build & Test (unit tests), SwiftLint | live (PRMT-008) |
 | Prowl QA (`prowl-qa.yml`) | hosted build + self-hosted runner on the QA Mini | Prowl hunts against the hunt flavor | live (PRMT-010) |
-| QA build (`qa-build.yml`) | GitHub-hosted macOS | Developer-ID-signed `qa` flavor for the pre-PR QA gate | PRMT-032 |
+| QA build (`qa-build.yml`) | GitHub-hosted macOS | Developer-ID-signed `qa` flavor for the pre-PR QA gate (`docs/qa/qa-build.md`) | live (PRMT-032) |
 | Daily pass | QA Mini, scheduled agent | the TC-PR cases against the installed release | PRMT-022 to PRMT-025 |
 
 ## Prowl QA on pull requests

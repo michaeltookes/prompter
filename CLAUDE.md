@@ -224,6 +224,22 @@ The app has full accessibility support across four areas:
 - [ ] Browse button opens file picker in empty image drop zones
 - [ ] Move Up/Down works in card context menu and bullet reorder buttons
 
+## CI Workflows
+
+All jobs run on GitHub-hosted runners unless noted; nothing builds the app on the QA Mini (only `Prowl hunts` runs there, against a hosted build).
+
+| Workflow | Trigger | Job (check name) | Output |
+|----------|---------|------------------|--------|
+| `swift-ci.yml` | pull request and push to `main` | `Build & Test`, `SwiftLint` | unit tests and lint; result bundles on failure |
+| `qa-build.yml` | `workflow_dispatch` (inputs `ref`, `require_signed`) and `workflow_call` | `qa-build` | artifact `prompter-qa-build` (3 days): `Prompter-QA-<shortsha>.zip` with `Prompter QA.app` (`com.tookes.Prompter.qa`, flavor `qa`), `BUILD_INFO.txt` (sha, QA build number, signing mode). Signed when the `qa-build` environment has `MACOS_CERTIFICATE_P12` and `MACOS_CERTIFICATE_PASSWORD` (`APPLE_TEAM_ID` checks the team), otherwise ad hoc and marked "UNSIGNED QA BUILD". See `docs/qa/qa-build.md` |
+| `prowl-qa.yml` | same-repo pull request to `main`, `workflow_dispatch` | `Build hunt app` | artifact `Prompter-Hunt-<shortsha>` (3 days): the ad-hoc-signed hunt flavor (`com.tookes.Prompter.hunt`) |
+| `prowl-qa.yml` | same | `Prowl hunts` (self-hosted `lucius-mac-mini-prompter`, `self-hosted, macOS, ARM64`) | runs `.prowl/hunts/` against that bundle under the Mini's desktop lock; run logs and JUnit as `prowl-runs-<run>-<attempt>` (14 days), screenshots kept on the runner |
+| `prowl-qa.yml` | same | `Prowl QA` (required gate) | passes only if both jobs above succeeded; a skipped job never counts. See `docs/qa/README.md` |
+| `claude.yml` | `@claude` mentions | on-demand Claude | |
+| `claude-pr-description.yml` | pull request | suggested PR description | workflow summary only |
+
+Every pull-request check must be green before merge; a queued `Prowl QA` (Mini runner offline) is not green. Unit tests boot the app as their host, so they run in CI, never on a developer Mac.
+
 ## Release Configuration
 
 Referenced by the `/release-prep` skill:
@@ -251,21 +267,6 @@ Referenced by the `/release-prep` skill:
 | Homebrew cask URL template | `https://github.com/michaeltookes/prompter/releases/download/v{VERSION}/Prompter.dmg` |
 | Notarization credentials | From the environment: `NOTARY_PROFILE` (local keychain profile) or `APPLE_ID` + `APPLE_TEAM_ID` + `NOTARY_APP_SPECIFIC_PASSWORD` (CI); signing uses `SIGNING_IDENTITY` and `APPLE_TEAM_ID`. See `Prompter/scripts/README.md` |
 | Validation script | *Not yet implemented* |
-
-## CI Jobs
-
-| Workflow | Trigger | Job (check name) | Runner | What it does |
-|---|---|---|---|---|
-| `swift-ci.yml` | PR to `main`, push to `main` | `Build & Test` | GitHub-hosted `macos-15` | resolve packages, `build-for-testing`, `test-without-building` (unit tests) |
-| `swift-ci.yml` | same | `SwiftLint` | GitHub-hosted `macos-15` | pinned SwiftLint 0.65.1, errors fail |
-| `prowl-qa.yml` | PR to `main` (same-repo heads), `workflow_dispatch` | `Build hunt app` | GitHub-hosted `macos-15` | builds the ad-hoc-signed hunt flavor (`com.tookes.Prompter.hunt`), uploads `Prompter-Hunt-<shortsha>.zip` |
-| `prowl-qa.yml` | same | `Prowl hunts` | self-hosted `lucius-mac-mini-prompter` (`self-hosted, macOS, ARM64`) | runs the Prowl hunts in `.prowl/hunts/` against that bundle under the Mini's desktop lock; no `xcodebuild` on the Mini |
-| `prowl-qa.yml` | same | `Prowl QA` (required) | ubuntu | gate: passes only if both jobs above succeeded (a skipped job never counts) |
-| `qa-build.yml` | `workflow_dispatch` (`ref`) | | GitHub-hosted | Developer-ID-signed `qa` flavor for the pre-PR QA gate (PRMT-032, not yet merged) |
-| `claude.yml` | `@claude` in issue and PR comments and reviews | | ubuntu | Claude on issues and PRs |
-| `claude-pr-description.yml` | PR opened (same-repo heads) | | ubuntu | suggests a PR description |
-
-Every check above must be green before merge; a queued `Prowl QA` (Mini runner offline) is not green. Details: `docs/qa/README.md`. Unit tests boot the app as their host, so they run in CI, never on a developer Mac.
 
 ## Important Notes
 
