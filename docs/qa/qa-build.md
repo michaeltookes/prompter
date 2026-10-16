@@ -27,17 +27,33 @@ Inputs: `ref` (branch, tag, or sha; empty builds the ref the run was started on)
 
 ## Fetch and install (QA Mini)
 
+Download each run into its own new, empty folder, extract only the zip that `BUILD_INFO.txt` names, and install only when its sha is the commit under test:
+
 ```sh
-mkdir -p ~/work/prompter-qa && cd ~/work/prompter-qa || exit 1
-gh run download <run-id> -R michaeltookes/prompter -n prompter-qa-build
-cat BUILD_INFO.txt
-ditto -x -k Prompter-QA-*.zip ~/Applications/
+set -euo pipefail
+RUN_ID=<run-id>
+EXPECTED_SHA=<full sha of the branch head under test>   # e.g. gh pr view <n> --json headRefOid -q .headRefOid
+DIR=~/Downloads/prompter-qa/$RUN_ID
+[ ! -e "$DIR" ] || { echo "$DIR already exists; remove it or use a new run" >&2; exit 1; }
+mkdir -p "$DIR"
+gh run download "$RUN_ID" -R michaeltookes/prompter -n prompter-qa-build -D "$DIR"
+cat "$DIR/BUILD_INFO.txt"
+
+SHA=$(sed -n 's/^sha=//p' "$DIR/BUILD_INFO.txt")
+ZIP=$(sed -n 's/^zip=//p' "$DIR/BUILD_INFO.txt")
+[ "$SHA" = "$EXPECTED_SHA" ] || { echo "artifact is $SHA, expected $EXPECTED_SHA" >&2; exit 1; }
+[ -f "$DIR/$ZIP" ] || { echo "missing $ZIP in $DIR" >&2; exit 1; }
+
+osascript -e 'quit app id "com.tookes.Prompter.qa"' || true
+rm -rf ~/Applications/"Prompter QA.app"
+ditto -x -k "$DIR/$ZIP" ~/Applications/
+/usr/libexec/PlistBuddy -c 'Print :PrompterGitCommit' ~/Applications/"Prompter QA.app"/Contents/Info.plist
 ```
 
 - Install to `~/Applications/Prompter QA.app` only, never `/Applications` (that is the released app).
 - `gh run download` sets no quarantine attribute, so the un-notarized app opens without a Gatekeeper prompt.
 - Launch with `open -b com.tookes.Prompter.qa`; quit with `osascript -e 'quit app id "com.tookes.Prompter.qa"'` (no signals).
-- Check the build before a gate run: `/usr/libexec/PlistBuddy -c 'Print :PrompterGitCommit' ~/Applications/Prompter\ QA.app/Contents/Info.plist` must match the branch head under test.
+- The last line prints the installed app's `PrompterGitCommit`; it must equal `EXPECTED_SHA` before a gate run. Old run folders under `~/Downloads/prompter-qa/` can be deleted by name once their gate run is reported.
 
 ## Signed vs unsigned builds
 
