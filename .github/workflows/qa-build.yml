@@ -1,0 +1,371 @@
+name: QA Build
+
+# Builds the qa flavor of any branch for the pre-PR QA gate (PRMT-032, design 4.4).
+#
+#   App:      Prompter QA.app, bundle id com.tookes.Prompter.qa, PrompterFlavor = qa
+#             (data in ~/Library/Application Support/Prompter-QA/, no Sparkle; PRMT-031)
+#   Job:      qa-build
+#   Artifact: prompter-qa-build (retention 3 days), holding
+#               Prompter-QA-<shortsha>.zip   the app (ditto, --keepParent)
+#               BUILD_INFO.txt               sha, build number, versions, signing mode
+#               UNSIGNED-QA-BUILD.txt        only when the build is ad hoc signed
+#
+# Signing: when the qa-build environment holds MACOS_CERTIFICATE_P12 and
+# MACOS_CERTIFICATE_PASSWORD, the app is signed with that certificate (an
+# "Apple Development" identity is preferred, then "Developer ID Application")
+# with the hardened runtime, not notarized, so the designated requirement stays
+# the same across builds and the one-time Accessibility grant survives. When the
+# secrets are missing the job still succeeds with an ad-hoc signed build marked
+# "UNSIGNED QA BUILD" (set require_signed to make missing secrets fail). A secret
+# that is present but cannot be imported always fails before anything is uploaded.
+#
+# Reuse: prowl-qa (PRMT-010) calls this with `uses: ./.github/workflows/qa-build.yml`
+# and downloads the artifact named in the `artifact-name` output. See docs/qa/qa-build.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag, or commit sha to build (empty = the ref this run was started on)
+        required: false
+        default: ""
+        type: string
+      require_signed:
+        description: Fail instead of producing an ad-hoc build when the signing secrets are missing
+        required: false
+        default: false
+        type: boolean
+  workflow_call:
+    inputs:
+      ref:
+        description: Branch, tag, or commit sha to build (empty = the caller's ref)
+        required: false
+        default: ""
+        type: string
+      require_signed:
+        description: Fail instead of producing an ad-hoc build when the signing secrets are missing
+        required: false
+        default: false
+        type: boolean
+    outputs:
+      artifact-name:
+        description: Name of the uploaded artifact (prompter-qa-build)
+        value: ${{ jobs.qa-build.outputs.artifact-name }}
+      zip-name:
+        description: File name of the app zip inside the artifact
+        value: ${{ jobs.qa-build.outputs.zip-name }}
+      sha:
+        description: Full commit sha that was built
+        value: ${{ jobs.qa-build.outputs.sha }}
+      build-number:
+        description: QA build number (the run number of the run that built it)
+        value: ${{ jobs.qa-build.outputs.build-number }}
+      signing:
+        description: "signed or adhoc"
+        value: ${{ jobs.qa-build.outputs.signing }}
+
+permissions:
+  contents: read
+
+env:
+  # Same Xcode pin as swift-ci.yml.
+  XCODE_PREFERRED: "26.2"
+  ARTIFACT_NAME: prompter-qa-build
+  QA_BUNDLE_ID: com.tookes.Prompter.qa
+  QA_PRODUCT_NAME: Prompter QA
+
+jobs:
+  qa-build:
+    name: qa-build
+    runs-on: macos-15
+    timeout-minutes: 30
+    # Environment secrets (MACOS_CERTIFICATE_P12, MACOS_CERTIFICATE_PASSWORD,
+    # APPLE_TEAM_ID) come from here, also when this workflow is called.
+    environment: qa-build
+    concurrency:
+      group: qa-build-${{ github.workflow }}-${{ inputs.ref || github.ref }}
+      cancel-in-progress: true
+    outputs:
+      artifact-name: ${{ steps.package.outputs.artifact-name }}
+      zip-name: ${{ steps.package.outputs.zip-name }}
+      sha: ${{ steps.meta.outputs.sha }}
+      build-number: ${{ steps.meta.outputs.build-number }}
+      signing: ${{ steps.signing.outputs.mode }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - name: Build metadata
+        id: meta
+        env:
+          INPUT_REF: ${{ inputs.ref }}
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          sha="$(git rev-parse HEAD)"
+          {
+            echo "sha=$sha"
+            echo "short-sha=${sha:0:7}"
+            echo "build-number=$RUN_NUMBER"
+          } >> "$GITHUB_OUTPUT"
+          echo "Building ${INPUT_REF:-$GITHUB_REF} at $sha (QA build $RUN_NUMBER)"
+
+      - name: Select Xcode
+        run: |
+          set -euo pipefail
+          if [[ -d "/Applications/Xcode_${XCODE_PREFERRED}.app" ]]; then
+            selected="/Applications/Xcode_${XCODE_PREFERRED}.app"
+          else
+            selected="$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' -print 2>/dev/null | sort -V | tail -n 1 || true)"
+          fi
+          if [[ -z "${selected:-}" ]]; then
+            echo "::error::No Xcode 26.x found on the runner. Installed:"
+            ls -d /Applications/Xcode_*.app || true
+            exit 1
+          fi
+          sudo xcode-select -s "$selected/Contents/Developer"
+          xcodebuild -version
+
+      - name: Import signing certificate
+        id: signing
+        env:
+          MACOS_CERTIFICATE_P12: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          REQUIRE_SIGNED: ${{ inputs.require_signed }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${MACOS_CERTIFICATE_P12:-}" || -z "${MACOS_CERTIFICATE_PASSWORD:-}" ]]; then
+            missing=()
+            [[ -z "${MACOS_CERTIFICATE_P12:-}" ]] && missing+=("MACOS_CERTIFICATE_P12")
+            [[ -z "${MACOS_CERTIFICATE_PASSWORD:-}" ]] && missing+=("MACOS_CERTIFICATE_PASSWORD")
+            if [[ "$REQUIRE_SIGNED" == "true" ]]; then
+              echo "::error::require_signed is set but the qa-build environment is missing: ${missing[*]}"
+              exit 1
+            fi
+            echo "::warning title=UNSIGNED QA BUILD::Secrets missing from the qa-build environment (${missing[*]}); building ad hoc. The Accessibility grant will not survive this build."
+            echo "mode=adhoc" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          KEYCHAIN="$RUNNER_TEMP/prompter-qa-signing.keychain-db"
+          KEYCHAIN_PW="$(openssl rand -base64 24)"
+          CERT_PATH="$RUNNER_TEMP/qa-certificate.p12"
+          # Record the keychain first so the cleanup step deletes it even if import fails.
+          echo "SIGNING_KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
+
+          if ! printf '%s' "$MACOS_CERTIFICATE_P12" | base64 --decode > "$CERT_PATH" 2>/dev/null || [[ ! -s "$CERT_PATH" ]]; then
+            rm -f "$CERT_PATH"
+            echo "::error::MACOS_CERTIFICATE_P12 is not valid base64 of a .p12 file."
+            exit 1
+          fi
+
+          security create-keychain -p "$KEYCHAIN_PW" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PW" "$KEYCHAIN"
+          if ! security import "$CERT_PATH" -k "$KEYCHAIN" -P "$MACOS_CERTIFICATE_PASSWORD" \
+              -T /usr/bin/codesign >/dev/null 2>&1; then
+            rm -f "$CERT_PATH"
+            echo "::error::Could not import MACOS_CERTIFICATE_P12 with MACOS_CERTIFICATE_PASSWORD (wrong password or not a PKCS#12 file)."
+            exit 1
+          fi
+          rm -f "$CERT_PATH"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -k "$KEYCHAIN_PW" "$KEYCHAIN" >/dev/null
+          # shellcheck disable=SC2046
+          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | sed 's/[",]//g')
+
+          identities="$(security find-identity -v -p codesigning "$KEYCHAIN")"
+          IDENTITY="$(grep '"Apple Development' <<<"$identities" | head -1 | awk '{print $2}' || true)"
+          if [[ -z "$IDENTITY" ]]; then
+            IDENTITY="$(grep '"Developer ID Application' <<<"$identities" | head -1 | awk '{print $2}' || true)"
+          fi
+          if [[ -z "$IDENTITY" ]]; then
+            echo "::error::MACOS_CERTIFICATE_P12 holds no Apple Development or Developer ID Application identity."
+            exit 1
+          fi
+          NAME="$(grep "$IDENTITY" <<<"$identities" | head -1 | sed -E 's/.*"(.*)".*/\1/')"
+          echo "SIGNING_IDENTITY=$IDENTITY" >> "$GITHUB_ENV"
+          echo "mode=signed" >> "$GITHUB_OUTPUT"
+          echo "identity-name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "Imported: $NAME"
+
+      - name: Cache Swift packages
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .spm
+          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}-
+
+      # Built unsigned, stamped, then signed by codesign below so the stamp is
+      # covered by the signature and both signing modes share one path.
+      # PRODUCT_BUNDLE_IDENTIFIER and PROMPTER_FLAVOR are set together (design 3.2).
+      - name: Build qa flavor (Release)
+        run: |
+          set -euo pipefail
+          xcodebuild build \
+            -project Prompter/Prompter.xcodeproj \
+            -scheme Prompter \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            -derivedDataPath .dd \
+            -clonedSourcePackagesDirPath .spm \
+            -resultBundlePath "$RUNNER_TEMP/QABuild.xcresult" \
+            PRODUCT_BUNDLE_IDENTIFIER="$QA_BUNDLE_ID" \
+            PRODUCT_NAME="$QA_PRODUCT_NAME" \
+            PROMPTER_FLAVOR=qa \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Stamp and sign
+        env:
+          SHA: ${{ steps.meta.outputs.sha }}
+          BUILD_NUMBER: ${{ steps.meta.outputs.build-number }}
+          MODE: ${{ steps.signing.outputs.mode }}
+        run: |
+          set -euo pipefail
+          APP=".dd/Build/Products/Release/$QA_PRODUCT_NAME.app"
+          [[ -d "$APP" ]] || { echo "::error::Build output not found: $APP"; exit 1; }
+          PLIST="$APP/Contents/Info.plist"
+          for key in PrompterQABuildNumber PrompterGitCommit PrompterQASigning; do
+            /usr/libexec/PlistBuddy -c "Delete :$key" "$PLIST" 2>/dev/null || true
+          done
+          /usr/libexec/PlistBuddy -c "Add :PrompterQABuildNumber string $BUILD_NUMBER" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :PrompterGitCommit string $SHA" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :PrompterQASigning string $MODE" "$PLIST"
+
+          ENTITLEMENTS="Prompter/Prompter/Resources/Prompter.entitlements"
+          if [[ "$MODE" == "signed" ]]; then
+            codesign --force --deep --options runtime --timestamp=none \
+              --entitlements "$ENTITLEMENTS" --sign "$SIGNING_IDENTITY" "$APP"
+          else
+            # Ad hoc without the hardened runtime: library validation would
+            # refuse the ad-hoc Sparkle framework in a hardened host (design 4.2).
+            codesign --force --deep --entitlements "$ENTITLEMENTS" --sign - "$APP"
+          fi
+          codesign --verify --deep --strict --verbose=2 "$APP"
+
+      - name: Verify bundle id, flavor, and signature
+        env:
+          MODE: ${{ steps.signing.outputs.mode }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          APP=".dd/Build/Products/Release/$QA_PRODUCT_NAME.app"
+          PLIST="$APP/Contents/Info.plist"
+          bundle="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$PLIST")"
+          flavor="$(/usr/libexec/PlistBuddy -c 'Print :PrompterFlavor' "$PLIST")"
+          if [[ "$bundle" != "$QA_BUNDLE_ID" || "$flavor" != "qa" ]]; then
+            echo "::error::Expected $QA_BUNDLE_ID / qa, got $bundle / $flavor"
+            exit 1
+          fi
+          echo "CFBundleIdentifier=$bundle PrompterFlavor=$flavor"
+          codesign -d -r- "$APP" 2>&1 | tee "$RUNNER_TEMP/designated-requirement.txt"
+          codesign -dv "$APP" 2>&1 | grep -E '^(Authority|TeamIdentifier|Signature|CodeDirectory)' || true
+          # When signed and APPLE_TEAM_ID is set, the certificate must belong to that team.
+          if [[ "$MODE" == "signed" && -n "${APPLE_TEAM_ID:-}" ]]; then
+            team="$(codesign -dv "$APP" 2>&1 | sed -n 's/^TeamIdentifier=//p')"
+            if [[ "$team" != "$APPLE_TEAM_ID" ]]; then
+              echo "::error::MACOS_CERTIFICATE_P12 belongs to team '$team', not APPLE_TEAM_ID."
+              exit 1
+            fi
+          fi
+
+      - name: Package
+        id: package
+        env:
+          SHA: ${{ steps.meta.outputs.sha }}
+          SHORT_SHA: ${{ steps.meta.outputs.short-sha }}
+          BUILD_NUMBER: ${{ steps.meta.outputs.build-number }}
+          MODE: ${{ steps.signing.outputs.mode }}
+          IDENTITY_NAME: ${{ steps.signing.outputs.identity-name }}
+          INPUT_REF: ${{ inputs.ref }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          APP=".dd/Build/Products/Release/$QA_PRODUCT_NAME.app"
+          PLIST="$APP/Contents/Info.plist"
+          OUT="$RUNNER_TEMP/qa-artifact"
+          ZIP="Prompter-QA-$SHORT_SHA.zip"
+          mkdir -p "$OUT"
+          ditto -c -k --keepParent "$APP" "$OUT/$ZIP"
+
+          version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$PLIST")"
+          bundle_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$PLIST")"
+          if [[ "$MODE" == "signed" ]]; then
+            signing_line="signed ($IDENTITY_NAME, hardened runtime, not notarized)"
+          else
+            signing_line="UNSIGNED QA BUILD (ad hoc; the Accessibility grant does not survive it)"
+          fi
+          {
+            echo "app=$QA_PRODUCT_NAME.app"
+            echo "bundle_id=$QA_BUNDLE_ID"
+            echo "flavor=qa"
+            echo "ref=${INPUT_REF:-$GITHUB_REF}"
+            echo "sha=$SHA"
+            echo "qa_build_number=$BUILD_NUMBER"
+            echo "version=$version"
+            echo "bundle_version=$bundle_version"
+            echo "signing=$MODE"
+            echo "signing_detail=$signing_line"
+            echo "run=$RUN_URL"
+            echo "zip=$ZIP"
+            echo "zip_sha256=$(shasum -a 256 "$OUT/$ZIP" | awk '{print $1}')"
+            echo "designated_requirement=$(sed -n 's/^designated => //p' "$RUNNER_TEMP/designated-requirement.txt")"
+          } > "$OUT/BUILD_INFO.txt"
+          if [[ "$MODE" != "signed" ]]; then
+            {
+              echo "UNSIGNED QA BUILD"
+              echo "This Prompter QA.app is ad hoc signed because the qa-build environment"
+              echo "has no signing certificate yet (PRMT-011). Its code signature changes"
+              echo "on every build, so macOS asks for the Accessibility grant again."
+            } > "$OUT/UNSIGNED-QA-BUILD.txt"
+          fi
+          cat "$OUT/BUILD_INFO.txt"
+          {
+            echo "artifact-name=$ARTIFACT_NAME"
+            echo "zip-name=$ZIP"
+            echo "dir=$OUT"
+          } >> "$GITHUB_OUTPUT"
+          {
+            echo "### Prompter QA build $BUILD_NUMBER"
+            echo ""
+            if [[ "$MODE" != "signed" ]]; then
+              echo "> **UNSIGNED QA BUILD** (ad hoc). Add the signing secrets to the \`qa-build\` environment for a stable signature."
+              echo ""
+            fi
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Artifact | \`$ARTIFACT_NAME\` (3 days) |"
+            echo "| Zip | \`$ZIP\` |"
+            echo "| Commit | \`$SHA\` |"
+            echo "| Version | $version ($bundle_version), QA build $BUILD_NUMBER |"
+            echo "| Signing | $signing_line |"
+            echo ""
+            echo "Fetch: \`gh run download $GITHUB_RUN_ID -R $GITHUB_REPOSITORY -n $ARTIFACT_NAME\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ steps.package.outputs.dir }}
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload build result bundle
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: qa-build-xcresult-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/QABuild.xcresult
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Remove signing keychain
+        if: always()
+        run: |
+          if [[ -n "${SIGNING_KEYCHAIN:-}" && -f "$SIGNING_KEYCHAIN" ]]; then
+            security delete-keychain "$SIGNING_KEYCHAIN" || true
+            echo "Deleted the temporary signing keychain."
+          fi
