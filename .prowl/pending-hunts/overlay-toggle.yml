@@ -1,0 +1,24 @@
+# PENDING PRMT-021: needs menuToggleOverlay, overlayWindow, the overlay state
+# contract (design 3.3) and the fixture deck. Move to .prowl/hunts/ then.
+#
+# Show Overlay from the menu opens the overlay on card 1 of 5. Prowl 0.1.8 has
+# no value assertion and text= is forbidden, so the state string is matched
+# through role=window[name=...], which compares title, description, and value
+# as a substring.
+
+name: overlay-toggle
+description: Show Overlay opens the overlay on card 1 of 5
+
+steps:
+  - click:
+      selector: statusItem
+
+  - click:
+      selector: id=menuToggleOverlay
+
+  - waitForSelector:
+      selector: id=overlayWindow
+      timeout: 10000
+
+  - assert:
+      visible: role=window[name="card=1/5;"]

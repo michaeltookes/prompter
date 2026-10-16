@@ -1,0 +1,48 @@
+# Prowl configuration: Prompter menu bar app (Prowl macOS target).
+#
+# Hunts run against the prebuilt hunt flavor (US-25): bundle id
+# com.tookes.Prompter.hunt, data in ~/Library/Application Support/Prompter-Hunt/
+# (wiped and re-seeded from Contents/Resources/HuntSeed/ on every launch), no
+# event tap, no Sparkle. In CI the bundle is built on a GitHub-hosted runner
+# (prowl-qa.yml job build-hunt) and unpacked here by the hunt job; locally,
+# Prompter/scripts/build-hunt-app.sh builds it in place. There is no build
+# command in this file, so Prowl never runs xcodebuild (design 4.3).
+
+target:
+  type: macos
+  app: .prowl/DerivedData/Build/Products/Debug/Prompter.app
+
+browser:
+  timeout: 30000        # also bounds the app-launch wait for the macOS target
+
+artifacts:
+  # Prowl offers "on-failure" or "all". This repo is public and run artifacts
+  # are downloadable by any logged-in GitHub user, and the macOS target falls
+  # back to a full-screen capture when the app has no capturable window. The
+  # workflow therefore keeps screenshots on the runner and strips every
+  # screenshots/ folder before uploading .prowl/runs (design 4.3).
+  screenshots: "on-failure"
+  junit: true
+
+# Hunts are open-and-assert. forbiddenSelectors is substring-matched against
+# every selector, assertions included (design 3.3, ContainerBar parity).
+guardrails:
+  maxSteps: 25
+  allowedApps:
+    - .prowl/DerivedData/Build/Products/Debug/Prompter.app
+    - com.tookes.Prompter.hunt
+  forbiddenSelectors:
+    # Substring selector families: too easy to hit an unsafe element.
+    - "menu="
+    - "text="
+    # Would request Screen Recording or reach the network.
+    - "menuCheckForUpdates"
+    - "Check for Updates"
+    - "menuTestProtectedMode"
+    - "Test Protected Mode"
+    - "testCaptureRun"
+    # Destructive or lifecycle actions.
+    - "editorDeleteDeck"
+    - "Delete"
+    - "menuQuit"
+    - "Quit Prompter"

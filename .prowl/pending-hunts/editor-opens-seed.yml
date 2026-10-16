@@ -1,0 +1,33 @@
+# PENDING PRMT-021: needs the editor identifiers and the five-card fixture deck
+# (docs/qa/fixtures/). Move to .prowl/hunts/ in the PRMT-021 branch.
+#
+# The editor opens on the seeded deck: five card rows, the first titled
+# "QA Card 1 - Opening" (design 4.3).
+
+name: editor-opens-seed
+description: The deck editor opens on the seeded five-card fixture deck
+
+steps:
+  - click:
+      selector: statusItem
+
+  - click:
+      selector: id=menuOpenEditor
+
+  - waitForSelector:
+      selector: id=editorCardList
+      timeout: 10000
+
+  - assert:
+      visible: id=editorCardRow-0
+
+  - assert:
+      visible: id=editorCardRow-4
+
+  - assert:
+      notVisible: id=editorCardRow-5
+
+  # role= matches title, description, or value as a substring; confirm the row
+  # exposes the card title this way when PRMT-021 lands.
+  - assert:
+      visible: role=row[name="QA Card 1 - Opening"]
