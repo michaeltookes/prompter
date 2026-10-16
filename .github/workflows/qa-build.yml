@@ -314,7 +314,7 @@ jobs:
             echo "run=$RUN_URL"
             echo "zip=$ZIP"
             echo "zip_sha256=$(shasum -a 256 "$OUT/$ZIP" | awk '{print $1}')"
-            echo "designated_requirement=$(sed -n 's/^designated => //p' "$RUNNER_TEMP/designated-requirement.txt")"
+            echo "designated_requirement=$(sed -n 's/^#* *designated => //p' "$RUNNER_TEMP/designated-requirement.txt")"
           } > "$OUT/BUILD_INFO.txt"
           if [[ "$MODE" != "signed" ]]; then
             {
