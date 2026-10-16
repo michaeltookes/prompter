@@ -14,9 +14,27 @@ others.
 ## Prowl QA on pull requests
 
 `.github/workflows/prowl-qa.yml` runs on every pull request to `main` whose head
-branch is in this repository (fork PRs are skipped: their code is untrusted
-input for a persistent GUI runner) and on `workflow_dispatch` once the file is
-on `main`.
+branch is in this repository and on `workflow_dispatch` once the file is on
+`main`.
+
+### Security boundary for the Mini (SEC-007)
+
+Fork code is untrusted input for a persistent self-hosted GUI runner. The
+workflow's same-repo `if:` conditions are **not** the boundary: a
+`pull_request` run uses the PR's own copy of the workflow, so a fork PR can
+remove them. The boundary is two settings outside the PR's control:
+
+1. **The `mini-runner` environment** on the `hunt` job (created by vendor-ops
+   with a required reviewer and a branch policy). A run reaches the Mini only
+   after a reviewer approves it, unless it comes from a same-repo branch the
+   branch policy covers. GitHub holds the job before handing it to any runner,
+   so nothing runs on the Mini before the gate, including PR-controlled files
+   such as `Prompter/scripts/prowl-qa-gui-segment.sh` and `.prowl/`; the job's
+   first step only runs after it.
+2. **The repository setting "require approval for all outside
+   collaborators"** for fork pull request workflows.
+
+The `if:` conditions stay as defence in depth.
 
 ### Jobs
 
@@ -27,8 +45,8 @@ on `main`.
    `Contents/Resources/HuntSeed/` (an empty deck folder until PRMT-021), and
    signs it ad hoc. The job checks the bundle id and flavor, then uploads
    `Prompter-Hunt-<shortsha>.zip` (kept 3 days).
-2. **Prowl hunts** (`hunt`, the self-hosted runner `lucius-mac-mini-prompter`,
-   labels `self-hosted, macOS, ARM64`). In order:
+2. **Prowl hunts** (`hunt`, environment `mini-runner`, the self-hosted runner
+   `lucius-mac-mini-prompter`, labels `self-hosted, macOS, ARM64`). In order:
    - fails at once, naming the variable, if `QA_DEVICE_LOCK_DIR` or
      `QA_DEVICE_LOCK_TOOL` is unset in the runner's environment;
    - checks out Prowl at `PROWL_VERSION` (ContainerBar's pin, 0.1.8), builds and
@@ -40,8 +58,9 @@ on `main`.
    - **GUI segment under the desktop lock**: one `device_lock.py` call runs
      `Prompter/scripts/prowl-qa-gui-segment.sh`, which runs `prowl ci --junit`
      and then, whatever the result, quits the hunt app with
-     `osascript -e 'quit app id "com.tookes.Prompter.hunt"'` (no signals) and
-     waits up to 10 s. While another desktop pass or hourly check holds the
+     an `osascript` quit bounded by a 5 s AppleScript timeout and a 5 s poll,
+     then waits up to 5 s for the app to exit (no signals; cleanup stays under
+     15 s, inside the lock call's 20 s grace). While another desktop pass or hourly check holds the
      lock (exit 75) the step retries every 30 s for up to 20 minutes, then
      fails with `desktop-busy`. The segment itself is limited to 25 minutes;
      if the lock tool stops it (timeout or a cancelled job), the script's

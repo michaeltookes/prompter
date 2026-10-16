@@ -8,7 +8,7 @@
 #
 #   1. prowl ci --junit against the prebuilt hunt bundle (.prowl/config.yml)
 #   2. whatever the result, quit the hunt app through Apple Events (no signals)
-#      and wait up to 10 s for it to exit
+#      and wait for it to exit (cleanup bounded under 15 s)
 #   3. exit with the hunt result
 #
 # The quit also runs from a trap on TERM, INT, and EXIT. device_lock.py sends
@@ -27,7 +27,11 @@ set -uo pipefail
 
 LOG_DIR="${1:?usage: prowl-qa-gui-segment.sh <log-dir>}"
 HUNT_BUNDLE_ID="com.tookes.Prompter.hunt"
-QUIT_WAIT_SECONDS=10
+# Cleanup stays under 15 s (the lock call's --grace is 20 s): at most 5 s for
+# the quit Apple Event to be sent and answered, then at most 5 s for the app
+# to exit. An unresponsive app is reported, never signalled.
+QUIT_SEND_SECONDS=5
+QUIT_WAIT_SECONDS=5
 mkdir -p "$LOG_DIR"
 
 hunt_app_running() {
@@ -44,7 +48,21 @@ quit_hunt_app() {
         echo "==> Hunt app not running (Prowl already quit it)"
         return 0
     fi
-    osascript -e "quit app id \"$HUNT_BUNDLE_ID\"" >>"$LOG_DIR/quit.log" 2>&1 || true
+    # osascript alone can block ~120 s on an app that does not answer; the
+    # AppleScript timeout bounds the event, and the background poll bounds
+    # osascript itself. A still-running osascript is left to its own timeout.
+    osascript \
+        -e "with timeout of $QUIT_SEND_SECONDS seconds" \
+        -e "tell application id \"$HUNT_BUNDLE_ID\" to quit" \
+        -e "end timeout" >>"$LOG_DIR/quit.log" 2>&1 &
+    quit_pid=$!
+    for _ in $(seq 1 $((QUIT_SEND_SECONDS * 2))); do
+        ps -p "$quit_pid" >/dev/null 2>&1 || break
+        sleep 0.5
+    done
+    if ps -p "$quit_pid" >/dev/null 2>&1; then
+        echo "::warning::The quit Apple Event got no answer within ${QUIT_SEND_SECONDS} s; giving up on it."
+    fi
     for _ in $(seq 1 "$QUIT_WAIT_SECONDS"); do
         hunt_app_running || break
         sleep 1

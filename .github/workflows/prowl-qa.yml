@@ -17,8 +17,19 @@
 # A hosted runner cannot drive the GUI: the runner's host process needs a
 # one-time Accessibility grant, which only a machine we control can give.
 #
-# Same-repository PR heads only: fork code is untrusted input for a persistent
-# self-hosted GUI runner. workflow_dispatch works once this file is on main.
+# Security boundary for the self-hosted Mini (SEC-007): NOT the `if:` checks
+# below. A pull_request run uses the PR's own copy of this file, so a fork PR
+# could simply delete them. The boundary is
+#   1. the `mini-runner` environment on the hunt job: a run reaches the Mini
+#      only after a required reviewer approves it, unless it comes from a
+#      same-repo branch the environment's branch policy covers; the approval
+#      happens before the job is handed to any runner, so no step (and no
+#      PR-controlled script, such as prowl-qa-gui-segment.sh) runs on the Mini
+#      before it; and
+#   2. the repository setting "require approval for all outside collaborators"
+#      for fork pull request workflows.
+# The same-repo `if:` conditions stay as defence in depth only.
+# workflow_dispatch works once this file is on main.
 
 name: Prowl QA
 
@@ -122,6 +133,9 @@ jobs:
     # queued while it is offline stays pending (never success); the merge
     # checklist treats pending as not green (US-4 AC3).
     runs-on: [self-hosted, macOS, ARM64]
+    # The security boundary (see the header): approval or branch policy first,
+    # then the job is dispatched to the Mini. Created by vendor-ops.
+    environment: mini-runner
     # Setup (~5 min) + up to 20 min waiting for the desktop lock + the segment's
     # own 25 min limit, so the job limit never cuts the segment short.
     timeout-minutes: 55
@@ -214,7 +228,7 @@ jobs:
       # The GUI segment: hunts and the hunt-app quit run inside ONE device_lock
       # call, so the hunt app is never launched outside the lock (US-4 AC5).
       # --grace 20 gives the segment's TERM trap time to quit the hunt app
-      # (10 s wait) before the lock tool escalates, on timeout or cancel.
+      # (bounded under 15 s) before the lock tool escalates, on timeout or cancel.
       # Exit 75 = another desktop user holds the lock: retry every 30 s for up
       # to 20 minutes, then fail with desktop-busy. The segment script maps its
       # own 75/124 to 1, so those codes always come from the lock tool.
