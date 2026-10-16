@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - Build flavors with isolated storage: `qa` (`com.tookes.Prompter.qa`, `Application Support/Prompter-QA/`) and `hunt` (`com.tookes.Prompter.hunt`, `Application Support/Prompter-Hunt/`, re-seeded on every launch) never start Sparkle and name their flavor in the status item; `Prompter/scripts/build-flavor-app.sh` and `build-hunt-app.sh` build them
 - Swift CI on every pull request and push to `main`: a "Build & Test" job (build for testing, then run the unit tests, on a GitHub-hosted macOS runner with Xcode 26) and a "SwiftLint" job (SwiftLint 0.65.1 with `Prompter/.swiftlint.yml`)
+- Prowl QA on every same-repository pull request: a hosted job builds the hunt flavor, and a self-hosted Mac runner drives it with Prowl under the shared desktop lock, then quits it; the first hunt checks the status item and its menu
 
 ### Changed
 - `AppState`'s timer and auto-save code moved into `AppState+Timer.swift` and `AppState+AutoSave.swift`, clearing the SwiftLint `type_body_length` error; no behaviour change

@@ -252,6 +252,20 @@ Referenced by the `/release-prep` skill:
 | Notarization credentials | From the environment: `NOTARY_PROFILE` (local keychain profile) or `APPLE_ID` + `APPLE_TEAM_ID` + `NOTARY_APP_SPECIFIC_PASSWORD` (CI); signing uses `SIGNING_IDENTITY` and `APPLE_TEAM_ID`. See `Prompter/scripts/README.md` |
 | Validation script | *Not yet implemented* |
 
+## CI Jobs
+
+| Workflow | Trigger | Job (check name) | Runner | What it does |
+|---|---|---|---|---|
+| `swift-ci.yml` | PR to `main`, push to `main` | `Build & Test` | GitHub-hosted `macos-15` | resolve packages, `build-for-testing`, `test-without-building` (unit tests) |
+| `swift-ci.yml` | same | `SwiftLint` | GitHub-hosted `macos-15` | pinned SwiftLint 0.65.1, errors fail |
+| `prowl-qa.yml` | PR to `main` (same-repo heads), `workflow_dispatch` | `Build hunt app` | GitHub-hosted `macos-15` | builds the ad-hoc-signed hunt flavor (`com.tookes.Prompter.hunt`), uploads `Prompter-Hunt-<shortsha>.zip` |
+| `prowl-qa.yml` | same | `Prowl QA` | self-hosted `lucius-mac-mini-prompter` (`self-hosted, macOS, ARM64`) | runs the Prowl hunts in `.prowl/hunts/` against that bundle under the Mini's desktop lock; no `xcodebuild` on the Mini |
+| `qa-build.yml` | `workflow_dispatch` (`ref`) | | GitHub-hosted | Developer-ID-signed `qa` flavor for the pre-PR QA gate (PRMT-032, not yet merged) |
+| `claude.yml` | `@claude` in issue and PR comments and reviews | | ubuntu | Claude on issues and PRs |
+| `claude-pr-description.yml` | PR opened (same-repo heads) | | ubuntu | suggests a PR description |
+
+Every check above must be green before merge; a queued `Prowl QA` (Mini runner offline) is not green. Details: `docs/qa/README.md`. Unit tests boot the app as their host, so they run in CI, never on a developer Mac.
+
 ## Important Notes
 
 1. **Protected Mode is Best-Effort**: `NSWindow.sharingType = .none` may not work with all capture tools. Always include a disclaimer and test instructions.
