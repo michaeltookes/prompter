@@ -122,6 +122,10 @@ Source: `docs/requirements/audit-and-modernization.md` (findings F-01 to F-19, s
    PRMT-008's "SwiftLint" job fails on errors only; `Prompter/.swiftlint.yml` reports 35 warnings on `main` (identifier names, file and function length, among others). Fix or justify each (inline `swiftlint:disable` with a reason only where the rule is wrong for the code), then add `--strict` to the Lint step in `.github/workflows/swift-ci.yml`. Coordinate with Epic A, which edits the same files. Design 4.2 item 4.
    **Acceptance:** `swiftlint lint --strict --config Prompter/.swiftlint.yml Prompter` exits 0 on `main`; the Swift CI "SwiftLint" job runs with `--strict`, so a new warning fails the check.
 
+{PRMT-037} **prowl-qa segment cleanup races (PRMT-010 leftover, Codex round 3 on PR 25)** (P2, Size S; before the first hunt that runs unattended on a schedule)
+   Two lifecycle races in `Prompter/scripts/prowl-qa-gui-segment.sh`, found by Codex round 3 on PR 25 after its review rounds were used: (1) `quit_hunt_app` sets `quit_done=1` before it tries the quit, so a TERM or INT that arrives during normal cleanup finds `quit_done` set and both `on_terminate` and the EXIT trap skip the quit, leaving the hunt app running after the lock is released; (2) when the background `osascript` quit outlives its 5 s send deadline, nothing reaps it, so the helper can outlive the segment and the desktop lock.
+   **Done when:** `quit_done` is set only after the quit attempt completes, and a TERM during cleanup still quits the app; the `osascript` helper is waited for, or ended by PID (the script's own child only, never by name), before the script exits; both are proven with the stub-app harness on Lucius' Mini (stub `prowl` and `osascript`, a private lock directory, `device_lock.py --timeout 3 --grace 20`), including a TERM sent during cleanup.
+
 ### Epic A: Audit fixes
 
 {PRMT-013} **Hotkeys only consume keys while they are in use** (Size M)
