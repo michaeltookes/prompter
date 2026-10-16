@@ -27,7 +27,7 @@ on `main`.
    `Contents/Resources/HuntSeed/` (an empty deck folder until PRMT-021), and
    signs it ad hoc. The job checks the bundle id and flavor, then uploads
    `Prompter-Hunt-<shortsha>.zip` (kept 3 days).
-2. **Prowl QA** (`hunt`, the self-hosted runner `lucius-mac-mini-prompter`,
+2. **Prowl hunts** (`hunt`, the self-hosted runner `lucius-mac-mini-prompter`,
    labels `self-hosted, macOS, ARM64`). In order:
    - fails at once, naming the variable, if `QA_DEVICE_LOCK_DIR` or
      `QA_DEVICE_LOCK_TOOL` is unset in the runner's environment;
@@ -44,6 +44,9 @@ on `main`.
      waits up to 10 s. While another desktop pass or hourly check holds the
      lock (exit 75) the step retries every 30 s for up to 20 minutes, then
      fails with `desktop-busy`. The segment itself is limited to 25 minutes;
+     if the lock tool stops it (timeout or a cancelled job), the script's
+     TERM/INT/EXIT trap still quits the hunt app before the lock is released
+     (`--grace 20` leaves time for the quit);
    - read-only checks after the segment: warns if the hunt app is still
      running, fails if a hunt build is in `/Applications`;
    - moves every `screenshots/` folder to `~/prowl-qa-screenshots/prompter/<run>-<attempt>/`
@@ -52,10 +55,14 @@ on `main`.
      kept 14 days. Screenshots are not uploaded because this repo is public and
      the macOS target falls back to a full-screen capture of the runner's
      desktop when the app has no window.
+3. **Prowl QA** (`gate`, ubuntu). The required check. It runs whatever happened
+   above and passes only when both jobs succeeded: GitHub counts a skipped job
+   as satisfied for a required check, and a failed build skips `hunt`, so
+   branch protection requires this job, not the other two.
 
 ### What counts as green
 
-Only a completed, successful **Prowl QA** check. A queued check (the Mini's
+Only a completed, successful **Prowl QA** (gate) check. A queued check (the Mini's
 runner offline: GitHub keeps the job pending for up to 24 hours), a cancelled
 run, `desktop-busy`, a failed hunt build, or a missing artifact is not green,
 and the merge checklist treats it as not green.
@@ -77,7 +84,7 @@ delete, or quit (see `.prowl/README.md`).
 
 | Hunt | Checks | Runs |
 |---|---|---|
-| `status-item` | the status item exists; its menu opens with Open Deck Editor, Protected Mode, Presentation Timer | now |
+| `status-item` | the status item exists; its menu opens with Open Deck Editor…, Protected Mode, Presentation Timer (exact labels) | now |
 | `editor-opens-seed` | the editor opens on the five-card fixture deck | after PRMT-021 |
 | `overlay-toggle` | Show Overlay opens the overlay on `card=1/5` | after PRMT-021 |
 | `card-select` | selecting `editorCardRow-2` moves the overlay to `card=3/5` | after PRMT-021 |

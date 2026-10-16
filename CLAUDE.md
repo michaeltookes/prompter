@@ -259,7 +259,8 @@ Referenced by the `/release-prep` skill:
 | `swift-ci.yml` | PR to `main`, push to `main` | `Build & Test` | GitHub-hosted `macos-15` | resolve packages, `build-for-testing`, `test-without-building` (unit tests) |
 | `swift-ci.yml` | same | `SwiftLint` | GitHub-hosted `macos-15` | pinned SwiftLint 0.65.1, errors fail |
 | `prowl-qa.yml` | PR to `main` (same-repo heads), `workflow_dispatch` | `Build hunt app` | GitHub-hosted `macos-15` | builds the ad-hoc-signed hunt flavor (`com.tookes.Prompter.hunt`), uploads `Prompter-Hunt-<shortsha>.zip` |
-| `prowl-qa.yml` | same | `Prowl QA` | self-hosted `lucius-mac-mini-prompter` (`self-hosted, macOS, ARM64`) | runs the Prowl hunts in `.prowl/hunts/` against that bundle under the Mini's desktop lock; no `xcodebuild` on the Mini |
+| `prowl-qa.yml` | same | `Prowl hunts` | self-hosted `lucius-mac-mini-prompter` (`self-hosted, macOS, ARM64`) | runs the Prowl hunts in `.prowl/hunts/` against that bundle under the Mini's desktop lock; no `xcodebuild` on the Mini |
+| `prowl-qa.yml` | same | `Prowl QA` (required) | ubuntu | gate: passes only if both jobs above succeeded (a skipped job never counts) |
 | `qa-build.yml` | `workflow_dispatch` (`ref`) | | GitHub-hosted | Developer-ID-signed `qa` flavor for the pre-PR QA gate (PRMT-032, not yet merged) |
 | `claude.yml` | `@claude` in issue and PR comments and reviews | | ubuntu | Claude on issues and PRs |
 | `claude-pr-description.yml` | PR opened (same-repo heads) | | ubuntu | suggests a PR description |

@@ -40,12 +40,14 @@ Run output lands in `.prowl/runs/` (gitignored).
 - `statusItem`: press the app's status item and leave its menu open.
 - `id=<identifier>`: accessibility identifier, exact. Identifiers per design
   3.3 arrive with PRMT-021.
-- `role=<role>[name="..."]`: AX role plus a substring of the title,
-  description, or **value**. Hunts use `role=menuitem[name="Open Deck Editor"]`
-  for menu titles and `role=window[name="card=1/5;"]` to read the overlay's
-  state string (design 3.3), since 0.1.8 has no value assertion and `text=` is
-  forbidden.
-- `label="..."`: exact label, click steps only (assertions become `text=`).
+- `role=<role>[name="..."]`: AX role plus a **substring** of the title,
+  description, or value. Hunts use `role=window[name="card=1/5;"]` to read the
+  overlay's state string (design 3.3), since 0.1.8 has no value assertion and
+  `text=` is forbidden. Never use it for a menu title: `name="Protected Mode"`
+  also matches "Test Protected Mode…".
+- `label="..."`: exact (case-insensitive) title, description, or value. Works
+  in `click` and `waitForSelector`; `assert` rewrites it to the forbidden
+  `text=`, so exact presence checks are `waitForSelector` steps.
 - `menu=` and `text=` are forbidden by `config.yml`.
 
 ## Writing hunts
