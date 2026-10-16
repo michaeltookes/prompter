@@ -224,6 +224,17 @@ The app has full accessibility support across four areas:
 - [ ] Browse button opens file picker in empty image drop zones
 - [ ] Move Up/Down works in card context menu and bullet reorder buttons
 
+## CI Workflows
+
+All jobs run on GitHub-hosted runners unless noted; nothing builds on the QA Mini.
+
+| Workflow | Trigger | Job (check name) | Output |
+|----------|---------|------------------|--------|
+| `swift-ci.yml` | pull request and push to `main` | `Build & Test`, `SwiftLint` | unit tests and lint; result bundles on failure |
+| `qa-build.yml` | `workflow_dispatch` (inputs `ref`, `require_signed`) and `workflow_call` | `qa-build` | artifact `prompter-qa-build` (3 days): `Prompter-QA-<shortsha>.zip` with `Prompter QA.app` (`com.tookes.Prompter.qa`, flavor `qa`), `BUILD_INFO.txt` (sha, QA build number, signing mode). Signed when the `qa-build` environment has `MACOS_CERTIFICATE_P12` and `MACOS_CERTIFICATE_PASSWORD` (`APPLE_TEAM_ID` checks the team), otherwise ad hoc and marked "UNSIGNED QA BUILD". See `docs/qa/qa-build.md` |
+| `claude.yml` | `@claude` mentions | on-demand Claude | |
+| `claude-pr-description.yml` | pull request | suggested PR description | workflow summary only |
+
 ## Release Configuration
 
 Referenced by the `/release-prep` skill:
