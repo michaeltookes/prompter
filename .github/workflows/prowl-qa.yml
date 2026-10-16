@@ -1,0 +1,296 @@
+# Prowl QA: end-to-end acceptance hunts against the real Prompter app
+# (design 4.3, story US-audit-and-modernization-4, backlog PRMT-010).
+#
+# Two jobs:
+#   build-hunt  GitHub-hosted macOS, same Xcode pin as swift-ci.yml. Builds the
+#               ad-hoc-signed hunt flavor (com.tookes.Prompter.hunt, data in
+#               Application Support/Prompter-Hunt/) and uploads it as an artifact.
+#   hunt        The self-hosted runner on Lucius' Mini. Downloads that bundle,
+#               registers it, and drives it with the pinned Prowl version under
+#               the host-wide desktop lock. The Mini never compiles the app
+#               (no xcodebuild there: it cannot run the Xcode the app needs).
+#
+# A hosted runner cannot drive the GUI: the runner's host process needs a
+# one-time Accessibility grant, which only a machine we control can give.
+#
+# Same-repository PR heads only: fork code is untrusted input for a persistent
+# self-hosted GUI runner. workflow_dispatch works once this file is on main.
+
+name: Prowl QA
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+
+# One run per PR (or ref) at a time; a newer push waits for the running hunt
+# instead of cancelling it mid-segment (a cancel inside the desktop lock could
+# leave the hunt app open). Across PRs the single repository-scoped runner
+# takes one job at a time, and across repositories the desktop lock below
+# serializes every GUI user of the Mini, so two runs never overlap on it.
+concurrency:
+  group: prowl-qa-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  # ContainerBar's pinned Prowl version (its prowl-qa.yml); bump both together.
+  PROWL_VERSION: 0.1.8
+  HUNT_BUNDLE_ID: com.tookes.Prompter.hunt
+  # The prebuilt bundle's path matches .prowl/config.yml and the hunt-flavor
+  # rule in AppEnvironment (bundle path contains /.prowl/DerivedData/).
+  HUNT_PRODUCTS_DIR: .prowl/DerivedData/Build/Products/Debug
+
+jobs:
+  build-hunt:
+    name: Build hunt app
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: macos-15
+    timeout-minutes: 30
+    env:
+      # Keep in step with swift-ci.yml (26.2 today, 27.x from PRMT-026).
+      XCODE_PREFERRED: "26.2"
+    outputs:
+      artifact: ${{ steps.package.outputs.artifact }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Select Xcode
+        run: |
+          set -euo pipefail
+          if [[ -d "/Applications/Xcode_${XCODE_PREFERRED}.app" ]]; then
+            selected="/Applications/Xcode_${XCODE_PREFERRED}.app"
+          else
+            selected="$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' -print 2>/dev/null | sort -V | tail -n 1 || true)"
+          fi
+          if [[ -z "${selected:-}" ]]; then
+            echo "::error::No Xcode 26.x found on the runner. Installed:"
+            ls -d /Applications/Xcode_*.app || true
+            exit 1
+          fi
+          sudo xcode-select -s "$selected/Contents/Developer"
+          xcodebuild -version
+
+      - name: Build hunt flavor
+        run: Prompter/scripts/build-hunt-app.sh
+
+      - name: Verify bundle identity
+        run: |
+          set -euo pipefail
+          app="$HUNT_PRODUCTS_DIR/Prompter.app"
+          bundle_id=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$app/Contents/Info.plist")
+          flavor=$(/usr/libexec/PlistBuddy -c "Print :PrompterFlavor" "$app/Contents/Info.plist")
+          if [[ "$bundle_id" != "$HUNT_BUNDLE_ID" || "$flavor" != "hunt" ]]; then
+            echo "::error::Hunt build has CFBundleIdentifier=$bundle_id PrompterFlavor=$flavor; expected $HUNT_BUNDLE_ID and hunt."
+            exit 1
+          fi
+          codesign --verify --deep --strict "$app"
+          echo "CFBundleIdentifier=$bundle_id PrompterFlavor=$flavor"
+
+      - name: Package
+        id: package
+        run: |
+          set -euo pipefail
+          short_sha="$(git rev-parse --short=7 HEAD)"
+          artifact="Prompter-Hunt-${short_sha}"
+          ditto -c -k --keepParent "$HUNT_PRODUCTS_DIR/Prompter.app" "$RUNNER_TEMP/${artifact}.zip"
+          echo "artifact=${artifact}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload hunt app
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ steps.package.outputs.artifact }}
+          path: ${{ runner.temp }}/${{ steps.package.outputs.artifact }}.zip
+          if-no-files-found: error
+          retention-days: 3
+
+  hunt:
+    name: Prowl QA
+    needs: build-hunt
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    # Repository-scoped runner lucius-mac-mini-prompter on Lucius' Mini. A job
+    # queued while it is offline stays pending (never success); the merge
+    # checklist treats pending as not green (US-4 AC3).
+    runs-on: [self-hosted, macOS, ARM64]
+    # Setup (~5 min) + up to 20 min waiting for the desktop lock + the segment's
+    # own 25 min limit, so the job limit never cuts the segment short.
+    timeout-minutes: 55
+    env:
+      LOG_DIR: ${{ github.workspace }}/.prowl/runs/ci-logs
+    steps:
+      - name: Require the desktop-lock environment
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in QA_DEVICE_LOCK_DIR QA_DEVICE_LOCK_TOOL; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::$name is not set in the runner's environment (.env). homelab-it sets it; see docs/qa/README.md."
+              missing=1
+            fi
+          done
+          [[ "$missing" -eq 0 ]] || exit 1
+          if [[ ! -f "$QA_DEVICE_LOCK_TOOL" ]]; then
+            echo "::error::QA_DEVICE_LOCK_TOOL points at a missing file: $QA_DEVICE_LOCK_TOOL"
+            exit 1
+          fi
+
+      - name: Checkout Prompter
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Checkout Prowl (CLI and helper source tag)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: prowl-tools/prowl
+          ref: v${{ env.PROWL_VERSION }}
+          path: prowl-src
+
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      - name: Build and link Prowl CLI
+        working-directory: prowl-src
+        run: |
+          npm install
+          npm run build
+          npm link
+
+      # The Prowl helper is a small Swift package; it is the only thing compiled
+      # on the Mini (the app itself comes from build-hunt).
+      - name: Build prowl-macdriver helper
+        working-directory: prowl-src/macdriver
+        run: |
+          swift build -c release
+          echo "PROWL_MACDRIVER_BIN=${GITHUB_WORKSPACE}/prowl-src/macdriver/.build/release/prowl-macdriver" >> "$GITHUB_ENV"
+
+      - name: Preflight Accessibility permission
+        run: |
+          if ! "$PROWL_MACDRIVER_BIN" check; then
+            echo "::error::Runner host is not trusted for Accessibility." \
+              "Grant it in System Settings > Privacy & Security > Accessibility" \
+              "on the runner machine (see docs/qa/README.md), then re-run."
+            exit 1
+          fi
+
+      # A missing or corrupt artifact fails here, before the lock is taken and
+      # before anything is launched (US-4 AC1b).
+      - name: Download hunt app
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ${{ needs.build-hunt.outputs.artifact }}
+          path: ${{ runner.temp }}/hunt-artifact
+
+      - name: Install hunt app into the workspace
+        run: |
+          set -euo pipefail
+          zip="$RUNNER_TEMP/hunt-artifact/${{ needs.build-hunt.outputs.artifact }}.zip"
+          [[ -f "$zip" ]] || { echo "::error::Hunt artifact zip not found: $zip"; exit 1; }
+          rm -rf .prowl/DerivedData
+          mkdir -p "$HUNT_PRODUCTS_DIR"
+          ditto -x -k "$zip" "$HUNT_PRODUCTS_DIR"
+          app="$GITHUB_WORKSPACE/$HUNT_PRODUCTS_DIR/Prompter.app"
+          [[ -d "$app" ]] || { echo "::error::Prompter.app missing from the hunt artifact"; exit 1; }
+          bundle_id=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$app/Contents/Info.plist")
+          if [[ "$bundle_id" != "$HUNT_BUNDLE_ID" ]]; then
+            echo "::error::Artifact bundle id is $bundle_id, expected $HUNT_BUNDLE_ID"
+            exit 1
+          fi
+          xattr -cr "$app"
+          codesign --verify --deep --strict "$app"
+          /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$app"
+          echo "Installed $app (never copied to /Applications)"
+
+      # The GUI segment: hunts and the hunt-app quit run inside ONE device_lock
+      # call, so the hunt app is never launched outside the lock (US-4 AC5).
+      # Exit 75 = another desktop user holds the lock: retry every 30 s for up
+      # to 20 minutes, then fail with desktop-busy. The segment script maps its
+      # own 75/124 to 1, so those codes always come from the lock tool.
+      - name: Run hunts under the desktop lock
+        run: |
+          # No -e: the lock tool's exit code drives the retry loop below.
+          set +e
+          set -uo pipefail
+          deadline=$(( $(date +%s) + 20 * 60 ))
+          attempt=0
+          while :; do
+            attempt=$((attempt + 1))
+            /usr/bin/python3 "$QA_DEVICE_LOCK_TOOL" \
+              --lock "$QA_DEVICE_LOCK_DIR" \
+              --run "gh-$GITHUB_RUN_ID" \
+              --session prompter-prowl-qa \
+              --job prompter-prowl-qa \
+              --timeout 1500 \
+              -- "$GITHUB_WORKSPACE/Prompter/scripts/prowl-qa-gui-segment.sh" "$LOG_DIR"
+            status=$?
+            if [[ "$status" -ne 75 ]]; then
+              break
+            fi
+            if (( $(date +%s) >= deadline )); then
+              echo "::error::desktop-busy: the desktop lock ($QA_DEVICE_LOCK_DIR) was still held after 20 minutes ($attempt attempts). Re-run when the Mini is free."
+              exit 1
+            fi
+            echo "Desktop lock busy (attempt $attempt); retrying in 30 s"
+            sleep 30
+          done
+          if [[ "$status" -eq 124 ]]; then
+            echo "::error::The GUI segment hit its 25-minute limit and was stopped by the lock tool."
+          fi
+          exit "$status"
+
+      # Read-only checks; nothing here touches the GUI outside the lock.
+      - name: Check the hunt app is gone and nothing is in /Applications
+        if: always()
+        run: |
+          set -uo pipefail
+          exe="$GITHUB_WORKSPACE/$HUNT_PRODUCTS_DIR/Prompter.app/Contents/MacOS/Prompter"
+          if pgrep -f "^${exe}" >/dev/null 2>&1; then
+            echo "::warning::The hunt app is still running from $exe after the run. It is not signalled; check the runner."
+          else
+            echo "Hunt app not running."
+          fi
+          leftover=0
+          for app in /Applications/*.app; do
+            id=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$app/Contents/Info.plist" 2>/dev/null || true)
+            if [[ "$id" == "$HUNT_BUNDLE_ID" ]]; then
+              echo "::error::A hunt build is in /Applications: $app"
+              leftover=1
+            fi
+          done
+          exit "$leftover"
+
+      # The macOS target falls back to a full-screen capture when the app has
+      # no capturable window, and this public repo's artifacts are readable by
+      # any logged-in user. Screenshots are moved to a runner-local folder
+      # (kept 14 days) and never uploaded.
+      - name: Keep screenshots on the runner
+        if: always()
+        run: |
+          set -uo pipefail
+          keep="$HOME/prowl-qa-screenshots/prompter"
+          dest="$keep/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          if [[ -d .prowl/runs ]]; then
+            while IFS= read -r dir; do
+              mkdir -p "$dest/$(dirname "${dir#.prowl/runs/}")"
+              mv "$dir" "$dest/$(dirname "${dir#.prowl/runs/}")/"
+            done < <(find .prowl/runs -type d -name screenshots -prune)
+          fi
+          [[ -d "$dest" ]] && echo "Screenshots kept on the runner at $dest"
+          find "$keep" -mindepth 1 -maxdepth 1 -type d -mtime +14 -exec rm -rf {} + 2>/dev/null || true
+
+      - name: Upload run logs and reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: prowl-runs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .prowl/runs/
+            !.prowl/runs/**/screenshots/**
+          if-no-files-found: ignore
+          retention-days: 14
