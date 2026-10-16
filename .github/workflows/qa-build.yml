@@ -23,6 +23,9 @@ name: QA Build
 # and downloads the artifact named in the `artifact-name` output. See docs/qa/qa-build.md.
 
 on:
+  # TEMPORARY (PRMT-032 proof run): workflow_dispatch only works once the file is on main.
+  push:
+    branches: [prmt-032-qa-build]
   workflow_dispatch:
     inputs:
       ref:
