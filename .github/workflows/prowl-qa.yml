@@ -193,7 +193,7 @@ jobs:
       # A missing or corrupt artifact fails here, before the lock is taken and
       # before anything is launched (US-4 AC1b).
       - name: Download hunt app
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: ${{ needs.build-hunt.outputs.artifact }}
           path: ${{ runner.temp }}/hunt-artifact
